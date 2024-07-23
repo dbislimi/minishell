@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/23 16:23:20 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:50:11 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ void	minishell(void)
 	{
 		str = readline("minishell> ");
 		if (str == NULL)
+		{
+			printf("exit\n");
 			break ;
+		}
 		add_history(str);
 		free(str);
 	}
