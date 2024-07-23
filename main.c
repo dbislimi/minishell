@@ -6,31 +6,11 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/22 17:31:13 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:23:20 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
-
-void	sigint_handler(int signal)
-{
-	char	*str;
-	
-	if (signal == SIGINT)
-	{
-		printf("\n");
-		str = readline("minishell> ");
-	}
-}
-
-void	set_signal_action(void)
-{
-	struct sigaction	act;
-
-	ft_bzero(&act, sizeof(act));
-	act.sa_handler = &sigint_handler;
-	sigaction(SIGINT, &act, NULL);
-}
 
 void	minishell(void)
 {

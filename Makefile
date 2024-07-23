@@ -1,13 +1,13 @@
 LIBFT_PATH 	= ./libft
 LIBFT      	= $(LIBFT_PATH)/libft.a
 
-MS_PATH 		= .
 LEXER_PATH 		= ./lexer
 PARSER_PATH 	= ./parser
 EXTENDER_PATH 	= ./extender
 EXECUTION_PATH	= ./execution
+BUILTINS_PATH 	= ./builtins
 
-SRCS 	= ${addprefix ${MS_PATH}/, main.c} ${addprefix ${EXTENDER_PATH}/, env_init.c env_build.c env_clear.c print_env.c}
+SRCS 	= main.c ${addprefix ${EXTENDER_PATH}/, env_init.c env_build.c env_clear.c print_env.c} ${addprefix ${BUILTINS_PATH}/, signals.c}
 OBJS 	= ${SRCS:.c=.o}
 
 

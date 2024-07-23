@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/22 17:11:02 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:24:54 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,16 @@
 # include <limits.h>
 # include <sys/wait.h>
 
-
-typedef struct	s_env
+typedef struct s_env
 {
-	char	*name;
-	char	*value;
+	char			*name;
+	char			*value;
 	struct s_env	*next;
 }			t_env;
+
+// BUILTINS
+
+void	set_signal_action(void);
 
 // EXTENDER 
 
