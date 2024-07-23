@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:18:46 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/23 17:23:07 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:42:23 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,5 @@
 
 void    env(t_env *env)
 {
-    while (env)
-    {
-        printf("%s=%s\n", env->name, env->value);
-        env = env->next;
-    }
+    print_env(env);
 }

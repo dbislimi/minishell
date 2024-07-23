@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/23 16:24:54 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:42:15 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 
 typedef struct s_env
 {
-	char			*name;
+	char			*variable;
 	char			*value;
 	struct s_env	*next;
 }			t_env;
@@ -45,5 +45,6 @@ void	add_node(t_env **lst, t_env *newnode);
 t_env	*last_node(t_env *lst);
 t_env	*new_node(void *content);
 void	envclear(t_env **lst);
+void	print_env(t_env *s);
 
 #endif

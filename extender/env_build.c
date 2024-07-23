@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_build.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 15:13:38 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/22 17:09:05 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:22:52 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_env	*new_node(void *content)
 	if (!new)
 		return (0);
 	line = split_for_env(content, '=');
-	new->name = ft_strdup(line[0]);
+	new->variable = ft_strdup(line[0]);
 	if (line[1])
 		new->value = ft_strdup(line[1]);
 	else

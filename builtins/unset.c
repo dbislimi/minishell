@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/23 17:11:53 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/23 18:22:52 by dbislimi         ###   ########.fr       */
+/*   Created: 2024/07/23 18:43:25 by dbislimi          #+#    #+#             */
+/*   Updated: 2024/07/23 18:48:48 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	pwd(t_env *env)
+void    unset(char *variable, t_env *env)
 {
-	while(env)
-	{
-        if (strcmp(env->variable, "PWD") == 0) 
-		{
-			printf("%s\n", env->value);
-			break ;
-		}
-		env = env->next;
+    t_env   *temp;
+
+    temp = NULL;
+    while (env->next != NULL)
+    {
+        if (ft_strcmp(variable, env->next->variable) == 0)
+        {
+            temp = env->next->next;
+            free(env->next->value);
+            free(env->next->value);
+            free(env->next);
+            env->next = temp;
+            break ;
+        }
+        env = env->next;
     }
 }
