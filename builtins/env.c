@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/23 16:48:35 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/23 17:19:38 by dbislimi         ###   ########.fr       */
+/*   Created: 2024/07/23 17:18:46 by dbislimi          #+#    #+#             */
+/*   Updated: 2024/07/23 17:23:07 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	echo(char *str, int option)
+void    env(t_env *env)
 {
-	if (option)
-		printf("%s", str);
-	else
-		printf("%s\n", str);
+    while (env)
+    {
+        printf("%s=%s\n", env->name, env->value);
+        env = env->next;
+    }
 }

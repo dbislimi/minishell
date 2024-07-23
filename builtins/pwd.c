@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/23 16:48:35 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/23 17:19:38 by dbislimi         ###   ########.fr       */
+/*   Created: 2024/07/23 17:11:53 by dbislimi          #+#    #+#             */
+/*   Updated: 2024/07/23 17:17:35 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	echo(char *str, int option)
+void	pwd(t_env *env)
 {
-	if (option)
-		printf("%s", str);
-	else
-		printf("%s\n", str);
+	while(env)
+	{
+        if (strcmp(env->name, "PWD") == 0) 
+		{
+			printf("%s\n", env->value);
+			break ;
+		}
+		env = env->next;
+    }
 }
