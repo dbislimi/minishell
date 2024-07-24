@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/24 16:22:15 by dbislimi         ###   ########.fr       */
+/*   Created: 2024/07/23 19:44:48 by dbislimi          #+#    #+#             */
+/*   Updated: 2024/07/24 16:25:38 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/minishell.h"
+#include "../includes/minishell.h"
 
 void	handle_quotes(char c, int *res, t_flag *flag)
 {
@@ -66,34 +66,57 @@ int	count_words_lexer(char const *s)
 	return (res);
 }
 
-void	minishell(void)
+static char	*fill_str_with(char const *s, int start, int end)
 {
-	char	*str;
+	char	*fill;
+	int		i;
 
-	while (1)
-	{
-		str = readline("minishell> ");
-		if (str == NULL)
-			break ;
-		printf("%d\n", count_words_lexer(str));
-		add_history(str);
-		free(str);
-	}
+	i = 0;
+	fill = malloc(sizeof(char) * (end - start + 1));
+	if (!fill)
+		return (NULL);
+	while (start < end)
+		fill[i++] = s[start++];
+	fill[i] = 0;
+	return (fill);
 }
 
-int	main(int ac, char **av, char **envp)
+char	**ft_split(char const *s, char c)
 {
-	t_env	*env;
+	char		**split;
+	int			size;
+	int			i;
+	int			end;
+	int			start;
 
-	(void)av;
-	env = NULL;
-	if (ac > 1)
+	i = 0;
+	start = 0;
+	size = count_words_lexer(s);
+	split = malloc(sizeof(char *) * (size + 1));
+	if (!split)
+		return (NULL);
+	while (i < size)
 	{
-		write(2, "minishell requires no arguments\n", 33);
-		exit(EXIT_FAILURE);
+		while (s[start] == c && s[start])
+			start++;
+		end = start + 1;
+		while (s[end] != c && s[end])
+			end++;
+		split[i] = fill_str_with(s, start, end);
+		start = end + 1;
+		i++;
 	}
-	env_init(&env, envp);
-	set_signal_action();
-	minishell();
-	envclear(&env);
+	split[i] = NULL;
+	return (split);
 }
+
+// void	lexing(char *str)
+// {
+// 	t_lexer	*lexer;
+// }
+
+// int	main(int ac, char **av)
+// {
+// 	(void)ac;
+// 	printf("%d\n", count_words_lexer(av[1]));
+// }

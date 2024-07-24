@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_build.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 15:13:38 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/22 17:09:05 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/23 19:55:33 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_env	*new_node(void *content)
 	return (new);
 }
 
-t_env	*last_node(t_env *lst)
+static t_env	*last_node(t_env *lst)
 {
 	if (lst)
 	{

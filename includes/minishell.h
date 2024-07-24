@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/23 16:24:54 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:09:45 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,14 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <sys/wait.h>
+# include <stdbool.h>
+
+
+// BUILTINS
+
+void	set_signal_action(void);
+
+// EXTENDER 
 
 typedef struct s_env
 {
@@ -34,16 +42,32 @@ typedef struct s_env
 	struct s_env	*next;
 }			t_env;
 
-// BUILTINS
-
-void	set_signal_action(void);
-
-// EXTENDER 
-
 void	env_init(t_env **env, char **envp);
 void	add_node(t_env **lst, t_env *newnode);
-t_env	*last_node(t_env *lst);
 t_env	*new_node(void *content);
 void	envclear(t_env **lst);
+
+// LEXER
+
+typedef struct s_lexer
+{
+	char	*content;
+	int		token;
+}		t_lexer;
+
+typedef struct s_flag
+{
+	bool	sg_quote;
+	bool	d_quote;
+}		t_flag;
+
+typedef struct s_index
+{
+	int	start;
+	int	end;
+}	t_index;
+
+void	lexing(char *str);
+t_lexer	*new_nodefl(void *content);
 
 #endif
