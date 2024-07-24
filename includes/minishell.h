@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/23 20:09:45 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:36:15 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ typedef struct s_index
 	int	end;
 }	t_index;
 
-void	lexing(char *str);
-t_lexer	*new_nodefl(void *content);
+char	**ft_split_lexer(char const *s);
+int	count_words_lexer(char const *s);
+// void	lexing(char *str);
+// t_lexer	*new_nodefl(void *content);
 
 #endif

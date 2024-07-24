@@ -7,7 +7,7 @@ EXTENDER_PATH 	= ./extender
 EXECUTION_PATH	= ./execution
 BUILTINS_PATH 	= ./builtins
 
-SRCS 	= main.c ${addprefix ${EXTENDER_PATH}/, env_init.c env_build.c env_clear.c print_env.c} ${addprefix ${BUILTINS_PATH}/, signals.c}
+SRCS 	= main.c ${addprefix ${EXTENDER_PATH}/, env_init.c env_build.c env_clear.c print_env.c} ${addprefix ${BUILTINS_PATH}/, signals.c} ${addprefix ${LEXER_PATH}/, lexing.c}
 OBJS 	= ${SRCS:.c=.o}
 
 
