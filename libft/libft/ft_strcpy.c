@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_tab.c                                         :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/29 13:12:28 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/26 18:25:04 by dbislimi         ###   ########.fr       */
+/*   Created: 2024/07/26 16:13:31 by dbislimi          #+#    #+#             */
+/*   Updated: 2024/07/26 17:08:22 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	free_tab(char **tab)
+void	ft_strcpy(char *dest, char *src)
 {
-	size_t	i;
+	int	i;
 
-	i = 0;
-	while (tab[i])
-		free(tab[i++]);
-	free(tab);
+	i = -1;
+	while (src[++i])
+		dest[i] = src[i];
+	dest[i] = '\0';
+	printf("cpy %s\n", dest);
 }

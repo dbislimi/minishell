@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexing.c                                           :+:      :+:    :+:   */
+/*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 19:44:48 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/24 20:14:38 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/26 18:31:08 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	is_start_of_word(int *res, t_flag f, bool *flag)
 	}
 }
 
-int	count_words_lexer(char const *s)
+int	count_words_lexer(const char *s)
 {
 	int	i;
 	int	res;
@@ -66,7 +66,7 @@ int	count_words_lexer(char const *s)
 	return (res);
 }
 
-static char	*fill_str_with(char const *s, int start, int end)
+static char	*fill_str_with(const char *s, int start, int end)
 {
 	char	*fill;
 	int		i;
@@ -76,49 +76,37 @@ static char	*fill_str_with(char const *s, int start, int end)
 	if (!fill)
 		return (NULL);
 	while (start < end)
-	{
-		// if (s[start] == '\\' && !is_whitespace(s[start + 1]))
-		// 	++start;
 		fill[i++] = s[start++];
-	}
 	fill[i] = 0;
 	return (fill);
 }
 
-void	found_quote(t_index *idx, char const *s, bool *flag)
+void	found_quote(t_index *idx, const char *s, bool *flag)
 {
-	if (s[idx->start++] == '"')
+	if (s[idx->start] == '"')
 	{
-		idx->end = idx->start;
+		idx->end = idx->start + 1;
 		while (s[idx->end] && !(s[idx->end] == '"' && s[idx->end - 1] != '\\'))
-		{
-			//printf("%d | %c -> %c\n",idx->end, s[idx->end - 1], s[idx->end]);
 			++idx->end;
-		}
-	//	printf("%c[%d]\n", s[idx->end - 1], idx->end);
 	}
 	else
 	{
-		idx->end = idx->start;
+		idx->end = idx->start + 1;
 		while (s[idx->end] && !(s[idx->end] == '\''))
 			++idx->end;
 	}
+	++idx->end;
 	*flag = 1;
 }
 
 void	found_word(t_index *idx, const char *s, bool *flag)
 {
-	if (s[idx->start] && s[idx->start] == '\\')
-	{
-		++idx->start;
-		++idx->end;
-	}
-	while (s[idx->start] && (!is_whitespace(s[idx->end]) && !(s[idx->end] == '"' || s[idx->end] == '\'')))
+	while (s[idx->end] && (!is_whitespace(s[idx->end]) && !(s[idx->end] == '"' || s[idx->end] == '\'')))
 		++idx->end;
 	*flag = 0;
 }
 
-char	**ft_split_lexer(char const *s)
+char	**ft_split_lexer(const char *s)
 {
 	char		**split;
 	int			size;
@@ -131,7 +119,10 @@ char	**ft_split_lexer(char const *s)
 	idx.start = 0;
 	size = count_words_lexer(s);
 	if (size == -1)
+	{
+		printf("Error: check your quotes\n");
 		return (NULL);
+	}
 	split = malloc(sizeof(char *) * (size + 1));
 	if (!split)
 		return (NULL);
@@ -145,7 +136,6 @@ char	**ft_split_lexer(char const *s)
 		else
 			found_word(&idx, s, &quote);
 		split[i] = fill_str_with(s, idx.start, idx.end);
-	//	printf("end of string : %c[%d]\n", s[idx.end], idx.end);
 		if (quote)
 			idx.start = idx.end + 1;
 		else
