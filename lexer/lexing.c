@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 19:44:48 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/24 20:14:38 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/26 13:57:55 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,7 @@ static char	*fill_str_with(char const *s, int start, int end)
 	if (!fill)
 		return (NULL);
 	while (start < end)
-	{
-		// if (s[start] == '\\' && !is_whitespace(s[start + 1]))
-		// 	++start;
 		fill[i++] = s[start++];
-	}
 	fill[i] = 0;
 	return (fill);
 }
@@ -124,10 +120,11 @@ char	**ft_split_lexer(char const *s)
 	int			size;
 	int			i;
 	t_index		idx;
-	bool		quote;
+	t_flag		flag;
 
 	i = 0;
-	quote = 0;
+	flag.d_quote = 0;
+	flag.sg_quote = 0;
 	idx.start = 0;
 	size = count_words_lexer(s);
 	if (size == -1)
