@@ -1,5 +1,6 @@
 LIBFT_PATH = ./libft
-LIBFT_SRCS = ${addprefix ${LIBFT_PATH}/, free_tab.c \
+LIBFT_SRCS = ${addprefix ${LIBFT_PATH}/, ft_strcpy.c \
+			free_tab.c \
 			count_words.c \
 			ft_atoi.c \
 			ft_atol.c \
@@ -63,7 +64,7 @@ SRCS = ${LIBFT_SRCS} ${PRINTF_SRCS} ${GNL_SRCS}
 OBJS = ${SRCS:.c=.o}
 NAME = libft.a
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3
 AR = ar rcs 
 RM = rm -rf
 INCLUDE = ./inc
