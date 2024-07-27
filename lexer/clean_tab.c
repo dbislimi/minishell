@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:12:57 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/26 19:05:32 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:31:35 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,44 +21,52 @@ int tablen(char **tab)
         ++i;
     return (i);
 }
-int find_value(char *str, t_env **env)
-{
-	int	i;
 
-	i = 0;
-	while (ft_isalnum(str[i]) && str[i] != '"')
-		++i;
-	while (*env)
+char	*find_value(char *str, t_env *env)
+{
+	size_t	i;
+	size_t	j;
+	
+	j = 0;
+	while (ft_isalnum(str[j]) && str[j] != '"')
+		++j;
+	while (env)
 	{
-		if (ft_strncmp(str, (*env)->name, i) == 0)
-		{
-			return (ft_strlen((*env)->value));
-		}
-		*env = (*env)->next;
+		i = ft_strlen(env->name);
+		if (j > i)
+			i = j;
+		if (ft_strncmp(str, env->name, i) == 0)
+			return (env->value);
+		env = env->next;
 	}
-	return (0);
+	return (NULL);
 }
 
-int	strlen2(char *str, t_env **env)
+int	strlen2(char *str, t_env *env)
 {
 	int	i;
+	char	*value;
 
 	i = 0;
 	if (*str == '"')
 		++str;
 	while (*str)
 	{
+		printf("TAB  :%s\n", str);
 		if (*str == '\\')
 			++str;
 		else if (*str == '$')
 		{
-			i += find_value(++str, env);
+			value = find_value(++str, env);
+			if (value != NULL)
+				i += ft_strlen(value);
 			while (ft_isalnum(*str))
 				++str;
 			continue ;
 		}
-		else if (*str == '"')
+		else if (*str == '"' || *str == '\0')
 			break ;
+		printf("TAB  :%s\n", str);
 		++i;
 		++str;
 	}
@@ -85,7 +93,9 @@ char	*simple_clean(char *toclean)
 
 size_t	handle_dollar(char *clean, char **tab, char *env_value)
 {
-	ft_strcpy(clean, env_value);
+	if (env_value == NULL)
+		return (0);
+	ft_strcat(clean, env_value);
 	++*tab;
 	while (ft_isalnum(**tab) && **tab != '"')
 		++*tab;
@@ -99,8 +109,8 @@ char	*clean(char *tab, t_env *env)
 	size_t	i;
 
 	i = 0;
-	len = strlen2(tab, &env);
-	clean = malloc(sizeof(char) * (len + 1));
+	len = strlen2(tab, env);
+	clean = ft_calloc(len + 1, sizeof(char));
 	if (!clean)
 		return (NULL);
 	if (*tab == '"')
@@ -111,7 +121,8 @@ char	*clean(char *tab, t_env *env)
 			++tab;
 		else if (*tab == '$')
 		{
-			i += handle_dollar(clean, &tab, env->value);
+			++tab;
+			i += handle_dollar(clean, &tab, find_value(tab, env));
 			continue ;
 		}
 		clean[i++] = *tab++;
