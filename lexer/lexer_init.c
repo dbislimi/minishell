@@ -10,6 +10,68 @@
 // /*                                                                            */
 // /* ************************************************************************** */
 
-// #include "../includes/minishell.h"
+#include "../includes/minishell.h"
 
-// void    lexer_init()
+static int	tokenize(char *content)
+{
+	if (ft_strlen(content) > 2)
+		return (WORD);
+	else if (ft_strcmp(content, "|") == 0)
+		return (PIPE);
+	else if (ft_strcmp(content, "<<") == 0)
+		return (HEREDOC);
+	else if (ft_strcmp(content, "<") == 0)
+		return (INPUT);
+	else if (ft_strcmp(content, ">>") == 0)
+		return (APPENDOUTPUT);
+	else if (ft_strcmp(content, ">") == 0)
+		return (OUTPUT);
+	return (WORD);
+}
+
+static t_lexer	*new_node_lexer(void *content)
+{
+	t_lexer	*new;
+
+	new = malloc(sizeof(t_lexer));
+	if (!new)
+		return (0);
+	new->content = content;
+	new->token = tokenize(content);;
+	new->next = NULL;
+	return (new);
+}
+
+static t_lexer	*last_node(t_lexer *lst)
+{
+	if (lst)
+	{
+		while (lst->next != NULL)
+			lst = lst->next;
+	}
+	return (lst);
+}
+
+static void	add_node_lexer(t_lexer **lst, t_lexer *newnode)
+{
+	t_lexer	*last;
+
+	if (*lst)
+	{
+		last = last_node(*lst);
+		last->next = newnode;
+	}
+	else
+		*lst = newnode;
+}
+void    lexer_init(t_lexer **lexer, char **split)
+{
+	t_lexer	*new;
+
+	while (*split)
+	{
+		new = new_node_lexer(*split);
+		add_node_lexer(lexer, new);
+		++split;
+	}
+}

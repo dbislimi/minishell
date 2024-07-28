@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_tab.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:12:57 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/27 20:31:35 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/28 18:49:12 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,30 +45,30 @@ char	*find_value(char *str, t_env *env)
 int	strlen2(char *str, t_env *env)
 {
 	int	i;
+	int	j;
 	char	*value;
 
 	i = 0;
-	if (*str == '"')
-		++str;
-	while (*str)
+	j = 0;
+	if (str[j] == '"')
+		++j;
+	while (str[j])
 	{
-		printf("TAB  :%s\n", str);
-		if (*str == '\\')
-			++str;
-		else if (*str == '$')
+		if (str[j] == '\\')
+			++j;
+		else if (str[j] == '$')
 		{
-			value = find_value(++str, env);
+			value = find_value((str + ++j), env);
 			if (value != NULL)
 				i += ft_strlen(value);
-			while (ft_isalnum(*str))
-				++str;
+			while (ft_isalnum(str[j]))
+				++j;
 			continue ;
 		}
-		else if (*str == '"' || *str == '\0')
+		else if (str[j] == '"')
 			break ;
-		printf("TAB  :%s\n", str);
-		++i;
-		++str;
+		if (str[j] && ++j)
+			++i;
 	}
 	return (i);
 }
@@ -147,7 +147,11 @@ char	**clean_tab(char **tab, t_env *env)
 		else
 			clean_tab[i] = clean(tab[i], env);
 		if (clean_tab[i] == NULL)
+		{
+			free(clean_tab);
+			free(tab);
 			return (NULL);
+		}
 	}
 	clean_tab[i] = NULL;
 	free_tab(tab);

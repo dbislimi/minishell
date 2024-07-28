@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/27 20:13:10 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/28 18:36:30 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,9 @@ void	envclear(t_env **lst);
 
 typedef struct s_lexer
 {
-	char	*content;
-	int		token;
+	char			*content;
+	int				token;
+	struct s_lexer	*next;
 }		t_lexer;
 
 typedef struct s_flag
@@ -67,6 +68,16 @@ typedef struct s_index
 	int	end;
 }	t_index;
 
+typedef	enum token
+{
+	WORD,
+	PIPE,
+	INPUT,
+	OUTPUT,
+	HEREDOC,
+	APPENDOUTPUT
+}	tk;
+
 char	**ft_split_lexer(char *s);
 int		count_words_lexer(char *s);
 char	**ft_split_lexer(char *s);
@@ -75,7 +86,6 @@ void	handle_quotes(char c, int *res, t_flag *flag);
 void	is_start_of_word(int *res, t_flag f, bool *flag);
 void	found_quote(t_index *idx, const char *s, bool *flag);
 void	found_word(t_index *idx, const char *s, bool *flag);
-// void	lexing(char *str);
-// t_lexer	*new_nodefl(void *content);
+void    lexer_init(t_lexer **lexer, char **split);
 
 #endif
