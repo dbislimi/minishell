@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/30 18:28:12 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/30 19:10:08 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef enum token
 	APPENDOUTPUT
 }	t_tk;
 
+t_lexer	*lexer(t_lexer *list, char *str, t_env *env);
 char	**ft_split_lexer(char *s);
 int		count_words_lexer(char *s);
 void	handle_quotes(char c, int *res, t_flag *flag);
