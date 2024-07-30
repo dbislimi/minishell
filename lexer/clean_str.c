@@ -1,32 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clean_tab.c                                        :+:      :+:    :+:   */
+/*   clean_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:12:57 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/28 18:49:12 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:27:33 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int tablen(char **tab)
-{
-    int i;
-
-    i = 0;
-    while (tab[i])
-        ++i;
-    return (i);
-}
-
 char	*find_value(char *str, t_env *env)
 {
 	size_t	i;
 	size_t	j;
-	
+
 	j = 0;
 	while (ft_isalnum(str[j]) && str[j] != '"')
 		++j;
@@ -44,9 +34,8 @@ char	*find_value(char *str, t_env *env)
 
 int	strlen2(char *str, t_env *env)
 {
-	int	i;
-	int	j;
-	char	*value;
+	size_t	i;
+	int		j;
 
 	i = 0;
 	j = 0;
@@ -58,9 +47,7 @@ int	strlen2(char *str, t_env *env)
 			++j;
 		else if (str[j] == '$')
 		{
-			value = find_value((str + ++j), env);
-			if (value != NULL)
-				i += ft_strlen(value);
+			i += count_dollar((str + ++j), env);
 			while (ft_isalnum(str[j]))
 				++j;
 			continue ;
@@ -82,6 +69,8 @@ char	*simple_clean(char *toclean)
 	i = 0;
 	len = ft_strlen(toclean);
 	clean = malloc(sizeof(char) * (len - 1));
+	if (!clean)
+		return (NULL);
 	++toclean;
 	while (i < len - 2)
 	{
@@ -89,17 +78,6 @@ char	*simple_clean(char *toclean)
 	}
 	clean[i] = '\0';
 	return (clean);
-}
-
-size_t	handle_dollar(char *clean, char **tab, char *env_value)
-{
-	if (env_value == NULL)
-		return (0);
-	ft_strcat(clean, env_value);
-	++*tab;
-	while (ft_isalnum(**tab) && **tab != '"')
-		++*tab;
-	return (ft_strlen(env_value));
 }
 
 char	*clean(char *tab, t_env *env)
@@ -128,32 +106,17 @@ char	*clean(char *tab, t_env *env)
 		clean[i++] = *tab++;
 	}
 	clean[i] = '\0';
-	return (clean);	
+	return (clean);
 }
 
-char	**clean_tab(char **tab, t_env *env)
+char	*clean_str(char *str, t_env *env)
 {
-	char	**clean_tab;
-    int		i;
-	int		len;
+	char	*clean_str;
 
-	i = -1;
-	len = tablen(tab);
-	clean_tab = malloc(sizeof(char *) * (len + 1));
-	while (++i < len)
-    {
-		if (tab[i][0] == '\'')
-			clean_tab[i] = simple_clean(tab[i]);
-		else
-			clean_tab[i] = clean(tab[i], env);
-		if (clean_tab[i] == NULL)
-		{
-			free(clean_tab);
-			free(tab);
-			return (NULL);
-		}
-	}
-	clean_tab[i] = NULL;
-	free_tab(tab);
-	return (clean_tab);
+	clean_str = NULL;
+	if (str[0] == '\'')
+		clean_str = simple_clean(str);
+	else
+		clean_str = clean(str, env);
+	return (clean_str);
 }

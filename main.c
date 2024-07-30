@@ -3,77 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/28 19:01:12 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:26:07 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
-
-void	print_lexer(t_lexer *lexer)
-{
-	while (lexer)
-	{
-		printf("content: [%s]\ntoken: [%d]\n", lexer->content, lexer->token);
-		lexer = lexer->next;
-	}	
-}
-void	free_lexer(t_lexer **lexer)
-{
-	t_lexer	*temp;
-
-	while (*lexer)
-	{
-		temp = (*lexer)->next;
-		free((*lexer)->content);
-		free(*lexer);
-		*lexer = temp;
-	}
-	*lexer = NULL;
-}
 
 void	minishell(t_env **env)
 {
 	t_lexer	*list;
 	char	*str;
 	char	**split;
-	// int	i;
 
-	// i = -1;
 	list = NULL;
+	str = NULL;
 	while (1)
 	{
+		if (str != NULL)
+			free(str);
 		str = readline("minishell> ");
 		if (str == NULL)
 			break ;
+		add_history(str);
 		split = ft_split_lexer(str);
 		if (split == NULL)
 			continue ;
-		// if (split)
-		// {
-		// 	while (split[++i])
-		// 		printf("s[%d] :%s(end)\n",i, split[i]);
-		// 	i = -1;
-			
-		// }
-		lexer_init(&list, split);
-		split = clean_tab(split, *env);
-		if (split == NULL)
+		list = lexer_init(&list, split, *env);
+		if (list == NULL)
 			continue ;
-		// printf("%d\n", count_words_lexer(str));
-		// if (split)
-		// {
-		// 	while (split && split[++i])
-		// 		printf("s[%d] :%s(end)\n",i, split[i]);
-		// 	i = -1;
-		// 	//free_tab(split);
-		// }
 		print_lexer(list);
 		free_lexer(&list);
-		add_history(str);
-		free(str);
 	}
 }
 

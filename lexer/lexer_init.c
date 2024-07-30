@@ -1,14 +1,14 @@
-// /* ************************************************************************** */
-// /*                                                                            */
-// /*                                                        :::      ::::::::   */
-// /*   lexer_init.c                                       :+:      :+:    :+:   */
-// /*                                                    +:+ +:+         +:+     */
-// /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
-// /*                                                +#+#+#+#+#+   +#+           */
-// /*   Created: 2024/07/26 14:10:26 by dbislimi          #+#    #+#             */
-// /*   Updated: 2024/07/26 14:10:53 by dbislimi         ###   ########.fr       */
-// /*                                                                            */
-// /* ************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_init.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/26 14:10:26 by dbislimi          #+#    #+#             */
+/*   Updated: 2024/07/30 18:10:44 by dbislimi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
@@ -36,8 +36,8 @@ static t_lexer	*new_node_lexer(void *content)
 	new = malloc(sizeof(t_lexer));
 	if (!new)
 		return (0);
-	new->content = content;
-	new->token = tokenize(content);;
+	new->content = NULL;
+	new->token = tokenize(content);
 	new->next = NULL;
 	return (new);
 }
@@ -64,14 +64,32 @@ static void	add_node_lexer(t_lexer **lst, t_lexer *newnode)
 	else
 		*lst = newnode;
 }
-void    lexer_init(t_lexer **lexer, char **split)
-{
-	t_lexer	*new;
 
-	while (*split)
+t_lexer	*lexer_init(t_lexer **lexer, char **split, t_env *env)
+{
+	t_lexer	*first_node;
+	t_lexer	*new;
+	int		i;
+
+	i = -1;
+	while (split[++i])
 	{
-		new = new_node_lexer(*split);
+		new = new_node_lexer(split[i]);
 		add_node_lexer(lexer, new);
-		++split;
 	}
+	i = -1;
+	first_node = *lexer;
+	while (*lexer)
+	{
+		(*lexer)->content = clean_str(split[++i], env);
+		if ((*lexer)->content == NULL)
+		{
+			free_lexer(&first_node);
+			free_tab(split);
+			return (NULL);
+		}
+		*lexer = (*lexer)->next;
+	}
+	free_tab(split);
+	return (first_node);
 }

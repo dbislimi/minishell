@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 19:44:48 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/28 18:02:49 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:09:04 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	count_words_lexer(char *s)
 {
-	int	i;
-	int	res;
-	t_flag f;
+	int		i;
+	int		res;
+	t_flag	f;
 	bool	flag;
 
 	i = 0;
@@ -53,9 +53,12 @@ static char	*fill_str_with(const char *s, int start, int end)
 	fill[i] = 0;
 	return (fill);
 }
+
 int	is_quote(char *s, t_index idx)
 {
-	return ((s[idx.start] == '"' && !(idx.start > 0 && s[idx.start - 1] == '\\')) || s[idx.start] == '\'');
+	return ((s[idx.start] == '"'
+			&& !(idx.start > 0 && s[idx.start - 1] == '\\'))
+		|| s[idx.start] == '\'');
 }
 
 static void	split_loop(int size, char *s, char **split)
@@ -72,14 +75,12 @@ static void	split_loop(int size, char *s, char **split)
 		while (s[idx.start] && is_whitespace(s[idx.start]))
 			++idx.start;
 		idx.end = idx.start + 1;
-		printf("end : %d\n", idx.end);
 		if (is_quote(s, idx))
 			found_quote(&idx, s, &quote);
 		else
 			found_word(&idx, s, &quote);
 		split[i] = fill_str_with(s, idx.start, idx.end);
 		idx.start = idx.end;
-		printf("c : %c\n", s[idx.start]);
 		i++;
 	}
 	split[i] = NULL;
