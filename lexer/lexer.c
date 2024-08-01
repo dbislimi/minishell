@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 19:03:31 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/30 19:11:36 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 16:32:25 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ t_lexer	*lexer(t_lexer *list, char *str, t_env *env)
 	if (split == NULL)
 		return (NULL);
 	list = lexer_init(&list, split, env);
+	free_tab(split);
 	if (list == NULL)
 		return (NULL);
-	//print_lexer(list);
+	print_lexer(list);
 	return (list);
 }

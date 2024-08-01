@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:12:57 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/30 18:27:33 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 20:06:12 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*find_value(char *str, t_env *env)
 	return (NULL);
 }
 
-int	strlen2(char *str, t_env *env)
+int	strlen2(char *str, t_env *env, bool flag)
 {
 	size_t	i;
 	int		j;
@@ -43,7 +43,7 @@ int	strlen2(char *str, t_env *env)
 		++j;
 	while (str[j])
 	{
-		if (str[j] == '\\')
+		if (str[j] == '\\' && (flag == 1 || (str[j + 1] == '\\' || str[j + 1] == '$')))
 			++j;
 		else if (str[j] == '$')
 		{
@@ -87,7 +87,35 @@ char	*clean(char *tab, t_env *env)
 	size_t	i;
 
 	i = 0;
-	len = strlen2(tab, env);
+	len = strlen2(tab, env, 0);
+	clean = ft_calloc(len + 1, sizeof(char));
+	if (!clean)
+		return (NULL);
+	if (*tab == '"')
+		++tab;
+	while (i < len)
+	{
+		if (*tab == '\\' && (*(tab + 1) == '\\' || *(tab + 1) == '$'))
+			++tab;
+		else if (*tab == '$')
+		{
+			++tab;
+			i += handle_dollar(clean, &tab, find_value(tab, env));
+			continue ;
+		}
+		clean[i++] = *tab++;
+	}
+	clean[i] = '\0';
+	return (clean);
+}
+char	*basic_clean(char *tab, t_env *env)
+{
+	char	*clean;
+	size_t	len;
+	size_t	i;
+
+	i = 0;
+	len = strlen2(tab, env, 1);
 	clean = ft_calloc(len + 1, sizeof(char));
 	if (!clean)
 		return (NULL);
@@ -116,7 +144,9 @@ char	*clean_str(char *str, t_env *env)
 	clean_str = NULL;
 	if (str[0] == '\'')
 		clean_str = simple_clean(str);
-	else
+	else if (str[0] == '"')
 		clean_str = clean(str, env);
+	else
+		clean_str = basic_clean(str, env);
 	return (clean_str);
 }

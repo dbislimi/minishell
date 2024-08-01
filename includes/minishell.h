@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/30 19:10:08 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 19:06:43 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,25 +48,6 @@ void	envclear(t_env **lst);
 
 // LEXER
 
-typedef struct s_lexer
-{
-	char			*content;
-	int				token;
-	struct s_lexer	*next;
-}		t_lexer;
-
-typedef struct s_flag
-{
-	bool	sg_quote;
-	bool	d_quote;
-}		t_flag;
-
-typedef struct s_index
-{
-	int	start;
-	int	end;
-}	t_index;
-
 typedef enum token
 {
 	WORD,
@@ -75,7 +56,30 @@ typedef enum token
 	OUTPUT,
 	HEREDOC,
 	APPENDOUTPUT
-}	t_tk;
+}	t_token;
+
+typedef struct s_lexer
+{
+	char			*content;
+	t_token			token;
+	int				index;
+	struct s_lexer	*next;
+	struct s_lexer	*prev;
+}		t_lexer;
+
+typedef struct s_flag
+{
+	bool	sg_quote;
+	bool	d_quote;
+	int		backslash;
+}		t_flag;
+
+typedef struct s_index
+{
+	int	start;
+	int	end;
+}	t_index;
+
 
 t_lexer	*lexer(t_lexer *list, char *str, t_env *env);
 char	**ft_split_lexer(char *s);
@@ -91,5 +95,16 @@ size_t	handle_dollar(char *clean, char **tab, char *env_value);
 size_t	count_dollar(char *str, t_env *env);
 void	free_lexer(t_lexer **lexer);
 void	print_lexer(t_lexer *lexer);
+void	handle_backslash(char c, int *backslash);
+
+//PARSER
+
+typedef struct s_parser
+{
+	char	**str;
+	t_lexer	*redirections;
+	struct s_parser	*next;
+	struct s_parser	*prev;	
+}		t_parser;
 
 #endif

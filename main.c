@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/30 19:12:53 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 15:54:12 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 void	minishell(t_env **env)
 {
-	t_lexer	*list;
-	char	*str;
+	//t_parser	*parser_list;
+	t_lexer		*lexer_list;
+	char		*str;
 
-	list = NULL;
+	lexer_list = NULL;
 	str = NULL;
 	while (1)
 	{
@@ -27,10 +28,11 @@ void	minishell(t_env **env)
 		if (str == NULL)
 			break ;
 		add_history(str);
-		list = lexer(list, str, *env);
-		if (list == NULL)
+		lexer_list = lexer(lexer_list, str, *env);
+		if (lexer_list == NULL)
 			continue ;
-		free_lexer(&list);
+	//	parser(lexer_list);
+		free_lexer(&lexer_list);
 	}
 }
 

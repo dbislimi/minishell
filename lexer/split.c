@@ -6,11 +6,21 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 19:44:48 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/30 18:09:04 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 19:18:11 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	handle_backslash(char c, int *backslash)
+{
+	if ((c == '\\' && *backslash == 0) || (c == '\\' && *backslash == 2))
+		*backslash = 1;
+	else if (*backslash == 1)
+		++*backslash;
+	else if (*backslash == 2)
+		*backslash = 0;
+}
 
 int	count_words_lexer(char *s)
 {
@@ -24,9 +34,11 @@ int	count_words_lexer(char *s)
 	flag = 0;
 	f.d_quote = 0;
 	f.sg_quote = 0;
+	f.backslash = 0;
 	while (s[i])
 	{
-		if ((s[i] == '"' && !(i > 0 && s[i - 1] == '\\')) || s[i] == '\'')
+		handle_backslash(s[i], &f.backslash);
+		if ((s[i] == '"' && f.backslash == 0) || s[i] == '\'')
 			handle_quotes(s[i], &res, &f);
 		else if (!is_whitespace(s[i]))
 			is_start_of_word(&res, f, &flag);
@@ -81,6 +93,7 @@ static void	split_loop(int size, char *s, char **split)
 			found_word(&idx, s, &quote);
 		split[i] = fill_str_with(s, idx.start, idx.end);
 		idx.start = idx.end;
+		printf("%s\n", split[i]);
 		i++;
 	}
 	split[i] = NULL;
@@ -95,7 +108,6 @@ char	**ft_split_lexer(char *s)
 	if (size == -1)
 	{
 		printf("Error: check your quotes\n");
-		free(s);
 		return (NULL);
 	}
 	split = malloc(sizeof(char *) * (size + 1));

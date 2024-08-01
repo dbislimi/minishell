@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:10:26 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/30 18:10:44 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 18:41:52 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	tokenize(char *content)
 	return (WORD);
 }
 
-static t_lexer	*new_node_lexer(void *content)
+static t_lexer	*new_node_lexer(void *content, int i)
 {
 	t_lexer	*new;
 
@@ -38,7 +38,9 @@ static t_lexer	*new_node_lexer(void *content)
 		return (0);
 	new->content = NULL;
 	new->token = tokenize(content);
+	new->index = i;
 	new->next = NULL;
+	new->prev = NULL;
 	return (new);
 }
 
@@ -60,36 +62,69 @@ static void	add_node_lexer(t_lexer **lst, t_lexer *newnode)
 	{
 		last = last_node(*lst);
 		last->next = newnode;
+		newnode->prev = last;
 	}
 	else
 		*lst = newnode;
+}
+void	delete_empty_nodes(t_lexer **lexer)
+{
+	t_lexer	*temp;
+	t_lexer	*first_node;
+	
+	first_node = NULL;
+	while (*lexer)
+	{
+		if ((*lexer)->content[0] != '\0')
+		{
+			first_node = *lexer;
+			break ;
+		}
+	}
+	while ((*lexer))
+	{
+		temp = (*lexer)->next;
+		if ((*lexer)->token == 0 && (*lexer)->content[0] == '\0')
+		{
+			printf("null\n");
+			free((*lexer)->content);
+			if ((*lexer)->prev != NULL)
+				(*lexer)->prev->next = (*lexer)->next;
+			if ((*lexer)->next != NULL)
+				(*lexer)->next->prev = (*lexer)->prev;
+			free((*lexer));
+		}
+		(*lexer) = temp;
+	}
 }
 
 t_lexer	*lexer_init(t_lexer **lexer, char **split, t_env *env)
 {
 	t_lexer	*first_node;
-	t_lexer	*new;
 	int		i;
 
 	i = -1;
 	while (split[++i])
-	{
-		new = new_node_lexer(split[i]);
-		add_node_lexer(lexer, new);
-	}
-	i = -1;
+		add_node_lexer(lexer, new_node_lexer(split[i], i));
+	i = 0;
 	first_node = *lexer;
 	while (*lexer)
 	{
-		(*lexer)->content = clean_str(split[++i], env);
-		if ((*lexer)->content == NULL)
+		if ((*lexer)->token == 0)
 		{
-			free_lexer(&first_node);
-			free_tab(split);
-			return (NULL);
+			(*lexer)->content = clean_str(split[i], env);
+			if ((*lexer)->content == NULL)
+			{
+				free_lexer(&first_node);
+				free_tab(split);
+				return (NULL);
+			}
 		}
 		*lexer = (*lexer)->next;
+		++i;
 	}
-	free_tab(split);
+	// first_node = delete_empty_nodes(first_node);
+	// if (first_node)
+	// 	printf("%s\n", first_node->content);
 	return (first_node);
 }

@@ -1,0 +1,12 @@
+builtins
+-e
+extender
+includes
+lexer
+libft
+main.c
+Makefile
+minishell
+parser
+README.md
+txt.txt
