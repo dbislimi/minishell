@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:10:26 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/01 18:41:52 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/02 19:40:52 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static t_lexer	*new_node_lexer(void *content, int i)
 	return (new);
 }
 
-static t_lexer	*last_node(t_lexer *lst)
+t_lexer	*last_node(t_lexer *lst)
 {
 	if (lst)
 	{
@@ -66,36 +66,6 @@ static void	add_node_lexer(t_lexer **lst, t_lexer *newnode)
 	}
 	else
 		*lst = newnode;
-}
-void	delete_empty_nodes(t_lexer **lexer)
-{
-	t_lexer	*temp;
-	t_lexer	*first_node;
-	
-	first_node = NULL;
-	while (*lexer)
-	{
-		if ((*lexer)->content[0] != '\0')
-		{
-			first_node = *lexer;
-			break ;
-		}
-	}
-	while ((*lexer))
-	{
-		temp = (*lexer)->next;
-		if ((*lexer)->token == 0 && (*lexer)->content[0] == '\0')
-		{
-			printf("null\n");
-			free((*lexer)->content);
-			if ((*lexer)->prev != NULL)
-				(*lexer)->prev->next = (*lexer)->next;
-			if ((*lexer)->next != NULL)
-				(*lexer)->next->prev = (*lexer)->prev;
-			free((*lexer));
-		}
-		(*lexer) = temp;
-	}
 }
 
 t_lexer	*lexer_init(t_lexer **lexer, char **split, t_env *env)
@@ -123,8 +93,6 @@ t_lexer	*lexer_init(t_lexer **lexer, char **split, t_env *env)
 		*lexer = (*lexer)->next;
 		++i;
 	}
-	// first_node = delete_empty_nodes(first_node);
-	// if (first_node)
-	// 	printf("%s\n", first_node->content);
+	first_node = delete_empty_nodes(first_node);
 	return (first_node);
 }

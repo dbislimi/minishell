@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/01 19:06:43 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/02 19:42:00 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ size_t	count_dollar(char *str, t_env *env);
 void	free_lexer(t_lexer **lexer);
 void	print_lexer(t_lexer *lexer);
 void	handle_backslash(char c, int *backslash);
+t_lexer	*delete_empty_nodes(t_lexer *lexer);
 
 //PARSER
 
