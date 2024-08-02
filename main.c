@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/01 15:54:12 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/02 19:54:29 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	minishell(t_env **env)
 		lexer_list = lexer(lexer_list, str, *env);
 		if (lexer_list == NULL)
 			continue ;
-	//	parser(lexer_list);
+		parser(lexer_list);
 		free_lexer(&lexer_list);
 	}
 }

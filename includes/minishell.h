@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/02 19:42:00 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/02 19:54:46 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,7 @@ typedef struct s_parser
 	struct s_parser	*next;
 	struct s_parser	*prev;	
 }		t_parser;
+
+void	parser(t_lexer *lexer);
 
 #endif

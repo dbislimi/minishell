@@ -3,30 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 19:30:11 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/01 16:42:06 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/02 20:37:47 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+int	count_nodes(t_lexer *lexer)
+{
+	int	res;
+
+	res = 0;
+	while (lexer && lexer->token != PIPE)
+	{
+		++res;
+		lexer = lexer->next;
+	}
+	return (res);
+}
 char	**build_command(t_lexer *lexer)
 {
-	
+	char	**cmd;
+	int		i;
+	int		len;
+
+	i = -1;
+	len = count_nodes(lexer);
+	cmd = malloc(sizeof(char *) * (len + 1));
+	while (++i < len)
+	{
+		cmd[i] = ft_strdup(lexer->content);
+		lexer = lexer->next;
+	}
+	cmd[i] = NULL;
+	i = 0;
+	while (cmd[i])
+	{
+		printf("cmd[%d]:%s\n", i, cmd[i]);
+		++i;
+	}
+	return (cmd);
 }
 void	detach_from_lexer(t_lexer *lexer)
 {
-	lexer->prev->next = lexer->next->next;
-	lexer->next->next->prev = lexer->prev;
+	if (lexer->next == NULL)
+		return ;
+	if (lexer->prev != NULL)
+		lexer->prev->next = lexer->next->next;
+	if (lexer->next != NULL)
+		lexer->next->prev = lexer->prev;
 	lexer->prev = NULL;
 	lexer->next->next = NULL;
 }
 
 t_lexer	*find_redirection(t_lexer *lexer)
 {
-	while (lexer->token != PIPE)
+	//print_lexer(lexer);
+	while (lexer && lexer->token != PIPE)
 	{
 		if (lexer->token == OUTPUT || lexer->token == APPENDOUTPUT)
 		{
@@ -38,14 +74,18 @@ t_lexer	*find_redirection(t_lexer *lexer)
 	return (NULL);
 }
 
-static t_parser	*new_node_lexer(t_lexer *lexer, int i)
+static t_parser	*new_node_parser(t_lexer *lexer)
 {
 	t_parser	*new;
-
+	t_lexer		*redirection;
+	
+	redirection = find_redirection(lexer);
+	if (redirection && redirection->next == NULL)
+		return (0);
 	new = malloc(sizeof(t_parser));
 	if (!new)
 		return (0);
-	new->redirections = find_redirection(lexer);
+	new->redirections = redirection;
 	new->str = build_command(lexer);
 	new->next = NULL;
 	new->prev = NULL;
@@ -62,7 +102,7 @@ static t_parser	*last_node(t_parser *lst)
 	return (lst);
 }
 
-static void	add_node_lexer(t_parser **lst, t_parser *newnode)
+static void	add_node_parser(t_parser **lst, t_parser *newnode)
 {
 	t_parser	*last;
 
@@ -92,14 +132,20 @@ int	count_pipes(t_lexer *lexer)
 
 void	parser(t_lexer *lexer)
 {
-	t_parser	*prev;
+	// t_parser	*prev;
 	t_parser	*parser;
 	int	cmds;
 
-	prev = NULL;
+	// prev = NULL;
+	parser = NULL;
 	cmds = count_pipes(lexer) + 1;
 	while (cmds--)
 	{
-		add_node_parser(parser, new_node_parser(lexer));
+		add_node_parser(&parser, new_node_parser(lexer));
+		if (cmds == 0)
+			break ;
+		while (lexer->token != PIPE)
+			lexer = lexer->next;
+		lexer = lexer->next;
 	}
 }
