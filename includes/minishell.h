@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/02 19:54:46 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 19:25:10 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,12 @@ t_lexer	*delete_empty_nodes(t_lexer *lexer);
 
 typedef struct s_parser
 {
-	char	**str;
+	char	**cmd;
 	t_lexer	*redirections;
 	struct s_parser	*next;
 	struct s_parser	*prev;	
 }		t_parser;
 
-void	parser(t_lexer *lexer);
+void	parser_init(t_parser **parser, t_lexer *lexer);
 
 #endif

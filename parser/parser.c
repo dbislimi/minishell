@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 19:30:11 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/02 20:37:47 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 19:39:50 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,6 @@ char	**build_command(t_lexer *lexer)
 		lexer = lexer->next;
 	}
 	cmd[i] = NULL;
-	i = 0;
-	while (cmd[i])
-	{
-		printf("cmd[%d]:%s\n", i, cmd[i]);
-		++i;
-	}
 	return (cmd);
 }
 void	detach_from_lexer(t_lexer *lexer)
@@ -86,7 +80,7 @@ static t_parser	*new_node_parser(t_lexer *lexer)
 	if (!new)
 		return (0);
 	new->redirections = redirection;
-	new->str = build_command(lexer);
+	new->cmd = build_command(lexer);
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
@@ -129,23 +123,40 @@ int	count_pipes(t_lexer *lexer)
 	}
 	return (i);
 }
-
-void	parser(t_lexer *lexer)
+void	print_parser(t_parser *parser)
 {
-	// t_parser	*prev;
-	t_parser	*parser;
+	int	i;
+
+	i = 0;
+	printf("\n");
+	while (parser)
+	{
+		printf("command : ");
+		while (parser->cmd[i])
+			printf("%s ", parser->cmd[i++]);
+		if (parser->redirections)
+			printf("\nredirection : (%d) %s\n", parser->redirections->token, parser->redirections->next->content);
+		else
+			printf("\nredirection : NULL\n");
+		parser = parser->next;
+		i = 0;
+	}
+}
+
+
+void	parser_init(t_parser **parser, t_lexer *lexer)
+{
 	int	cmds;
 
-	// prev = NULL;
-	parser = NULL;
 	cmds = count_pipes(lexer) + 1;
 	while (cmds--)
 	{
-		add_node_parser(&parser, new_node_parser(lexer));
+		add_node_parser(parser, new_node_parser(lexer));
 		if (cmds == 0)
 			break ;
 		while (lexer->token != PIPE)
 			lexer = lexer->next;
 		lexer = lexer->next;
 	}
+	print_parser(*parser);
 }

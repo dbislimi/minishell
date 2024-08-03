@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:12:57 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/01 20:06:12 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 19:16:14 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ char	*clean(char *tab, t_env *env)
 		++tab;
 	while (i < len)
 	{
-		if (*tab == '\\' && (*(tab + 1) == '\\' || *(tab + 1) == '$'))
+		if (*tab == '\\' && (*(tab + 1) == '\\' || *(tab + 1) == '$' || *(tab + 1) == '"'))
 			++tab;
 		else if (*tab == '$')
 		{

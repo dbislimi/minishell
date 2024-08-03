@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 20:11:20 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/01 19:16:54 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 19:38:41 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,18 @@
 void	handle_quotes(char c, int *res, t_flag *flag)
 {
 	if (c == '"' && flag->d_quote == 0 && flag->sg_quote == 0)
-	{
-		printf("d quote open\n");
 		flag->d_quote = 1;
-	}
 	else if (c == '"' && flag->d_quote == 1)
 	{
 		++*res;
-		printf("d quote close\n");
 		flag->d_quote = 0;
 	}
 	else if (c == '\'' && flag->sg_quote == 0 && flag->d_quote == 0)
-	{
-		printf("s quote open\n");
 		flag->sg_quote = 1;
-	}
 	else if (c == '\'' && flag->sg_quote == 1)
 	{
 		++*res;
 		flag->sg_quote = 0;
-		printf("s quote close\n");
 	}
 }
 

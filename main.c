@@ -6,18 +6,33 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/02 19:54:29 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 19:30:58 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
 
+void	free_parser(t_parser **parser)
+{
+	t_parser	*temp;
+
+	while (*parser)
+	{
+		temp = (*parser)->next;
+		free_tab((*parser)->cmd);
+		free_lexer(&(*parser)->redirections);
+		free(*parser);
+		*parser = temp;
+	}
+}
+
 void	minishell(t_env **env)
 {
-	//t_parser	*parser_list;
+	t_parser	*parser_list;
 	t_lexer		*lexer_list;
 	char		*str;
 
+	parser_list = NULL;
 	lexer_list = NULL;
 	str = NULL;
 	while (1)
@@ -31,8 +46,9 @@ void	minishell(t_env **env)
 		lexer_list = lexer(lexer_list, str, *env);
 		if (lexer_list == NULL)
 			continue ;
-		parser(lexer_list);
+		parser_init(&parser_list, lexer_list);
 		free_lexer(&lexer_list);
+		free_parser(&parser_list);
 	}
 }
 
