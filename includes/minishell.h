@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/03 19:25:10 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/05 19:45:08 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,6 @@
 # include <limits.h>
 # include <sys/wait.h>
 # include <stdbool.h>
-
-// BUILTINS
-
-void	set_signal_action(void);
 
 // EXTENDER 
 
@@ -80,7 +76,6 @@ typedef struct s_index
 	int	end;
 }	t_index;
 
-
 t_lexer	*lexer(t_lexer *list, char *str, t_env *env);
 char	**ft_split_lexer(char *s);
 int		count_words_lexer(char *s);
@@ -97,17 +92,40 @@ void	free_lexer(t_lexer **lexer);
 void	print_lexer(t_lexer *lexer);
 void	handle_backslash(char c, int *backslash);
 t_lexer	*delete_empty_nodes(t_lexer *lexer);
+int		strlen2(char *str, t_env *env, bool flag);
+char	*find_value(char *str, t_env *env);
+int		is_special_char(char c);
+void	handle_backslash(char c, int *backslash);
 
 //PARSER
 
 typedef struct s_parser
 {
-	char	**cmd;
-	t_lexer	*redirections;
+	char			**cmd;
+	int				(*builtin)(t_env *, struct s_parser *);
+	t_lexer			*redirections;
 	struct s_parser	*next;
 	struct s_parser	*prev;	
 }		t_parser;
 
 void	parser_init(t_parser **parser, t_lexer *lexer);
+t_lexer	*find_redirection(t_lexer *lexer);
+char	**build_command(t_lexer *lexer);
+void	detach_from_lexer(t_lexer *lexer);
+int		count_pipes(t_lexer *lexer);
+int		count_nodes(t_lexer *lexer);
+void	print_parser(t_parser *parser);
+void	free_parser(t_parser **parser);
+
+// BUILTINS
+
+void	set_signal_action(void);
+int		my_echo(t_env *env, struct s_parser *parser);
+int		my_cd(t_env *env, struct s_parser *parser);
+int		my_pwd(t_env *env, struct s_parser *parser);
+int		my_export(t_env *env, struct s_parser *parser);
+int		my_unset(t_env *env, struct s_parser *parser);
+int		my_env(t_env *env, struct s_parser *parser);
+int		my_exit(t_env *env, struct s_parser *parser);
 
 #endif

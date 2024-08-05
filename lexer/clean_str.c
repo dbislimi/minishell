@@ -3,62 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   clean_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:12:57 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/03 19:16:14 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/05 19:06:40 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char	*find_value(char *str, t_env *env)
-{
-	size_t	i;
-	size_t	j;
-
-	j = 0;
-	while (ft_isalnum(str[j]) && str[j] != '"')
-		++j;
-	while (env)
-	{
-		i = ft_strlen(env->name);
-		if (j > i)
-			i = j;
-		if (ft_strncmp(str, env->name, i) == 0)
-			return (env->value);
-		env = env->next;
-	}
-	return (NULL);
-}
-
-int	strlen2(char *str, t_env *env, bool flag)
-{
-	size_t	i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	if (str[j] == '"')
-		++j;
-	while (str[j])
-	{
-		if (str[j] == '\\' && (flag == 1 || (str[j + 1] == '\\' || str[j + 1] == '$')))
-			++j;
-		else if (str[j] == '$')
-		{
-			i += count_dollar((str + ++j), env);
-			while (ft_isalnum(str[j]))
-				++j;
-			continue ;
-		}
-		else if (str[j] == '"')
-			break ;
-		if (str[j] && ++j)
-			++i;
-	}
-	return (i);
-}
 
 char	*simple_clean(char *toclean)
 {
@@ -95,7 +47,7 @@ char	*clean(char *tab, t_env *env)
 		++tab;
 	while (i < len)
 	{
-		if (*tab == '\\' && (*(tab + 1) == '\\' || *(tab + 1) == '$' || *(tab + 1) == '"'))
+		if (*tab == '\\' && is_special_char(*(tab + 1)))
 			++tab;
 		else if (*tab == '$')
 		{
@@ -108,6 +60,7 @@ char	*clean(char *tab, t_env *env)
 	clean[i] = '\0';
 	return (clean);
 }
+
 char	*basic_clean(char *tab, t_env *env)
 {
 	char	*clean;

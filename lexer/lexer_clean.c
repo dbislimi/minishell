@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_clean.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 19:40:28 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/02 19:41:04 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/05 18:55:13 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_lexer	*delete_empty_nodes(t_lexer *lexer)
 {
 	t_lexer	*temp;
 	t_lexer	*first_node;
-	
+
 	first_node = lexer;
 	while (lexer)
 	{

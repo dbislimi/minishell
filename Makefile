@@ -8,9 +8,9 @@ EXECUTION_PATH	= ./execution
 BUILTINS_PATH 	= ./builtins
 
 SRCS 	= main.c ${addprefix ${EXTENDER_PATH}/, env_init.c env_build.c env_clear.c print_env.c} \
-				 ${addprefix ${BUILTINS_PATH}/, signals.c} \
+				 ${addprefix ${BUILTINS_PATH}/, signals.c cd.c echo.c env.c exit.c export.c pwd.c unset.c} \
 				 ${addprefix ${LEXER_PATH}/, split.c split_utils.c lexer.c lexer_init.c lexer_clean.c lexer_clear.c clean_str.c clean_utils.c} \
-				 ${addprefix ${PARSER_PATH}/, parser.c}
+				 ${addprefix ${PARSER_PATH}/, parser.c free_parser.c print_parser.c parse_utils.c}
 OBJS 	= ${SRCS:.c=.o}
 
 

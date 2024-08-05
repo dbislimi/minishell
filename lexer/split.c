@@ -6,21 +6,11 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 19:44:48 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/01 19:18:11 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/05 19:09:34 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	handle_backslash(char c, int *backslash)
-{
-	if ((c == '\\' && *backslash == 0) || (c == '\\' && *backslash == 2))
-		*backslash = 1;
-	else if (*backslash == 1)
-		++*backslash;
-	else if (*backslash == 2)
-		*backslash = 0;
-}
 
 int	count_words_lexer(char *s)
 {

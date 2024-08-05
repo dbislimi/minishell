@@ -3,30 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/03 19:30:58 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/05 19:44:07 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
 
-void	free_parser(t_parser **parser)
+void	execution(t_parser *cmd, t_env *env)
 {
-	t_parser	*temp;
-
-	while (*parser)
+	while (cmd)
 	{
-		temp = (*parser)->next;
-		free_tab((*parser)->cmd);
-		free_lexer(&(*parser)->redirections);
-		free(*parser);
-		*parser = temp;
+		if (cmd->builtin != NULL)
+ 			 cmd->builtin(env, cmd);
+		cmd = cmd->next;
 	}
 }
 
-void	minishell(t_env **env)
+void	minishell(t_env *env)
 {
 	t_parser	*parser_list;
 	t_lexer		*lexer_list;
@@ -43,10 +39,11 @@ void	minishell(t_env **env)
 		if (str == NULL)
 			break ;
 		add_history(str);
-		lexer_list = lexer(lexer_list, str, *env);
+		lexer_list = lexer(lexer_list, str, env);
 		if (lexer_list == NULL)
 			continue ;
 		parser_init(&parser_list, lexer_list);
+		execution(parser_list, env);
 		free_lexer(&lexer_list);
 		free_parser(&parser_list);
 	}
@@ -65,6 +62,6 @@ int	main(int ac, char **av, char **envp)
 	}
 	env_init(&env, envp);
 	set_signal_action();
-	minishell(&env);
+	minishell(env);
 	envclear(&env);
 }
