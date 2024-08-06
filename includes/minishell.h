@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/05 19:45:08 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/06 19:42:21 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,14 @@ typedef struct s_index
 	int	end;
 }	t_index;
 
-t_lexer	*lexer(t_lexer *list, char *str, t_env *env);
+void	lexer(t_lexer **list, char *str, t_env *env);
 char	**ft_split_lexer(char *s);
 int		count_words_lexer(char *s);
-void	handle_quotes(char c, int *res, t_flag *flag);
+void	handle_quotes(char c, int *res, t_flag *flag, bool *wf);
 void	is_start_of_word(int *res, t_flag f, bool *flag);
 void	found_quote(t_index *idx, const char *s, bool *flag);
 void	found_word(t_index *idx, const char *s, bool *flag);
-t_lexer	*lexer_init(t_lexer **lexer, char **split, t_env *env);
+void	lexer_init(t_lexer **lexer, char **split, t_env *env);
 char	*clean_str(char *str, t_env *env);
 char	*find_value(char *str, t_env *env);
 size_t	handle_dollar(char *clean, char **tab, char *env_value);

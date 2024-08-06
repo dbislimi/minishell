@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 19:44:48 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/05 19:09:34 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/06 19:48:21 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	count_words_lexer(char *s)
 	{
 		handle_backslash(s[i], &f.backslash);
 		if ((s[i] == '"' && f.backslash == 0) || s[i] == '\'')
-			handle_quotes(s[i], &res, &f);
+			handle_quotes(s[i], &res, &f, &flag);
 		else if (!is_whitespace(s[i]))
 			is_start_of_word(&res, f, &flag);
 		else if (!(f.d_quote || f.sg_quote))
@@ -95,6 +95,7 @@ char	**ft_split_lexer(char *s)
 	int			size;
 
 	size = count_words_lexer(s);
+	printf("size : %d\n", size);
 	if (size == -1)
 	{
 		printf("Error: check your quotes\n");

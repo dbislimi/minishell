@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 19:30:11 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/05 19:25:24 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/06 17:24:35 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,4 @@ void	parser_init(t_parser **parser, t_lexer *lexer)
 			lexer = lexer->next;
 		lexer = lexer->next;
 	}
-	print_parser(*parser);
 }

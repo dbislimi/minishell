@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_clear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 18:25:45 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/02 19:35:07 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/06 19:15:53 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ void	print_lexer(t_lexer *lexer)
 		printf("NULL\n");
 	while (lexer)
 	{
-		printf("content: [%s]\ntoken: [%d]\n", lexer->content, lexer->token);
+		printf("content: [%s]\n", lexer->content);
+		printf("token: [%d]\n", lexer->token);
 		lexer = lexer->next;
 	}
 }

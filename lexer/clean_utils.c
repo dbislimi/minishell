@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 18:21:42 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/05 19:07:42 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:30:22 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*find_value(char *str, t_env *env)
 int	strlen2(char *str, t_env *env, bool flag)
 {
 	size_t	i;
-	int		j;
+	size_t	j;
 
 	i = 0;
 	j = 0;

@@ -6,13 +6,13 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 20:11:20 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/05 19:09:39 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/06 19:42:06 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	handle_quotes(char c, int *res, t_flag *flag)
+void	handle_quotes(char c, int *res, t_flag *flag, bool *wf)
 {
 	if (c == '"' && flag->d_quote == 0 && flag->sg_quote == 0)
 		flag->d_quote = 1;
@@ -28,6 +28,7 @@ void	handle_quotes(char c, int *res, t_flag *flag)
 		++*res;
 		flag->sg_quote = 0;
 	}
+	*wf = 0;
 }
 
 void	is_start_of_word(int *res, t_flag f, bool *flag)

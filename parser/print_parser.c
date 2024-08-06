@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:17:32 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/05 18:26:53 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:17:40 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void	print_parser(t_parser *parser)
 	int	i;
 
 	i = 0;
-	printf("\n");
 	while (parser)
 	{
+		printf("\n");
 		printf("command : ");
 		while (parser->cmd[i])
 			printf("%s ", parser->cmd[i++]);

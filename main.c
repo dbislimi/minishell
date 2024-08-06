@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/05 19:44:07 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:44:57 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,27 @@ void	execution(t_parser *cmd, t_env *env)
 		cmd = cmd->next;
 	}
 }
+void	lexer_parser(t_parser **parser, char *str, t_env *env)
+{
+	t_lexer		*lexer_list;
+
+	lexer_list = NULL;
+	lexer(&lexer_list, str, env);
+	printf("debu\n");
+	if (lexer_list == NULL)
+		return ;
+	parser_init(parser, lexer_list);
+	free_lexer(&lexer_list);
+	print_parser(*parser);
+}
 
 void	minishell(t_env *env)
 {
 	t_parser	*parser_list;
-	t_lexer		*lexer_list;
 	char		*str;
 
-	parser_list = NULL;
-	lexer_list = NULL;
 	str = NULL;
+	parser_list = NULL;
 	while (1)
 	{
 		if (str != NULL)
@@ -39,12 +50,10 @@ void	minishell(t_env *env)
 		if (str == NULL)
 			break ;
 		add_history(str);
-		lexer_list = lexer(lexer_list, str, env);
-		if (lexer_list == NULL)
+		lexer_parser(&parser_list, str, env);
+		if (parser_list == NULL)
 			continue ;
-		parser_init(&parser_list, lexer_list);
 		execution(parser_list, env);
-		free_lexer(&lexer_list);
 		free_parser(&parser_list);
 	}
 }
