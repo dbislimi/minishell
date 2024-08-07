@@ -1,0 +1,65 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thmouty <theo@student.42.fr>               +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/17 14:55:54 by thmouty           #+#    #+#             */
+/*   Updated: 2024/07/17 14:56:39 by thmouty          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PIPEX_H
+# define PIPEX_H
+
+# include "../libft/inc/libft.h"
+# include "../libft/inc/ft_printf.h"
+# include "../libft/inc/get_next_line.h"
+# include <errno.h>
+# include <fcntl.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
+
+# ifndef BONUS
+#  define BONUS 0
+# endif
+
+// STRING
+# define FILE_TEMP ".here_doc_tmp"
+
+typedef struct s_tools
+{
+	struct s_simple_cmds	*simple_cmds;
+	char	**cmd;
+
+	char	*path;
+	char	**envp;
+	char	**split;
+	char	*limiter;
+	char	*infile;
+	char	*outfile;
+	int		fd[2];
+	int		input_fd;
+	int		pid;
+	int		error;
+}			t_tools;
+
+// pipex.c
+void		execute_pipeline(t_tools *data, int cmd_index, int num_cmds);
+void		execute_child(t_tools *data, int cmd_index, int num_cmds);
+void		execute_parent(t_tools *data, int cmd_index, int num_cmds);
+
+// tools.c
+void		free_all_stop(t_tools *data, int is_malloc, int error,
+				char *message);
+void		redirect_output(t_tools *data);
+void		get_path_cmd(t_tools *data, char **envp, char *cmd);
+void		create_path(t_tools *data, char *cmd, char *path);
+void		here_doc(t_tools *data, int *ac, char ***av);
+
+#endif

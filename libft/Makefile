@@ -33,6 +33,7 @@ LIBFT_SRCS = ${addprefix ${LIBFT_PATH}/, ft_strcpy.c \
 			ft_putendl_fd.c \
 			ft_putnbr_fd.c \
 			ft_strjoin.c \
+			ft_strjoinf.c \
 			ft_strjoinwsep.c \
 			ft_substr.c \
 			ft_strtrim.c \

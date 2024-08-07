@@ -27,6 +27,17 @@ static char	*fill_str_with(char const *s, int start, int end)
 	return (fill);
 }
 
+char	**free_all_split(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+		free(tab[i++]);
+	free(tab);
+	return (NULL);
+}
+
 char	**ft_split(char const *s, char c)
 {
 	char		**split;
