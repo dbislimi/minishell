@@ -14,8 +14,16 @@
 
 int	my_exit(t_env *env, struct s_parser *parser)
 {
+	int	exit_code;
+
 	(void)env;
-	(void)parser;
-	printf("use of exit\n");
+	exit_code = 0;
+	if (parser->cmd[1])
+	{
+		exit_code = ft_atoi(parser->cmd[1]) % 256;
+		if (exit_code < 0)
+			exit_code = 256 + exit_code;
+	}
+	exit(exit_code);
 	return (1);
 }

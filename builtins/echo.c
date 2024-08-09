@@ -14,8 +14,20 @@
 
 int	my_echo(t_env *env, struct s_parser *parser)
 {
+	int	i;
+
 	(void)env;
-	(void)parser;
-	printf("use of echo\n");
+	i = 1;
+	if (parser->cmd[1] && strcmp(parser->cmd[1], "-n") == 0)
+		i++;
+	while (parser->cmd[i])
+	{
+		ft_printf("use %s\n", parser->cmd[i]);
+		if (parser->cmd[i + 1])
+			ft_printf(" ");
+		i++;
+	}
+	if (!parser->cmd[1] || strcmp(parser->cmd[1], "-n") != 0)
+		printf("slaut c'est le backslashn\n");
 	return (1);
 }
