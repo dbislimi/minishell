@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/06 19:42:21 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/09 17:18:04 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	env_init(t_env **env, char **envp);
 void	add_node(t_env **lst, t_env *newnode);
 t_env	*new_node(void *content);
 void	envclear(t_env **lst);
+void	print_env(t_env *s);
 
 // LEXER
 
@@ -79,7 +80,7 @@ typedef struct s_index
 void	lexer(t_lexer **list, char *str, t_env *env);
 char	**ft_split_lexer(char *s);
 int		count_words_lexer(char *s);
-void	handle_quotes(char c, int *res, t_flag *flag, bool *wf);
+int		handle_quotes(char c, t_flag *flag);
 void	is_start_of_word(int *res, t_flag f, bool *flag);
 void	found_quote(t_index *idx, const char *s, bool *flag);
 void	found_word(t_index *idx, const char *s, bool *flag);
@@ -95,7 +96,7 @@ t_lexer	*delete_empty_nodes(t_lexer *lexer);
 int		strlen2(char *str, t_env *env, bool flag);
 char	*find_value(char *str, t_env *env);
 int		is_special_char(char c);
-void	handle_backslash(char c, int *backslash);
+int	is_quote(char c, int backslash);
 
 //PARSER
 

@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/06 18:44:57 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/07 18:16:14 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	lexer_parser(t_parser **parser, char *str, t_env *env)
 
 	lexer_list = NULL;
 	lexer(&lexer_list, str, env);
-	printf("debu\n");
 	if (lexer_list == NULL)
 		return ;
 	parser_init(parser, lexer_list);
