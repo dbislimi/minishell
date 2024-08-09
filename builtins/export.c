@@ -14,8 +14,8 @@
 
 int	my_export(t_env *env, struct s_parser *parser)
 {
-	(void)env;
-	(void)parser;
-	printf("use of export\n");
+	add_node(&env, new_node(parser->cmd[1]));
+	if (!parser->cmd[1])
+		my_env(env, parser);
 	return (1);
 }

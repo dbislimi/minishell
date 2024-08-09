@@ -15,7 +15,15 @@
 int	my_env(t_env *env, struct s_parser *parser)
 {
 	(void)parser;
+<<<<<<< HEAD
 	printf("use of env\n");
 	print_env(env);
+=======
+	while (env)
+	{
+		ft_printf("%s=%s\n", env->name, env->value);
+		env = env->next;
+	}
+>>>>>>> 6696c3ff06f17ed57282e48a34e63306a9c25788
 	return (1);
 }
