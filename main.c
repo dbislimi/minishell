@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/10 19:12:32 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:44:46 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	lexer_parser(t_parser **parser, char *str, t_env *env)
 		return ;
 	parser_init(parser, lexer_list);
 	free_lexer(&lexer_list);
-	print_parser(*parser);
+	//print_parser(*parser);
 }
 
 void	minishell(t_env *env)

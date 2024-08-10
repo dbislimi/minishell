@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 19:03:31 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/06 18:45:42 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:41:35 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,5 @@ void	lexer(t_lexer **list, char *str, t_env *env)
 	free_tab(split);
 	if (*list == NULL)
 		return ;
-	printf("debug\n");
-	print_lexer(*list);
+	//print_lexer(*list);
 }

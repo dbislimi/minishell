@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 20:11:20 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/10 18:14:52 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:42:43 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,20 @@ int	handle_quotes(char c, t_flag *flag)
 	if (c == '"' && flag->d_quote == 0 && flag->sg_quote == 0)
 	{
 		flag->d_quote = 1;
-		printf("dquote open\n");
 		return (1);
 	}
 	else if (c == '"' && flag->d_quote == 1)
 	{
 		flag->d_quote = 0;
-		printf("dquote close\n");
 		return (1);
 	}
 	else if (c == '\'' && flag->sg_quote == 0 && flag->d_quote == 0)
 	{
-		printf("sgquote open\n");
 		flag->sg_quote = 1;
 		return (1);
 	}
 	else if (c == '\'' && flag->sg_quote == 1)
 	{
-		printf("sgquote close\n");
 		flag->sg_quote = 0;
 		return (1);
 	}
@@ -56,7 +52,6 @@ void	found_quote(t_index *idx, const char *s, bool *flag)
 
 	(void)flag;
 	backslash = 0;
-	printf("debug %d\n", idx->end);
 	if (s[idx->end] == '"')
 	{
 		++idx->end;

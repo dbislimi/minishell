@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:12:57 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/10 18:15:38 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:43:58 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static char	*simple_clean(char *toclean)
 	len = 0;
 	while (toclean && toclean[len + 1] != '\'')
 		++len;
-	printf("len : %zu\n", len);
 	clean_str = malloc(sizeof(char) * (len + 1));
 	if (!clean_str)
 		return (NULL);
