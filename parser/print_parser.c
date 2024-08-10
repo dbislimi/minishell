@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:17:32 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/06 18:17:40 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 17:37:42 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_parser(t_parser *parser)
 		printf("\n");
 		printf("command : ");
 		while (parser->cmd[i])
-			printf("%s ", parser->cmd[i++]);
+			printf("[%s] ", parser->cmd[i++]);
 		if (parser->redirections)
 			printf("\nredirection : (%d) %s\n", parser->redirections->token,
 				parser->redirections->next->content);

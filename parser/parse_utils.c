@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:18:21 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/05 18:26:32 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:06:46 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ char	**build_command(t_lexer *lexer)
 
 t_lexer	*find_redirection(t_lexer *lexer)
 {
-	//print_lexer(lexer);
 	while (lexer && lexer->token != PIPE)
 	{
 		if (lexer->token == OUTPUT || lexer->token == APPENDOUTPUT)

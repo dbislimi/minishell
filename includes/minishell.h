@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/09 17:18:04 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:50:24 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,8 @@ t_lexer	*delete_empty_nodes(t_lexer *lexer);
 int		strlen2(char *str, t_env *env, bool flag);
 char	*find_value(char *str, t_env *env);
 int		is_special_char(char c);
-int	is_quote(char c, int backslash);
+int		is_quote(char c, int backslash);
+size_t	skip_word(const char *s, char c);
 
 //PARSER
 

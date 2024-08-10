@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/07 18:16:14 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:12:32 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@ void	execution(t_parser *cmd, t_env *env)
 	while (cmd)
 	{
 		if (cmd->builtin != NULL)
- 			 cmd->builtin(env, cmd);
+			cmd->builtin(env, cmd);
 		cmd = cmd->next;
 	}
 }
+
 void	lexer_parser(t_parser **parser, char *str, t_env *env)
 {
 	t_lexer		*lexer_list;

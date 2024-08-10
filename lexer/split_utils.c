@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 20:11:20 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/09 16:19:39 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 18:14:52 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	handle_quotes(char c, t_flag *flag)
 		flag->d_quote = 0;
 		printf("dquote close\n");
 		return (1);
-	}		
+	}
 	else if (c == '\'' && flag->sg_quote == 0 && flag->d_quote == 0)
 	{
 		printf("sgquote open\n");
@@ -40,24 +40,6 @@ int	handle_quotes(char c, t_flag *flag)
 	}
 	return (0);
 }
-// void	handle_quotes(char c, int *res, t_flag *flag, bool *wf)
-// {
-// 	if (c == '"' && flag->d_quote == 0 && flag->sg_quote == 0)
-// 		flag->d_quote = 1;
-// 	else if (c == '"' && flag->d_quote == 1)
-// 	{
-// 		++*res;
-// 		flag->d_quote = 0;
-// 	}
-// 	else if (c == '\'' && flag->sg_quote == 0 && flag->d_quote == 0)
-// 		flag->sg_quote = 1;
-// 	else if (c == '\'' && flag->sg_quote == 1)
-// 	{
-// 		++*res;
-// 		flag->sg_quote = 0;
-// 	}
-// 	*wf = 0;
-// }
 
 void	is_start_of_word(int *res, t_flag f, bool *flag)
 {
@@ -99,7 +81,8 @@ void	found_word(t_index *idx, const char *s, bool *flag)
 
 	backslash = 0;
 	handle_backslash(s[idx->end], &backslash);
-	while (s[idx->end] && (!is_whitespace(s[idx->end]) && !(s[idx->end] == '"' || s[idx->end] == '\'')))
+	while (s[idx->end] && (!is_whitespace(s[idx->end])
+			&& !(s[idx->end] == '"' || s[idx->end] == '\'')))
 	{
 		++idx->end;
 		handle_backslash(s[idx->end], &backslash);

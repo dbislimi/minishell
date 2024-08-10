@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 19:30:11 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/06 17:24:35 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:08:04 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,12 @@ void	parser_init(t_parser **parser, t_lexer *lexer)
 	cmds = count_pipes(lexer) + 1;
 	while (cmds--)
 	{
+		if (lexer == NULL || lexer->token == PIPE)
+		{
+			printf("Error: unexpected token '|'\n");
+			free_parser(parser);
+			break ;
+		}
 		add_node_parser(parser, new_node_parser(lexer));
 		if (cmds == 0)
 			break ;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 18:21:42 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/06 18:30:22 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 17:27:17 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	strlen2(char *str, t_env *env, bool flag)
 				++j;
 			continue ;
 		}
-		else if (str[j] == '"')
+		else if (str[j] == '"' || (flag == 1 && str[j] == '\''))
 			break ;
 		if (str[j] && ++j)
 			++i;

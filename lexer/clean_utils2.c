@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_parser.c                                      :+:      :+:    :+:   */
+/*   clean_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/05 19:44:28 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/10 19:08:57 by dbislimi         ###   ########.fr       */
+/*   Created: 2024/08/10 16:48:44 by dbislimi          #+#    #+#             */
+/*   Updated: 2024/08/10 18:15:14 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_parser(t_parser **parser)
+size_t	skip_word(const char *s, char c)
 {
-	t_parser	*temp;
+	size_t	i;
+	int		backslash;
 
-	while (*parser)
+	if (c)
+		i = 1;
+	else
+		i = 0;
+	backslash = 0;
+	handle_backslash(s[i], &backslash);
+	while (s[i] && !(is_quote(s[i], backslash) && (!c || s[i] == c)))
 	{
-		temp = (*parser)->next;
-		free_tab((*parser)->cmd);
-		free_lexer(&(*parser)->redirections);
-		free(*parser);
-		*parser = temp;
+		++i;
+		handle_backslash(s[i], &backslash);
 	}
-	*parser = NULL;
+	return (i);
 }

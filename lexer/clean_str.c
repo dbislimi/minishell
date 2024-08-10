@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:12:57 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/09 19:20:01 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 18:15:38 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static char	*clean2(char *tab, t_env *env)
 	return (clean_str);
 }
 
-char	*strjoinlexer(char const *s1, char *s2)
+char	*strjoinlexer(char *s1, char *s2)
 {
 	char	*joined;
 	size_t	i;
@@ -98,9 +98,9 @@ char	*strjoinlexer(char const *s1, char *s2)
 	if (!s1 && !s2)
 		return (ft_strdup(""));
 	if (s1 == NULL)
-		return (ft_strdup(s2));
+		return (s2);
 	if (s2 == NULL)
-		return (ft_strdup(s1));
+		return (s1);
 	i = 0;
 	j = 0;
 	joined = ft_calloc(sizeof(char), (ft_strlen(s1) + ft_strlen(s2) + 1));
@@ -111,26 +111,9 @@ char	*strjoinlexer(char const *s1, char *s2)
 	while (s2[j])
 		joined[i++ - 1] = s2[j++];
 	joined[i - 1] = 0;
+	free(s1);
 	free(s2);
 	return (joined);
-}
-
-size_t	skip_word(const char *s, char c)
-{
-	size_t	i;
-	int		backslash;
-
-	i = 0;
-	backslash = 0;
-	handle_backslash(s[i], &backslash);
-	printf("skib, %c\n", s[i]);
-	while (s[i] && ((c == '\0' && !is_quote(s[i], backslash)) || (s[i] == c && !is_quote(s[i], backslash))))
-	{
-		printf("skip, %c -> backslash : %d\n", s[i], backslash);
-		++i;
-		handle_backslash(s[i], &backslash);
-	}
-	return (i);
 }
 
 char	*clean_str(char *str, t_env *env)
@@ -145,20 +128,18 @@ char	*clean_str(char *str, t_env *env)
 		if (str[len] == '\'')
 		{
 			clean_str = strjoinlexer(clean_str, simple_clean(str + len));
-			len += skip_word(str + len, '\'') + 2;
+			len += skip_word(str + len, '\'') + 1;
 		}
 		else if (str[len] == '"')
 		{
-			clean_str = strjoinlexer(clean_str, clean(str + len++, env));
+			clean_str = strjoinlexer(clean_str, clean(str + len, env));
 			len += skip_word(str + len, '"') + 1;
 		}
 		else
 		{
 			clean_str = strjoinlexer(clean_str, clean2(str + len, env));
-			printf("len: %zu\n", len);
-			len += skip_word(str + len, '\0') + 1;
+			len += skip_word(str + len, '\0');
 		}
-		printf("clean_str : {%s}\nlen : %zu\nchar : %c\n", clean_str, len, str[len]);
 	}
 	return (clean_str);
 }
