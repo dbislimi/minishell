@@ -15,10 +15,6 @@
 int	my_env(t_env *env, struct s_parser *parser)
 {
 	(void)parser;
-	while (env)
-	{
-		ft_printf("%s=%s\n", env->name, env->value);
-		env = env->next;
-	}
+	print_env(env, "env");
 	return (1);
 }

@@ -16,6 +16,8 @@ void	print_env(t_env *env, char *type)
 {
 	int	i;
 
+	if (!env)
+		printf("env Vide\n");
 	while (env)
 	{
 		i = 0;
@@ -23,20 +25,22 @@ void	print_env(t_env *env, char *type)
 			printf("%s=%s\n", env->name, env->value);
 		else if (strcmp(type, "export") == 0)
 		{
-			printf("declare -x %s", env->name);
 			if (env->value)
 			{
-				printf("=\"");
+				printf("declare -x %s=\"", env->name);
 				while (env->value[i])
 				{
-					if (ft_strchr("$\"\\`", env->value[i]))
+					if (env->value[i] == '\"' || env->value[i] == '$'
+						|| env->value[i] == '\\' || env->value[i] == '`'
+						|| env->value[i] == '"')
 						printf("\\");
 					printf("%c", env->value[i]);
 					i++;
 				}
-				printf("\"");
+				printf("\"\n");
 			}
-			printf("\n");
+			else
+				printf("declare -x %s\n", env->name);
 		}
 		env = env->next;
 	}

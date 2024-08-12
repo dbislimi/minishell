@@ -22,12 +22,12 @@ int	my_echo(t_env *env, struct s_parser *parser)
 		i++;
 	while (parser->cmd[i])
 	{
-		ft_printf("use %s\n", parser->cmd[i]);
+		ft_printf("%s", parser->cmd[i]);
 		if (parser->cmd[i + 1])
 			ft_printf(" ");
 		i++;
 	}
 	if (!parser->cmd[1] || strcmp(parser->cmd[1], "-n") != 0)
-		printf("slaut c'est le backslashn\n");
+		printf("\n");
 	return (1);
 }

@@ -71,15 +71,19 @@ t_env	*new_node(void *content)
 	t_env	*new;
 	char	**line;
 
+	if (!content)
+		return (0);
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (0);
 	line = split_for_env(content);
 	new->name = ft_strdup(line[0]);
-	if (line[1])
+	if (line[1] && ft_strlen(line[1]) > 0)
 		new->value = ft_strdup(line[1]);
-	else
+	else if (line[1] && ft_strlen(line[1]) == 0)
 		new->value = ft_strdup("");
+	else
+		new->value = NULL;
 	new->next = NULL;
 	free_tab(line);
 	return (new);
@@ -99,6 +103,10 @@ void	add_node(t_env **lst, t_env *newnode)
 {
 	t_env	*last;
 
+	if (!newnode)
+		return ;
+	if (env_edit(lst, newnode) == 1)
+			return ;
 	if (*lst)
 	{
 		last = last_node(*lst);
