@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 19:30:11 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/10 19:08:04 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/12 16:32:21 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,12 @@ static t_parser	*new_node_parser(t_lexer *lexer)
 	t_parser	*new;
 	t_lexer		*redirection;
 
-	redirection = find_redirection(lexer);
+	redirection = find_redirection(&lexer);
 	if (redirection && redirection->next == NULL)
 		return (0);
+	print_lexer(redirection);
+	printf("------\n");
+	print_lexer(lexer);
 	new = malloc(sizeof(t_parser));
 	if (!new)
 		return (0);

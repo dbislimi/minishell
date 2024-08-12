@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/10 16:50:24 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/12 16:49:29 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,9 @@ typedef struct s_parser
 }		t_parser;
 
 void	parser_init(t_parser **parser, t_lexer *lexer);
-t_lexer	*find_redirection(t_lexer *lexer);
+t_lexer	*find_redirection(t_lexer **lexer);
 char	**build_command(t_lexer *lexer);
-void	detach_from_lexer(t_lexer *lexer);
+void	detach_from_lexer(t_lexer **lexer);
 int		count_pipes(t_lexer *lexer);
 int		count_nodes(t_lexer *lexer);
 void	print_parser(t_parser *parser);
