@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 15:13:38 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/23 19:55:33 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/12 19:50:11 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,43 @@ static char	*fill_str_with(char const *s, int start, int end)
 	fill[i] = 0;
 	return (fill);
 }
-
-static char	**split_for_env(char const *s, char c)
+int	sizeofsplit(const char *s)
 {
-	char		**split;
-	int			end;
-	int			start;
+	const char	*equal;
 
+	equal = ft_strchr(s, '=');
+	if (equal == NULL)
+		return (1);
+	else
+		return (2);
+}
+
+static char	**split_for_env(char const *s)
+{
+	char	**split;
+	int		len;
+	int		i;
+	int		end;
+	int		start;
+
+	len = sizeofsplit(s);
+	i = 0;
 	start = 0;
-	split = malloc(sizeof(char *) * (3));
+	end = 1;
+	split = malloc(sizeof(char *) * (len + 1));
 	if (!split)
 		return (NULL);
-	while (s[start] == c && s[start])
-		start++;
-	end = start + 1;
-	while (s[end] != c && s[end])
-		end++;
-	split[0] = fill_str_with(s, start, end);
-	start = end + 1;
-	split[1] = fill_str_with(s, start, ft_strlen(s));
-	split[2] = NULL;
+	while (s[end] && s[end] != '=')
+				end++;
+	while (i < len)
+	{
+		if (i != 0)
+			while (s[end])
+				end++;
+		split[i++] = fill_str_with(s, start, end);
+		start = end + 1;
+	}
+	split[i] = NULL;
 	return (split);
 }
 
@@ -57,7 +74,7 @@ t_env	*new_node(void *content)
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (0);
-	line = split_for_env(content, '=');
+	line = split_for_env(content);
 	new->name = ft_strdup(line[0]);
 	if (line[1])
 		new->value = ft_strdup(line[1]);
