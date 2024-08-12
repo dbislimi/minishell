@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:18:21 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/10 19:06:46 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/12 16:49:18 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,6 @@ int	count_pipes(t_lexer *lexer)
 	return (i);
 }
 
-void	detach_from_lexer(t_lexer *lexer)
-{
-	if (lexer->next == NULL)
-		return ;
-	if (lexer->prev != NULL)
-		lexer->prev->next = lexer->next->next;
-	if (lexer->next != NULL)
-		lexer->next->prev = lexer->prev;
-	lexer->prev = NULL;
-	lexer->next->next = NULL;
-}
 
 char	**build_command(t_lexer *lexer)
 {
@@ -69,16 +58,38 @@ char	**build_command(t_lexer *lexer)
 	return (cmd);
 }
 
-t_lexer	*find_redirection(t_lexer *lexer)
+void	detach_from_lexer(t_lexer **lexer)
 {
-	while (lexer && lexer->token != PIPE)
+	t_lexer	*temp;
+	
+	if ((*lexer)->next == NULL)
 	{
-		if (lexer->token == OUTPUT || lexer->token == APPENDOUTPUT)
+		*lexer = (*lexer)->prev;
+		return ;
+	}
+	if ((*lexer)->prev != NULL)
+		(*lexer)->prev->next = (*lexer)->next->next;
+	else
+		temp = (*lexer)->next->next;
+	(*lexer)->next->prev = (*lexer)->prev;
+	(*lexer)->prev = NULL;
+	(*lexer)->next->next = NULL;
+	*lexer = temp;
+}
+
+t_lexer	*find_redirection(t_lexer **lexer)
+{
+	t_lexer	*redirection;
+	
+	while ((*lexer) && (*lexer)->token != PIPE)
+	{
+		if ((*lexer)->token == OUTPUT || (*lexer)->token == APPENDOUTPUT)
 		{
+			redirection = *lexer;
 			detach_from_lexer(lexer);
-			return (lexer);
+			return (redirection);
 		}
-		lexer = lexer->next;
+		(*lexer) = (*lexer)->next;
 	}
 	return (NULL);
 }
