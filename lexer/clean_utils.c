@@ -67,7 +67,7 @@ int	strlen2(char *str, t_env *env, bool flag)
 		else if (str[j] == '$')
 		{
 			i += count_dollar((str + ++j), env);
-			while (ft_isalnum(str[j]))
+			while (ft_isalnum(str[j]) || str[j] == '_')
 				++j;
 			continue ;
 		}
