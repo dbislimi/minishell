@@ -101,10 +101,21 @@ static t_env	*last_node(t_env *lst)
 
 void	add_node(t_env **lst, t_env *newnode)
 {
+	int		i;
 	t_env	*last;
 
 	if (!newnode)
 		return ;
+	i = 0;
+	while (newnode->name[i])
+	{
+		if(!ft_isalnum(newnode->name[i]) && newnode->name[i] != '_')
+		{
+			printf("bash: export: « %s=%s » : identifiant non valable\n", newnode->name, newnode->value);
+			return ;
+		}
+		i++;
+	}
 	if (env_edit(lst, newnode) == 1)
 			return ;
 	if (*lst)

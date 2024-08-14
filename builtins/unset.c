@@ -14,21 +14,26 @@
 
 int	my_unset(t_env *env, struct s_parser *parser)
 {
-	t_env	*tmp;
+	t_env	*old;
+	t_env	*temp;
+	int		i;
 
-	(void)env;
+	temp = env;
 	(void)parser;
+	i = 1;
 	while (env)
 	{
-		if (strcmp(parser->cmd[1], env->name) == 0)
+		if (strcmp(parser->cmd[i], env->name) == 0)
 		{
-			tmp->next = env->next;
+			old->next = env->next;
 			free(env->name);
 			free(env->value);
 			free(env);
-			return (1);
+			env = temp;
+			if (parser->cmd[i++ + 1] == NULL)
+				return (1);
 		}
-		tmp = env;
+		old = env;
 		env = env->next;
 	}
 	return (0);
