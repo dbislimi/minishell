@@ -45,6 +45,8 @@ void	add_node(t_env **lst, t_env *newnode);
 t_env	*new_node(void *content);
 void	envclear(t_env **lst);
 void	print_env(t_env *env, char *type);
+void	print_export(t_env *env, int i);
+void	print_brut_format(char c);
 
 // LEXER
 

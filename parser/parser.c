@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-int	(*is_builtin(char **cmd))(t_env *env, struct s_parser *parser)
+int (*is_builtin(char	**cmd))(t_env *env, struct s_parser *parser)
 {
 	if (cmd == NULL)
 		return ((void *)0);
@@ -77,7 +77,7 @@ void	rm_from_lexer(t_lexer **lexer, int index)
 {
 	t_lexer	*node;
 	t_lexer	*prev;
-	t_lexer *next;
+	t_lexer	*next;
 
 	node = *lexer;
 	while (node && node->index != index)
@@ -102,7 +102,8 @@ void	rm_from_lexer(t_lexer **lexer, int index)
 	node = NULL;
 }
 
-void	add_new_redirection(t_lexer *to_add, t_lexer **lexer, t_parser_utils *utils)
+void	add_new_redirection(t_lexer *to_add, t_lexer **lexer,
+		t_parser_utils *utils)
 {
 	t_lexer	*newnode;
 	int		i1;
@@ -114,9 +115,7 @@ void	add_new_redirection(t_lexer *to_add, t_lexer **lexer, t_parser_utils *utils
 	add_node_lexer(&utils->redirections, newnode);
 	i1 = to_add->index;
 	i2 = to_add->next->index;
-	
 	rm_from_lexer(lexer, i1);
-	
 	rm_from_lexer(lexer, i2);
 	++utils->nb_of_redirections;
 }
@@ -124,7 +123,7 @@ void	add_new_redirection(t_lexer *to_add, t_lexer **lexer, t_parser_utils *utils
 void	token_error(t_lexer *problem, t_parser_utils *utils)
 {
 	char	*error;
-	
+
 	if (!problem)
 		error = ft_strdup("`newline'");
 	else
@@ -160,8 +159,8 @@ void	detach_redirections(t_lexer **lexer, t_parser_utils *utils)
 
 void	parser_init(t_parser **parser, t_lexer **lexer, t_parser_utils *utils)
 {
-	t_lexer			*lxr;
-	bool		i;
+	t_lexer	*lxr;
+	bool	i;
 	int		cmds;
 
 	i = 0;

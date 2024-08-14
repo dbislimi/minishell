@@ -26,6 +26,7 @@ static char	*fill_str_with(char const *s, int start, int end)
 	fill[i] = 0;
 	return (fill);
 }
+
 int	sizeofsplit(const char *s)
 {
 	const char	*equal;
@@ -53,7 +54,7 @@ static char	**split_for_env(char const *s)
 	if (!split)
 		return (NULL);
 	while (s[end] && s[end] != '=')
-				end++;
+		end++;
 	while (i < len)
 	{
 		if (i != 0)
@@ -109,15 +110,16 @@ void	add_node(t_env **lst, t_env *newnode)
 	i = 0;
 	while (newnode->name[i])
 	{
-		if(!ft_isalnum(newnode->name[i]) && newnode->name[i] != '_')
+		if (!ft_isalnum(newnode->name[i]) && newnode->name[i] != '_')
 		{
-			printf("bash: export: « %s=%s » : identifiant non valable\n", newnode->name, newnode->value);
+			printf("bash: export: « %s=%s » : identifiant non valable\n",
+				newnode->name, newnode->value);
 			return ;
 		}
 		i++;
 	}
 	if (env_edit(lst, newnode) == 1)
-			return ;
+		return ;
 	if (*lst)
 	{
 		last = last_node(*lst);

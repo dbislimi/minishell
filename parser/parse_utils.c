@@ -39,7 +39,6 @@ int	count_pipes(t_lexer *lexer)
 	return (i);
 }
 
-
 char	**build_command(t_lexer *lexer)
 {
 	char	**cmd;
@@ -60,30 +59,30 @@ char	**build_command(t_lexer *lexer)
 	return (cmd);
 }
 
-// void	detach_from_lexer(t_lexer **lexer)
-// {
-// 	t_lexer	*temp;
-	
-// 	if ((*lexer)->next == NULL)
-// 	{
-// 		*lexer = (*lexer)->prev;
-// 		return ;
-// 	}
-// 	if ((*lexer)->prev != NULL)
-// 		(*lexer)->prev->next = (*lexer)->next->next;
-// 	else
-// 		temp = (*lexer)->next->next;
-// 	(*lexer)->next->prev = (*lexer)->prev;
-// 	(*lexer)->prev = NULL;
-// 	(*lexer)->next->next = NULL;
-// 	*lexer = temp;
-// }
+void	detach_from_lexer(t_lexer **lexer)
+{
+	t_lexer	*temp;
+
+	if ((*lexer)->next == NULL)
+	{
+		*lexer = (*lexer)->prev;
+		return ;
+	}
+	if ((*lexer)->prev != NULL)
+		(*lexer)->prev->next = (*lexer)->next->next;
+	else
+		temp = (*lexer)->next->next;
+	(*lexer)->next->prev = (*lexer)->prev;
+	(*lexer)->prev = NULL;
+	(*lexer)->next->next = NULL;
+	*lexer = temp;
+}
 
 t_lexer	*find_redirection(t_lexer **lexer)
 {
 	t_lexer	*redirection;
 	t_lexer	*temp;
-	
+
 	temp = *lexer;
 	while (temp && temp->token != PIPE)
 	{

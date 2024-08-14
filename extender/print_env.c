@@ -22,22 +22,43 @@ void	print_env(t_env *env, char *type)
 		if (strcmp(type, "env") == 0)
 			printf("%s=%s\n", env->name, env->value);
 		else if (strcmp(type, "export") == 0)
-		{
-			printf("declare -x %s", env->name);
-			if (env->value)
-			{
-				printf("=\"");
-				while (env->value[i])
-				{
-					if (ft_strchr("$\"\\`", env->value[i]))
-						printf("\\");
-					printf("%c", env->value[i]);
-					i++;
-				}
-				printf("\"");
-			}
-			printf("\n");
-		}
+			print_export(env, i);
 		env = env->next;
 	}
+}
+
+void	print_export(t_env *env, int i)
+{
+	printf("declare -x %s", env->name);
+	if (env->value)
+	{
+		printf("=\"");
+		while (env->value[i])
+		{
+			if (ft_strchr("$\"\\`", env->value[i]))
+				printf("\\");
+			print_brut_format(env->value[i]);
+			i++;
+		}
+		printf("\"");
+	}
+	printf("\n");
+}
+
+void	print_brut_format(char c)
+{
+	if (c == '\n')
+		printf("\\n");
+	else if (c == '\t')
+		printf("\\t");
+	else if (c == '\v')
+		printf("\\v");
+	else if (c == '\b')
+		printf("\\b");
+	else if (c == '\r')
+		printf("\\r");
+	else if (c == '\f')
+		printf("\\f");
+	else
+		printf("%c", c);
 }

@@ -24,9 +24,9 @@ void	execution(t_parser *cmd, t_env *env)
 
 void	lexer_parser(t_parser **parser, char *str, t_env *env)
 {
-	t_lexer		*lexer_list;
+	t_lexer			*lexer_list;
 	t_parser_utils	utils;
-	
+
 	lexer_list = NULL;
 	lexer(&lexer_list, str, env);
 	if (lexer_list == NULL)

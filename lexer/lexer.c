@@ -23,5 +23,4 @@ void	lexer(t_lexer **list, char *str, t_env *env)
 	free_tab(split);
 	if (*list == NULL)
 		return ;
-	//print_lexer(*list);
 }

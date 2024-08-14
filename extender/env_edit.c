@@ -19,7 +19,8 @@ int	env_edit(t_env **lst, t_env *newnode)
 	tmp = *lst;
 	while (tmp)
 	{
-		if (newnode && tmp->name && newnode->name && strcmp(tmp->name, newnode->name) == 0)
+		if (newnode && tmp->name && newnode->name && strcmp(tmp->name,
+				newnode->name) == 0)
 		{
 			if (newnode->value)
 			{
