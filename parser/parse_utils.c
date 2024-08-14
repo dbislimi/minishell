@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:18:21 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/14 11:25:56 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:24:16 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,19 +79,21 @@ char	**build_command(t_lexer *lexer)
 // 	*lexer = temp;
 // }
 
-// t_lexer	*find_redirection(t_lexer **lexer)
-// {
-// 	t_lexer	*redirection;
+t_lexer	*find_redirection(t_lexer **lexer)
+{
+	t_lexer	*redirection;
+	t_lexer	*temp;
 	
-// 	while ((*lexer) && (*lexer)->token != PIPE)
-// 	{
-// 		if ((*lexer)->token == OUTPUT || (*lexer)->token == APPENDOUTPUT)
-// 		{
-// 			redirection = *lexer;
-// 			detach_from_lexer(lexer);
-// 			return (redirection);
-// 		}
-// 		(*lexer) = (*lexer)->next;
-// 	}
-// 	return (NULL);
-// }
+	temp = *lexer;
+	while (temp && temp->token != PIPE)
+	{
+		if (temp->token == OUTPUT || temp->token == APPENDOUTPUT)
+		{
+			redirection = *lexer;
+			detach_from_lexer(lexer);
+			return (redirection);
+		}
+		temp = temp->next;
+	}
+	return (NULL);
+}

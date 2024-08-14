@@ -40,10 +40,11 @@ typedef struct s_env
 }			t_env;
 
 void	env_init(t_env **env, char **envp);
+int		env_edit(t_env **lst, t_env *newnode);
 void	add_node(t_env **lst, t_env *newnode);
 t_env	*new_node(void *content);
 void	envclear(t_env **lst);
-void	print_env(t_env *s);
+void	print_env(t_env *env, char *type);
 
 // LEXER
 

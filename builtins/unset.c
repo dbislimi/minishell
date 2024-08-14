@@ -22,7 +22,6 @@ int	my_unset(t_env *env, struct s_parser *parser)
 	{
 		if (strcmp(parser->cmd[1], env->name) == 0)
 		{
-			printf("found\n");
 			tmp->next = env->next;
 			free(env->name);
 			free(env->value);
