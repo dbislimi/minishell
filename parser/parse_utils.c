@@ -80,16 +80,18 @@ void	detach_from_lexer(t_lexer **lexer)
 t_lexer	*find_redirection(t_lexer **lexer)
 {
 	t_lexer	*redirection;
+	t_lexer	*temp;
 	
-	while ((*lexer) && (*lexer)->token != PIPE)
+	temp = *lexer;
+	while (temp && temp->token != PIPE)
 	{
-		if ((*lexer)->token == OUTPUT || (*lexer)->token == APPENDOUTPUT)
+		if (temp->token == OUTPUT || temp->token == APPENDOUTPUT)
 		{
 			redirection = *lexer;
 			detach_from_lexer(lexer);
 			return (redirection);
 		}
-		(*lexer) = (*lexer)->next;
+		temp = temp->next;
 	}
 	return (NULL);
 }
