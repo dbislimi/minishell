@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:10:26 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/10 18:15:05 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 09:57:02 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,16 @@ static int	tokenize(char *content)
 	return (WORD);
 }
 
-static t_lexer	*new_node_lexer(void *content, t_env *env, int i)
+t_lexer	*new_node_lexer(char *content, t_token tk, int i)
 {
 	t_lexer	*new;
 
 	new = malloc(sizeof(t_lexer));
 	if (!new)
 		return (0);
-	new->token = tokenize(content);
-	if (new->token == 0)
-		new->content = clean_str(content, env);
-	else
-		new->content = NULL;
-	if (new->token == 0 && new->content == NULL)
-		new->index = -1;
-	else
-		new->index = i;
+	new->token = tk;
+	new->content = content;
+	new->index = i;
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
@@ -60,7 +54,7 @@ t_lexer	*last_node(t_lexer *lst)
 	return (lst);
 }
 
-static t_lexer	*add_node_lexer(t_lexer **lst, t_lexer *newnode)
+void	add_node_lexer(t_lexer **lst, t_lexer *newnode)
 {
 	t_lexer	*last;
 
@@ -72,22 +66,25 @@ static t_lexer	*add_node_lexer(t_lexer **lst, t_lexer *newnode)
 	}
 	else
 		*lst = newnode;
-	return (newnode);
 }
 
 void	lexer_init(t_lexer **lexer, char **split, t_env *env)
 {
-	t_lexer	*last_node;
+	char	*content;
+	t_token	token;
 	int		i;
 
 	i = -1;
 	while (split[++i])
 	{
-		last_node = add_node_lexer(lexer, new_node_lexer(split[i], env, i));
-		if (last_node->index == -1)
+		content = NULL;
+		token = tokenize(split[i]);
+		if (!token)
 		{
-			free_lexer(lexer);
-			return ;
+			content = clean_str(split[i], env);
+			// if (content == NULL)
+			// 	ft_error();
 		}
+		add_node_lexer(lexer, new_node_lexer(content, token, i));
 	}
 }

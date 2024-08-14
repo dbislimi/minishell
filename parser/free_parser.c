@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_parser.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 19:44:28 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/10 19:08:57 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 11:28:12 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	free_parser(t_parser **parser)
 	while (*parser)
 	{
 		temp = (*parser)->next;
-		free_tab((*parser)->cmd);
+		if ((*parser)->cmd)
+			free_tab((*parser)->cmd);
 		free_lexer(&(*parser)->redirections);
 		free(*parser);
 		*parser = temp;
