@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/12 20:13:10 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 13:19:21 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,16 @@ void	execution(t_parser *cmd, t_env *env)
 void	lexer_parser(t_parser **parser, char *str, t_env *env)
 {
 	t_lexer		*lexer_list;
-
+	t_parser_utils	utils;
+	
 	lexer_list = NULL;
 	lexer(&lexer_list, str, env);
 	if (lexer_list == NULL)
 		return ;
-	parser_init(parser, lexer_list);
-	//free_lexer(&lexer_list);
-	//print_parser(*parser);
+	utils.lexer = lexer_list;
+	utils.parser = *parser;
+	parser_init(parser, &lexer_list, &utils);
+	print_parser(*parser);
 }
 
 void	minishell(t_env *env)

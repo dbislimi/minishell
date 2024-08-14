@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/12 16:49:29 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 13:19:37 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # include <limits.h>
 # include <sys/wait.h>
 # include <stdbool.h>
+
+# define SYNTAX_ERROR "minishell: syntax error near unexpected token"
 
 // EXTENDER 
 
@@ -85,6 +87,8 @@ void	is_start_of_word(int *res, t_flag f, bool *flag);
 void	found_quote(t_index *idx, const char *s, bool *flag);
 void	found_word(t_index *idx, const char *s, bool *flag);
 void	lexer_init(t_lexer **lexer, char **split, t_env *env);
+t_lexer	*new_node_lexer(char *content, t_token tk, int i);
+void	add_node_lexer(t_lexer **lst, t_lexer *newnode);
 char	*clean_str(char *str, t_env *env);
 char	*find_value(char *str, t_env *env);
 size_t	handle_dollar(char *clean, char **tab, char *env_value);
@@ -101,16 +105,25 @@ size_t	skip_word(const char *s, char c);
 
 //PARSER
 
+typedef struct s_parser_utils
+{
+	t_lexer			*lexer;
+	t_lexer			*redirections;
+	int				nb_of_redirections;
+	struct s_parser	*parser;
+}		t_parser_utils;
+
 typedef struct s_parser
 {
 	char			**cmd;
 	int				(*builtin)(t_env *, struct s_parser *);
 	t_lexer			*redirections;
+	int				nb_of_redirections;
 	struct s_parser	*next;
 	struct s_parser	*prev;	
 }		t_parser;
 
-void	parser_init(t_parser **parser, t_lexer *lexer);
+void	parser_init(t_parser **parser, t_lexer **lexer, t_parser_utils *utils);
 t_lexer	*find_redirection(t_lexer **lexer);
 char	**build_command(t_lexer *lexer);
 void	detach_from_lexer(t_lexer **lexer);

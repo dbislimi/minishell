@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:17:32 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/10 17:37:42 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:08:38 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,26 @@ void	print_parser(t_parser *parser)
 {
 	int	i;
 
-	i = 0;
 	while (parser)
 	{
+		i = 0;
 		printf("\n");
 		printf("command : ");
-		while (parser->cmd[i])
-			printf("[%s] ", parser->cmd[i++]);
-		if (parser->redirections)
-			printf("\nredirection : (%d) %s\n", parser->redirections->token,
-				parser->redirections->next->content);
+		if (parser->cmd)
+		{
+			while (parser->cmd[i])
+				printf("[%s] ", parser->cmd[i++]);
+		}
 		else
-			printf("\nredirection : NULL\n");
+			printf("NULL");
+		printf("\nredirection : ");
+		while (parser->redirections)
+		{
+			printf("(%d) %s|", parser->redirections->token,
+				parser->redirections->content);
+			parser->redirections = parser->redirections->next;
+		}
+		printf("\n");
 		parser = parser->next;
-		i = 0;
 	}
 }

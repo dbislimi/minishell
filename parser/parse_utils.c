@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:18:21 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/12 16:49:18 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/14 11:25:56 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ char	**build_command(t_lexer *lexer)
 	int		len;
 
 	i = -1;
+	if (!lexer)
+		return (NULL);
 	len = count_nodes(lexer);
 	cmd = malloc(sizeof(char *) * (len + 1));
 	while (++i < len)
@@ -58,38 +60,38 @@ char	**build_command(t_lexer *lexer)
 	return (cmd);
 }
 
-void	detach_from_lexer(t_lexer **lexer)
-{
-	t_lexer	*temp;
+// void	detach_from_lexer(t_lexer **lexer)
+// {
+// 	t_lexer	*temp;
 	
-	if ((*lexer)->next == NULL)
-	{
-		*lexer = (*lexer)->prev;
-		return ;
-	}
-	if ((*lexer)->prev != NULL)
-		(*lexer)->prev->next = (*lexer)->next->next;
-	else
-		temp = (*lexer)->next->next;
-	(*lexer)->next->prev = (*lexer)->prev;
-	(*lexer)->prev = NULL;
-	(*lexer)->next->next = NULL;
-	*lexer = temp;
-}
+// 	if ((*lexer)->next == NULL)
+// 	{
+// 		*lexer = (*lexer)->prev;
+// 		return ;
+// 	}
+// 	if ((*lexer)->prev != NULL)
+// 		(*lexer)->prev->next = (*lexer)->next->next;
+// 	else
+// 		temp = (*lexer)->next->next;
+// 	(*lexer)->next->prev = (*lexer)->prev;
+// 	(*lexer)->prev = NULL;
+// 	(*lexer)->next->next = NULL;
+// 	*lexer = temp;
+// }
 
-t_lexer	*find_redirection(t_lexer **lexer)
-{
-	t_lexer	*redirection;
+// t_lexer	*find_redirection(t_lexer **lexer)
+// {
+// 	t_lexer	*redirection;
 	
-	while ((*lexer) && (*lexer)->token != PIPE)
-	{
-		if ((*lexer)->token == OUTPUT || (*lexer)->token == APPENDOUTPUT)
-		{
-			redirection = *lexer;
-			detach_from_lexer(lexer);
-			return (redirection);
-		}
-		(*lexer) = (*lexer)->next;
-	}
-	return (NULL);
-}
+// 	while ((*lexer) && (*lexer)->token != PIPE)
+// 	{
+// 		if ((*lexer)->token == OUTPUT || (*lexer)->token == APPENDOUTPUT)
+// 		{
+// 			redirection = *lexer;
+// 			detach_from_lexer(lexer);
+// 			return (redirection);
+// 		}
+// 		(*lexer) = (*lexer)->next;
+// 	}
+// 	return (NULL);
+// }
