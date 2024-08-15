@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 19:44:48 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/10 18:13:09 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/15 17:04:05 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@ int	count_words_lexer(char *s)
 	i = 0;
 	res = 0;
 	flag = 0;
-	f.d_quote = 0;
-	f.sg_quote = 0;
-	f.backslash = 0;
+	flag_variables_init(&f);
 	while (s[i])
 	{
 		handle_backslash(s[i], &f.backslash);
-		if ((s[i] == '"' && f.backslash == 0) || s[i] == '\'')
+		if (is_quote(s[i], f.backslash))
 			handle_quotes(s[i], &f);
-		if (!is_whitespace(s[i]))
+		if (is_token(s[i], f))
+			i += handle_token(&res, (s + i), &flag);
+		else if (!is_whitespace(s[i]))
 			is_start_of_word(&res, f, &flag);
 		else if (!(f.d_quote || f.sg_quote))
 			flag = 0;
@@ -56,38 +56,39 @@ static char	*fill_str_with(const char *s, int start, int end)
 	return (fill);
 }
 
-int	is_quote(char c, int backslash)
+void	skip_whitespaces(char *s, t_index *idx)
 {
-	return ((c == '"' && backslash == 0) || c == '\'');
+	while (s[idx->start] && is_whitespace(s[idx->start]))
+		++idx->start;
+	idx->end = idx->start - 1;
 }
 
 static void	split_loop(int size, char *s, char **split)
 {
 	t_flag	f;
 	t_index	idx;
-	bool	quote;
 	int		i;
 
 	i = 0;
-	f.backslash = 0;
-	quote = 0;
+	flag_variables_init(&f);
 	idx.start = 0;
 	while (i < size)
 	{
 		handle_backslash(s[idx.start], &f.backslash);
-		while (s[idx.start] && is_whitespace(s[idx.start]))
-			++idx.start;
-		idx.end = idx.start - 1;
-		while (s[++idx.end] && (!is_whitespace(s[idx.end])))
+		skip_whitespaces(s, &idx);
+		if (is_token(s[idx.start], f))
+			idx.end += handle_token(NULL, (s + idx.start), NULL) + 2;
+		else
 		{
-			handle_backslash(s[idx.end], &f.backslash);
-			if (is_quote(s[idx.end], f.backslash))
-				found_quote(&idx, s, &quote);
+			while (s[++idx.end] && !is_token(s[idx.end], f)
+				&& (!is_whitespace(s[idx.end]))
+				&& handle_backslash(s[idx.end], &f.backslash))
+				if (is_quote(s[idx.end], f.backslash))
+					found_quote(&idx, s);
 		}
 		split[i++] = fill_str_with(s, idx.start, idx.end);
 		idx.start = idx.end;
 	}
-	split[i] = NULL;
 }
 
 char	**ft_split_lexer(char *s)
@@ -105,5 +106,6 @@ char	**ft_split_lexer(char *s)
 	if (!split)
 		return (NULL);
 	split_loop(size, s, split);
+	split[size] = NULL;
 	return (split);
 }

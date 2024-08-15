@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/15 15:08:03 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/15 17:01:13 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,12 @@ typedef struct s_index
 void	lexer(t_lexer **list, char *str, t_env *env);
 char	**ft_split_lexer(char *s);
 int		count_words_lexer(char *s);
+void	flag_variables_init(t_flag *flag);
+int		handle_token(int *res, char *s, bool *flag);
+bool	is_token(char c, t_flag f);
 int		handle_quotes(char c, t_flag *flag);
 void	is_start_of_word(int *res, t_flag f, bool *flag);
-void	found_quote(t_index *idx, const char *s, bool *flag);
+void	found_quote(t_index *idx, const char *s);
 void	found_word(t_index *idx, const char *s, bool *flag);
 void	lexer_init(t_lexer **lexer, char **split, t_env *env);
 t_lexer	*new_node_lexer(char *content, t_token tk, int i);
@@ -99,12 +102,12 @@ size_t	handle_dollar(char *clean, char **tab, char *env_value);
 size_t	count_dollar(char *str, t_env *env);
 void	free_lexer(t_lexer **lexer);
 void	print_lexer(t_lexer *lexer);
-void	handle_backslash(char c, int *backslash);
+int		handle_backslash(char c, int *backslash);
 t_lexer	*delete_empty_nodes(t_lexer *lexer);
 int		strlen2(char *str, t_env *env, bool flag);
 char	*find_value(char *str, t_env *env);
 int		is_special_char(char c);
-int		is_quote(char c, int backslash);
+bool	is_quote(char c, int backslash);
 size_t	skip_word(const char *s, char c);
 
 //PARSER

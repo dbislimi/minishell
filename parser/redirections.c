@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 15:03:16 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/15 15:06:13 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/15 16:47:07 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,10 @@ void	token_error(t_lexer *problem, t_parser_utils *utils)
 			error = ft_strdup("`>'");
 		else if (problem->token == HEREDOC)
 			error = ft_strdup("`<<'");
-		else
+		else if (problem->token == APPENDOUTPUT)
 			error = ft_strdup("`>>'");
+		else
+			error = ft_strdup("`|'");
 	}
 	printf("%s %s\n", SYNTAX_ERROR, error);
 	free(error);

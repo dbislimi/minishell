@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 20:11:20 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/10 19:42:43 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/15 17:00:39 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,10 @@ void	is_start_of_word(int *res, t_flag f, bool *flag)
 	}
 }
 
-void	found_quote(t_index *idx, const char *s, bool *flag)
+void	found_quote(t_index *idx, const char *s)
 {
 	int	backslash;
 
-	(void)flag;
 	backslash = 0;
 	if (s[idx->end] == '"')
 	{
@@ -85,7 +84,7 @@ void	found_word(t_index *idx, const char *s, bool *flag)
 	*flag = 0;
 }
 
-void	handle_backslash(char c, int *backslash)
+int	handle_backslash(char c, int *backslash)
 {
 	if ((c == '\\' && *backslash == 0) || (c == '\\' && *backslash == 2))
 		*backslash = 1;
@@ -93,4 +92,5 @@ void	handle_backslash(char c, int *backslash)
 		++*backslash;
 	else if (*backslash == 2)
 		*backslash = 0;
+	return (1);
 }
