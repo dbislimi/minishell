@@ -7,16 +7,16 @@ EXTENDER_PATH 	= ./extender
 EXECUTION_PATH	= ./execution
 BUILTINS_PATH 	= ./builtins
 
-SRCS 	= main.c ${addprefix ${EXTENDER_PATH}/, env_edit.c env_init.c env_build.c env_clear.c print_env.c} \
+SRCS 	= main.c ${addprefix ${EXTENDER_PATH}/, env_edit.c split_for_env.c env_init.c env_build.c env_clear.c print_env.c} \
 				 ${addprefix ${BUILTINS_PATH}/, signals.c cd.c echo.c env.c exit.c export.c pwd.c unset.c} \
 				 ${addprefix ${LEXER_PATH}/, split.c split_utils.c lexer.c lexer_init.c lexer_clean.c lexer_clear.c clean_str.c clean_utils.c clean_utils2.c} \
-				 ${addprefix ${PARSER_PATH}/, parser.c free_parser.c print_parser.c parse_utils.c}
+				 ${addprefix ${PARSER_PATH}/, parser.c redirections.c free_parser.c print_parser.c parse_utils.c}
 OBJS 	= ${SRCS:.c=.o}
 
 
 NAME 	= minishell
 CC 		= cc
-CFLAGS	= -Wall -Wextra -Werror -g3 #-fsanitize=address
+CFLAGS	= -Wall -Wextra -Werror -g3
 LDFLAGS = -lreadline
 RM 		= rm -rf
 INCLUDES = -Iincludes

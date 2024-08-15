@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/14 13:19:37 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/15 15:08:03 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_env
 }			t_env;
 
 void	env_init(t_env **env, char **envp);
+char	**split_for_env(char const *s);
 int		env_edit(t_env **lst, t_env *newnode);
 void	add_node(t_env **lst, t_env *newnode);
 t_env	*new_node(void *content);
@@ -134,6 +135,7 @@ int		count_pipes(t_lexer *lexer);
 int		count_nodes(t_lexer *lexer);
 void	print_parser(t_parser *parser);
 void	free_parser(t_parser **parser);
+void	detach_redirections(t_lexer **lexer, t_parser_utils *utils);
 
 // BUILTINS
 

@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 18:21:42 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/10 17:27:17 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/15 14:44:56 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 size_t	handle_dollar(char *clean, char **tab, char *env_value)
 {
-	if (env_value == NULL)
-		return (0);
-	ft_strcat(clean, env_value);
 	++*tab;
 	while ((ft_isalnum(**tab) || **tab == '_') && **tab != '"')
 		++*tab;
+	if (env_value == NULL)
+		return (0);
+	ft_strcat(clean, env_value);
 	return (ft_strlen(env_value));
 }
 
@@ -48,7 +48,7 @@ char	*find_value(char *str, t_env *env)
 			return (env->value);
 		env = env->next;
 	}
-	return ("");
+	return (NULL);
 }
 
 int	strlen2(char *str, t_env *env, bool flag)
