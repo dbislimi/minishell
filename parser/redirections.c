@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 15:03:16 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/15 16:47:07 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:35:18 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	ft_error(char *error, t_parser_utils *utils)
+{
+	printf("%s\n", error);
+	free_lexer(utils->lexer);
+	free_parser(utils->parser);
+}
 
 void	rm_from_lexer(t_lexer **lexer, int index)
 {
@@ -48,9 +55,10 @@ void	add_new_redirection(t_lexer *to_add, t_lexer **lexer,
 	int		i1;
 	int		i2;
 
-	newnode = new_node_lexer(to_add->next->content, to_add->token, 0);
-	// if (!newnode)
-	// 	ft_error();
+	newnode = new_node_lexer(to_add->next->content,
+			to_add->token, utils->nb_of_redirections);
+	if (!newnode)
+		return (ft_error(MALLOC, utils));
 	add_node_lexer(&utils->redirections, newnode);
 	i1 = to_add->index;
 	i2 = to_add->next->index;
@@ -80,8 +88,8 @@ void	token_error(t_lexer *problem, t_parser_utils *utils)
 	}
 	printf("%s %s\n", SYNTAX_ERROR, error);
 	free(error);
-	free_lexer(&utils->lexer);
-	free_parser(&utils->parser);
+	free_lexer(utils->lexer);
+	free_parser(utils->parser);
 }
 
 void	detach_redirections(t_lexer **lexer, t_parser_utils *utils)
@@ -94,10 +102,9 @@ void	detach_redirections(t_lexer **lexer, t_parser_utils *utils)
 	if (!to_remove || to_remove->token == PIPE)
 		return ;
 	if (!to_remove->next || to_remove->next->token)
-	{
-		token_error(to_remove->next, utils);
-		return ;
-	}
+		return (token_error(to_remove->next, utils));
 	add_new_redirection(to_remove, lexer, utils);
+	if (!(*lexer))
+		return ;
 	detach_redirections(lexer, utils);
 }

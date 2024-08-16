@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/15 16:13:09 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:33:56 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	lexer_parser(t_parser **parser, char *str, t_env *env)
 	lexer(&lexer_list, str, env);
 	if (lexer_list == NULL)
 		return ;
-	utils.lexer = lexer_list;
-	utils.parser = *parser;
+	utils.lexer = &lexer_list;
+	utils.parser = parser;
 	parser_init(parser, &lexer_list, &utils);
 	print_parser(*parser);
 }

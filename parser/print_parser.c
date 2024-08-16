@@ -3,24 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   print_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:17:32 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/15 15:22:17 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:46:42 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	print_redirections(t_lexer *redirections)
+void	print_redirections(t_lexer *redirections, int nb)
 {
-	printf("\nredirections : ");
+	printf("\n\n%d redirections :\n", nb);
 	while (redirections)
 	{
-		printf("(%d) %s", redirections->token,
+		printf("	%d- {%d} %s\n", redirections->index + 1,
+			redirections->token,
 			redirections->content);
-		if (redirections->next)
-			printf(" & ");
 		redirections = redirections->next;
 	}
 	printf("\n");
@@ -42,7 +41,7 @@ void	print_parser(t_parser *parser)
 		}
 		else
 			printf("NULL");
-		print_redirections(parser->redirections);
+		print_redirections(parser->redirections, parser->nb_of_redirections);
 		parser = parser->next;
 	}
 }

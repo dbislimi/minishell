@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/15 17:01:13 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:33:45 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include <stdbool.h>
 
 # define SYNTAX_ERROR "minishell: syntax error near unexpected token"
-
+# define MALLOC "Error: malloc did not work."
 // EXTENDER 
 
 typedef struct s_env
@@ -114,10 +114,10 @@ size_t	skip_word(const char *s, char c);
 
 typedef struct s_parser_utils
 {
-	t_lexer			*lexer;
+	t_lexer			**lexer;
 	t_lexer			*redirections;
 	int				nb_of_redirections;
-	struct s_parser	*parser;
+	struct s_parser	**parser;
 }		t_parser_utils;
 
 typedef struct s_parser

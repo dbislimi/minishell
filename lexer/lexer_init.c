@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 14:10:26 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/14 09:57:02 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:04:08 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,7 @@ void	lexer_init(t_lexer **lexer, char **split, t_env *env)
 		content = NULL;
 		token = tokenize(split[i]);
 		if (!token)
-		{
 			content = clean_str(split[i], env);
-			// if (content == NULL)
-			// 	ft_error();
-		}
 		add_node_lexer(lexer, new_node_lexer(content, token, i));
 	}
 }

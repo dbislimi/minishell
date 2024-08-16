@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 19:30:11 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/15 15:15:51 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:35:56 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,9 @@ void	parser_init(t_parser **parser, t_lexer **lexer, t_parser_utils *utils)
 		utils->redirections = NULL;
 		utils->nb_of_redirections = 0;
 		detach_redirections(&lxr, utils);
-		if (utils->lexer == NULL)
+		if (*utils->lexer == NULL)
 			return ;
-		if (!i)
+		if (!i++)
 			*lexer = lxr;
 		add_node_parser(parser, new_node_parser(lxr, utils));
 		if (cmds == 0)
@@ -97,7 +97,6 @@ void	parser_init(t_parser **parser, t_lexer **lexer, t_parser_utils *utils)
 		while (lxr->token != PIPE)
 			lxr = lxr->next;
 		lxr = lxr->next;
-		i = 1;
 	}
 	free_lexer(lexer);
 }
