@@ -55,21 +55,21 @@ void	add_node(t_env **lst, t_env *newnode)
 	i = 0;
 	while (newnode->name[i])
 	{
-		if (!ft_isalnum(newnode->name[i]) && newnode->name[i] != '_')
+		if ((i == 0 && ft_isdigit(newnode->name[i]))
+			|| (!ft_isalnum(newnode->name[i]) && newnode->name[i] != '_'))
 		{
-			printf("bash: export: « %s=%s » : identifiant non valable\n",
+			printf("bash: export: « %s=%s » : not a valid identifier\n",
 				newnode->name, newnode->value);
 			return ;
 		}
 		i++;
 	}
-	if (env_edit(lst, newnode) == 1)
-		return ;
-	if (*lst)
+	i = env_edit(lst, newnode);
+	if (!i && *lst)
 	{
 		last = last_node(*lst);
 		last->next = newnode;
 	}
-	else
+	else if (!i)
 		*lst = newnode;
 }

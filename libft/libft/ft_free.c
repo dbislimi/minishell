@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   ft_free .c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/05 17:25:33 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/05 19:38:46 by dbislimi         ###   ########.fr       */
+/*   Created: 2024/04/22 11:13:53 by dbislimi          #+#    #+#             */
+/*   Updated: 2024/07/22 15:14:15 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-int	my_cd(t_env **env, struct s_parser *parser)
+
+char	*ft_free(char *tab)
 {
-	(void)env;
-	(void)parser;
-	printf("use of cd\n");
-	return (0);
+	if (tab)
+		free(tab);
+	return (NULL);
 }

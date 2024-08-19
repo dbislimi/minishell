@@ -55,6 +55,18 @@ char	**ft_split(char const *s, char c)
 	split[i] = NULL;
 	return (split);
 }
+
+char	**free_all_split(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+		free(tab[i++]);
+	free(tab);
+	return (NULL);
+}
+
 /*
 int main(void)
 {

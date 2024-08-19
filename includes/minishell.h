@@ -28,6 +28,7 @@
 # include <sys/wait.h>
 # include <stdbool.h>
 
+# define FILE_TEMP ".here_doc_tmp"
 # define SYNTAX_ERROR "minishell: syntax error near unexpected token"
 # define MALLOC "Error: malloc did not work."
 // EXTENDER 
@@ -41,6 +42,7 @@ typedef struct s_env
 
 void	env_init(t_env **env, char **envp);
 char	**split_for_env(char const *s);
+char	**convert_env_tab(t_env *env);
 int		env_edit(t_env **lst, t_env *newnode);
 void	add_node(t_env **lst, t_env *newnode);
 t_env	*new_node(void *content);
@@ -123,11 +125,12 @@ typedef struct s_parser_utils
 typedef struct s_parser
 {
 	char			**cmd;
-	int				(*builtin)(t_env *, struct s_parser *);
+	int				(*builtin)(t_env **, struct s_parser *);
 	t_lexer			*redirections;
 	int				nb_of_redirections;
+	int				pid;
 	struct s_parser	*next;
-	struct s_parser	*prev;	
+	struct s_parser	*prev;
 }		t_parser;
 
 void	parser_init(t_parser **parser, t_lexer **lexer, t_parser_utils *utils);
@@ -143,12 +146,15 @@ void	detach_redirections(t_lexer **lexer, t_parser_utils *utils);
 // BUILTINS
 
 void	set_signal_action(void);
-int		my_echo(t_env *env, struct s_parser *parser);
-int		my_cd(t_env *env, struct s_parser *parser);
-int		my_pwd(t_env *env, struct s_parser *parser);
-int		my_export(t_env *env, struct s_parser *parser);
-int		my_unset(t_env *env, struct s_parser *parser);
-int		my_env(t_env *env, struct s_parser *parser);
-int		my_exit(t_env *env, struct s_parser *parser);
+int		my_echo(t_env **env, struct s_parser *parser);
+int		my_cd(t_env **env, struct s_parser *parser);
+int		my_pwd(t_env **env, struct s_parser *parser);
+int		my_export(t_env **env, struct s_parser *parser);
+int		my_unset(t_env **env, struct s_parser *parser);
+int		my_env(t_env **env, struct s_parser *parser);
+int		my_exit(t_env **env, struct s_parser *parser);
+
+// EXECUTOR
+int		executor(t_env **env, struct s_parser *parser);
 
 #endif

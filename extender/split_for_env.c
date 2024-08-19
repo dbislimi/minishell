@@ -66,3 +66,33 @@ char	**split_for_env(char const *s)
 	split[i] = NULL;
 	return (split);
 }
+
+char **convert_env_tab(t_env *env)
+{
+	t_env	*tmp;
+	char	**tab;
+	int		i;
+
+	i = 1;
+	tmp = env;
+	while (tmp)
+	{
+		i++;
+		tmp = tmp->next;
+	}
+	tab = malloc(sizeof(char *) * i);
+	if (!tab)
+		return (NULL);
+	i = 0;
+	tmp = env;
+	while (tmp)
+	{
+		tab[i] = ft_strjoin(tmp->name, "=");
+		tab[i] = ft_strjoinf(tab[i], tmp->value, 1);
+		i++;
+		tmp = tmp->next;
+	}
+	tab[i] = NULL;
+	return (tab);
+}
+

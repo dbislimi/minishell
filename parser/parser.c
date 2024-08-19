@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-int	(*is_builtin(char	**cmd))(t_env *env, struct s_parser *parser)
+int	(*is_builtin(char	**cmd))(t_env **env, struct s_parser *parser)
 {
 	if (cmd == NULL)
 		return ((void *)0);
@@ -44,6 +44,7 @@ static t_parser	*new_node_parser(t_lexer *lexer, t_parser_utils *utils)
 	new->nb_of_redirections = utils->nb_of_redirections;
 	new->cmd = build_command(lexer);
 	new->builtin = is_builtin(new->cmd);
+	new->pid = 0;
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
@@ -89,8 +90,9 @@ void	parser_init(t_parser **parser, t_lexer **lexer, t_parser_utils *utils)
 		detach_redirections(&lxr, utils);
 		if (*utils->lexer == NULL)
 			return ;
-		if (!i++)
+		if (!i)
 			*lexer = lxr;
+		i = 1;
 		add_node_parser(parser, new_node_parser(lxr, utils));
 		if (cmds == 0)
 			break ;

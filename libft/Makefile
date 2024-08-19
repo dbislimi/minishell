@@ -1,6 +1,7 @@
 LIBFT_PATH = ./libft
 LIBFT_SRCS = ${addprefix ${LIBFT_PATH}/, ft_strcpy.c \
 			free_tab.c \
+			ft_free.c \
 			count_words.c \
 			ft_atoi.c \
 			ft_atol.c \
@@ -33,6 +34,7 @@ LIBFT_SRCS = ${addprefix ${LIBFT_PATH}/, ft_strcpy.c \
 			ft_putendl_fd.c \
 			ft_putnbr_fd.c \
 			ft_strjoin.c \
+			ft_strjoinf.c \
 			ft_strjoinwsep.c \
 			ft_substr.c \
 			ft_strtrim.c \

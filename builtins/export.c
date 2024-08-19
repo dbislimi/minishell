@@ -12,14 +12,14 @@
 
 #include "../includes/minishell.h"
 
-int	my_export(t_env *env, struct s_parser *parser)
+int	my_export(t_env **env, struct s_parser *parser)
 {
 	int	i;
 
 	i = 0;
 	while (parser->cmd[++i])
-		add_node(&env, new_node(parser->cmd[i]));
+		add_node(env, new_node(parser->cmd[i]));
 	if (!parser->cmd[1])
-		print_env(env, "export");
-	return (1);
+		print_env(*env, "export");
+	return (0);
 }

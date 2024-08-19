@@ -12,16 +12,6 @@
 
 #include "./includes/minishell.h"
 
-void	execution(t_parser *cmd, t_env *env)
-{
-	while (cmd)
-	{
-		if (cmd->builtin != NULL)
-			cmd->builtin(env, cmd);
-		cmd = cmd->next;
-	}
-}
-
 void	lexer_parser(t_parser **parser, char *str, t_env *env)
 {
 	t_lexer			*lexer_list;
@@ -51,11 +41,12 @@ void	minishell(t_env *env)
 		str = readline("minishell> ");
 		if (str == NULL)
 			break ;
-		add_history(str);
+		if (ft_strlen(str) != 0)
+			add_history(str);
 		lexer_parser(&parser_list, str, env);
 		if (parser_list == NULL)
 			continue ;
-		execution(parser_list, env);
+		executor(&env, parser_list);
 		free_parser(&parser_list);
 	}
 }

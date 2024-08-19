@@ -12,9 +12,9 @@
 
 #include "../includes/minishell.h"
 
-int	my_env(t_env *env, struct s_parser *parser)
+int	my_env(t_env **env, struct s_parser *parser)
 {
 	(void)parser;
-	print_env(env, "env");
-	return (1);
+	print_env(*env, "env");
+	return (0);
 }

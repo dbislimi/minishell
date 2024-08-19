@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-int	my_exit(t_env *env, struct s_parser *parser)
+int	my_exit(t_env **env, struct s_parser *parser)
 {
 	int	exit_code;
 
@@ -25,5 +25,5 @@ int	my_exit(t_env *env, struct s_parser *parser)
 			exit_code = 256 + exit_code;
 	}
 	exit(exit_code);
-	return (1);
+	return (exit_code);
 }

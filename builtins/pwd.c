@@ -12,10 +12,10 @@
 
 #include "../includes/minishell.h"
 
-int	my_pwd(t_env *env, struct s_parser *parser)
+int	my_pwd(t_env **env, struct s_parser *parser)
 {
 	(void)env;
 	(void)parser;
 	printf("use of pwd\n");
-	return (1);
+	return (0);
 }

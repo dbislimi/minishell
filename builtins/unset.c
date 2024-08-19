@@ -12,29 +12,34 @@
 
 #include "../includes/minishell.h"
 
-int	my_unset(t_env *env, struct s_parser *parser)
+int	my_unset(t_env **env, struct s_parser *parser)
 {
 	t_env	*old;
 	t_env	*temp;
 	int		i;
 
-	temp = env;
-	(void)parser;
+	temp = *env;
+	old = NULL;
 	i = 1;
-	while (env)
+	while (temp && parser->cmd[i])
 	{
-		if (strcmp(parser->cmd[i], env->name) == 0)
+		if (strcmp(parser->cmd[i], temp->name) == 0)
 		{
-			old->next = env->next;
-			free(env->name);
-			free(env->value);
-			free(env);
-			env = temp;
+			if (old == NULL)
+				*env = temp->next;
+			else
+				old->next = temp->next;
+			free(temp->name);
+			free(temp->value);
+			free(temp);
+			temp = *env;
+			if (old == NULL)
+				continue ;
 			if (parser->cmd[i++ + 1] == NULL)
 				return (1);
 		}
-		old = env;
-		env = env->next;
+		old = temp;
+		temp = temp->next;
 	}
 	return (0);
 }

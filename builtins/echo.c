@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-int	my_echo(t_env *env, struct s_parser *parser)
+int	my_echo(t_env **env, struct s_parser *parser)
 {
 	int	i;
 
@@ -29,5 +29,5 @@ int	my_echo(t_env *env, struct s_parser *parser)
 	}
 	if (!parser->cmd[1] || strcmp(parser->cmd[1], "-n") != 0)
 		printf("\n");
-	return (1);
+	return (0);
 }
