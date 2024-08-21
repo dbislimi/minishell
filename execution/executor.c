@@ -52,11 +52,6 @@ int	execute_pipeline(t_exe *exe, t_parser *cmd)
 {
 	int	res;
 
-	if (cmd->next)
-	{
-		if (pipe(exe->fd) == -1)
-			return (free_exe(exe, 0, 1, "1"));
-	}
 	if (cmd->builtin != NULL)
 	{
 		res = redirect(exe, cmd);
@@ -65,8 +60,11 @@ int	execute_pipeline(t_exe *exe, t_parser *cmd)
 		cmd->builtin(exe->env, cmd);
 		execute_parent(exe, cmd);
 	}
-	else
+	else if (cmd->cmd && cmd->cmd[0])
 	{
+		if (cmd->next)
+			if (pipe(exe->fd) == -1)
+				return (free_exe(exe, 0, 1, "1"));
 		cmd->pid = fork();
 		if (cmd->pid == -1)
 			return (free_exe(exe, 0, 1, "1"));
@@ -91,13 +89,14 @@ void	execute_child(t_exe *exe, t_parser *cmd)
 	{
 		res = get_path_cmd(exe, cmd->cmd[0]);
 		if (res != 0)
-			exit(res);
+		{
+			exe->fd[1] = close(exe->fd[1]);
+			exe->fd[0] = close(exe->fd[0]);
+			exit(free_exe(exe, 0, 127, "1"));
+		}
 		res = execve(exe->path, cmd->cmd, exe->env_tab);
 		if (res == -1)
-		{
-			free_exe(exe, 0, 1, "1");
-			res = 1;
-		}
+			res = free_exe(exe, 0, 1, "1");
 	}
 	exe->fd[1] = close(exe->fd[1]);
 	exit(res);
@@ -113,10 +112,17 @@ void	execute_parent(t_exe *exe, t_parser *cmd)
 		execute_pipeline(exe, cmd->next);
 		exe->fd[0] = close(exe->fd[0]);
 	}
+	exe->fd[0] = close(exe->fd[0]);
+	exe->fd[1] = close(exe->fd[1]);
 	tmp = exe->parser;
 	while (tmp)
 	{
-		waitpid(tmp->pid, &exe->error, 0);
+		if (tmp->pid != 0)
+		{
+			printf("pid = %d\n", tmp->pid);
+			waitpid(tmp->pid, &exe->error, 0);
+			tmp->pid = 0;
+		}
 		tmp = tmp->next;
 	}
 }
@@ -132,6 +138,7 @@ static t_exe	init_exe(t_env **env, t_parser *parser)
 	exe.fd[0] = 0;
 	exe.fd[1] = 0;
 	exe.error = 0;
+	exe.fd_tmp = 0;
 	return (exe);
 }
 int	executor(t_env **env, t_parser *parser)

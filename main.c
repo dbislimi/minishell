@@ -68,18 +68,19 @@ void	minishell(t_env *env)
 {
 	t_parser	*parser_list;
 	char		*str;
+	char		*old;
 
 	str = NULL;
 	parser_list = NULL;
 	while (1)
 	{
-		if (str != NULL)
-			free(str);
+		old = str;
 		str = print_line(env);
 		if (str == NULL)
 			break ;
-		if (ft_strlen(str) != 0)
+		if (ft_strlen(str) != 0 && (!old || ft_strcmp(str, old) != 0))
 			add_history(str);
+		old = ft_free(old);
 		lexer_parser(&parser_list, str, env);
 		if (parser_list == NULL)
 			continue ;

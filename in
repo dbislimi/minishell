@@ -1,0 +1,15 @@
+build
+builtins
+execution
+extender
+in
+includes
+lexer
+libft
+main.c
+main.o
+Makefile
+minishell
+out
+parser
+README.md

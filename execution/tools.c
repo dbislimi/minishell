@@ -14,7 +14,8 @@
 
 int	free_exe(t_exe *exe, int is_malloc, int error, char *message)
 {
-	unlink(FILE_TEMP);
+	if (access(FILE_TEMP, F_OK) == 0)
+		unlink(FILE_TEMP);
 	if (exe->path)
 		exe->path = ft_free(exe->path);
 	if (error)
