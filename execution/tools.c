@@ -14,12 +14,9 @@
 
 int	free_exe(t_exe *exe, int is_malloc, int error, char *message)
 {
-	if (access(FILE_TEMP, 0) == 0)
-		unlink(FILE_TEMP);
+	unlink(FILE_TEMP);
 	if (exe->path)
 		exe->path = ft_free(exe->path);
-	if (exe->split)
-		exe->split = free_all_split(exe->split);
 	if (error)
 	{
 		if (message && (*message == '1' || *message == '2'))
@@ -46,66 +43,42 @@ int	redirect_input(t_exe *exe, t_parser *cmd)
 
 	if (!cmd)
 		return (0);
-	if (cmd->redirections && cmd->redirections->token == INPUT)
+	if (cmd->redirections->token == HEREDOC)
+		return (here_doc(exe, cmd));
+	if (access(cmd->redirections->content, F_OK) != 0)
 	{
-		if (access(cmd->redirections->content, 0) != 0)
-		{
-			msg = ft_strjoin("minishell: ", cmd->redirections->content);
-			return (free_exe(exe, 1, 1, ft_strjoinf(msg,
-						": No such file or directory\n", 1)));
-		}
-		exe->fd[0] = open(cmd->redirections->content, O_RDONLY);
-		if (exe->fd[0] == -1)
-			return (free_exe(exe, 0, 1, "Failed to open input file"));
-		if (dup2(exe->fd[0], STDIN_FILENO) == -1)
-			return (free_exe(exe, 0, 1, "Failed to redirect input"));
-		close(exe->fd[0]);
+		msg = ft_strjoin("minishell: ", cmd->redirections->content);
+		return (free_exe(exe, 1, 1, ft_strjoinf(msg,
+					": No such file or directory\n", 1)));
 	}
-	else if (cmd->prev)
+	exe->fd_tmp = open(cmd->redirections->content, O_RDONLY);
+	if (exe->fd_tmp == -1)
+		return (free_exe(exe, 0, 1, "Failed to open input file"));
+	if (dup2(exe->fd_tmp, STDIN_FILENO) == -1)
 	{
-		if (dup2(exe->fd[0], STDIN_FILENO) == -1)
-			return (free_exe(exe, 0, 1, "Failed to redirect input to pipe"));
-		close(exe->fd[0]);
-		close(exe->fd[1]);
+		exe->fd_tmp = close(exe->fd_tmp);
+		return (free_exe(exe, 0, 1, "Failed to redirect input"));
 	}
 	return (0);
 }
 
 int	redirect_output(t_exe *exe, t_parser *cmd)
 {
-	int	save_stdout;
-
 	if (!cmd)
 		return (0);
-	save_stdout = dup(STDOUT_FILENO);
-	if (cmd->redirections && (cmd->redirections->token == OUTPUT
-			|| cmd->redirections->token == APPENDOUTPUT))
-	{
-		if (cmd->redirections->token == APPENDOUTPUT)
-			exe->fd[1] = open(cmd->redirections->content,
-					O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
-			exe->fd[1] = open(cmd->redirections->content,
-					O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (exe->fd[1] == -1)
-			return (free_exe(exe, 0, 1, "Failed to open output file"));
-		if (dup2(exe->fd[1], STDOUT_FILENO) == -1)
-		{
-			close(exe->fd[1]);
-			return (free_exe(exe, 0, 1, "Failed to redirect output"));
-		}
-	}
-	else if (cmd->next)
-	{
-		if (dup2(exe->fd[1], STDOUT_FILENO) == -1)
-			return (free_exe(exe, 0, 1, "Failed to redirect output to pipe"));
-	}
+	if (cmd->redirections->token == APPENDOUTPUT)
+		exe->fd_tmp = open(cmd->redirections->content,
+				O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
-		return (0);
-	close(exe->fd[1]);
-	close(exe->fd[0]);
-	dup2(save_stdout, STDOUT_FILENO);
-	close(save_stdout);
+		exe->fd_tmp = open(cmd->redirections->content,
+				O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (exe->fd_tmp == -1)
+		return (free_exe(exe, 0, 1, "Failed to open output file"));
+	if (dup2(exe->fd_tmp, STDOUT_FILENO) == -1)
+	{
+		exe->fd_tmp = close(exe->fd_tmp);
+		return (free_exe(exe, 0, 1, "Failed to redirect output"));
+	}
 	return (0);
 }
 
@@ -129,8 +102,6 @@ int	get_path_cmd(t_exe *exe, char *cmd)
 	i = -1;
 	while (path[++i])
 	{
-		printf("path[%d] = %s\n", i, path[i]);
-		printf("cmd = %s\n", cmd);
 		create_path(exe, cmd, path[i]);
 		if (access(exe->path, 0) == 0)
 			break ;
@@ -138,8 +109,8 @@ int	get_path_cmd(t_exe *exe, char *cmd)
 	}
 	path = free_all_split(path);
 	if (!exe->path)
-		return (free_exe(exe, 1, 127, ft_strjoinf("zsh: command not found: ",
-					cmd, 0)));
+		return (free_exe(exe, 1, 127,
+				ft_strjoinf("minishell: command not found: ", cmd, 0)));
 	return (0);
 }
 
@@ -157,10 +128,10 @@ void	create_path(t_exe *exe, char *cmd, char *path)
 
 int	here_doc(t_exe *exe, t_parser *cmd)
 {
-	char			*line;
+	char	*line;
 
-	exe->input_fd = open(FILE_TEMP, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (exe->input_fd == -1)
+	exe->fd_tmp = open(FILE_TEMP, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (exe->fd_tmp == -1)
 		return (free_exe(exe, 0, 1, "1"));
 	while (1)
 	{
@@ -170,7 +141,7 @@ int	here_doc(t_exe *exe, t_parser *cmd)
 		if (get_ctrl(0) == 1)
 		{
 			free(line);
-			close(exe->input_fd);
+			exe->fd_tmp = close(exe->fd_tmp);
 			free_exe(exe, 0, 0, NULL);
 			get_ctrl(-1);
 			return (1);
@@ -179,13 +150,14 @@ int	here_doc(t_exe *exe, t_parser *cmd)
 				ft_strlen(cmd->redirections->content)) == 0
 			&& ft_strlen(line) == ft_strlen(cmd->redirections->content))
 			break ;
-		write(exe->input_fd, line, ft_strlen(line));
+		write(exe->fd_tmp, line, ft_strlen(line));
 		free(line);
 	}
 	free(line);
-	close(exe->input_fd);
-	exe->input_fd = open(FILE_TEMP, O_RDONLY);
-	if (cmd->cmd && dup2(exe->input_fd, STDIN_FILENO) == -1)
+	exe->fd_tmp = close(exe->fd_tmp);
+	exe->fd_tmp = open(FILE_TEMP, O_RDONLY);
+	if (cmd->cmd && dup2(exe->fd_tmp, STDIN_FILENO) == -1)
 		return (free_exe(exe, 0, 1, "1"));
-	return (close(exe->input_fd));
+	exe->fd_tmp = close(exe->fd_tmp);
+	return (0);
 }

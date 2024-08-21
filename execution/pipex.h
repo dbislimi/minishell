@@ -33,9 +33,8 @@ typedef struct s_exe
 
 	char	*path;
 	char	**envp;
-	char	**split;
 	int		fd[2];
-	int		input_fd;
+	int		fd_tmp;
 	int		error;
 }			t_exe;
 
