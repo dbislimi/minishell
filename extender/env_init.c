@@ -16,7 +16,7 @@ void	env_init(t_env **env, char **envp)
 {
 	t_env	*new;
 
-	while (*envp)
+	while (envp && *envp)
 	{
 		new = new_node(*envp);
 		add_node(env, new);

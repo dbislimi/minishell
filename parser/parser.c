@@ -14,7 +14,7 @@
 
 int	(*is_builtin(char	**cmd))(t_env **env, struct s_parser *parser)
 {
-	if (cmd == NULL)
+	if (cmd == NULL || cmd[0] == NULL)
 		return ((void *)0);
 	if (ft_strcmp(cmd[0], "echo") == 0)
 		return (my_echo);

@@ -24,7 +24,44 @@ void	lexer_parser(t_parser **parser, char *str, t_env *env)
 	utils.lexer = &lexer_list;
 	utils.parser = parser;
 	parser_init(parser, &lexer_list, &utils);
-	print_parser(*parser);
+	if (DEBUG)
+		print_parser(*parser);
+}
+
+static char	*get_pwd(char *line, char *pwd)
+{
+	char	*tmp;
+
+	if (ft_strncmp(pwd, "/home/", 6) == 0)
+	{
+		line = ft_strjoinf(line, "~", 1);
+		tmp = ft_strchr(pwd + 6, '/');
+	}
+	else
+	{
+		tmp = pwd + 1;
+		line = ft_strjoinf(line, "/", 1);
+	}
+	line = ft_strjoinf(line, tmp, 1);
+	return (line);
+}
+
+static char	*print_line(t_env *env)
+{
+	char	*line;
+	char	*tmp;
+
+	line = NULL;
+	tmp = find_value("USER", env);
+	if (tmp)
+		line = ft_strjoinf(tmp, ":", 0);
+	tmp = find_value("PWD", env);
+	if (tmp)
+		line = get_pwd(line, tmp);
+	line = ft_strjoinf(line, "$ ", 1);
+	tmp = readline(line);
+	free(line);
+	return (tmp);
 }
 
 void	minishell(t_env *env)
@@ -38,7 +75,7 @@ void	minishell(t_env *env)
 	{
 		if (str != NULL)
 			free(str);
-		str = readline("minishell> ");
+		str = print_line(env);
 		if (str == NULL)
 			break ;
 		if (ft_strlen(str) != 0)

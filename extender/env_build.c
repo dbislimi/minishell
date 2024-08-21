@@ -58,7 +58,7 @@ void	add_node(t_env **lst, t_env *newnode)
 		if ((i == 0 && ft_isdigit(newnode->name[i]))
 			|| (!ft_isalnum(newnode->name[i]) && newnode->name[i] != '_'))
 		{
-			printf("bash: export: « %s=%s » : not a valid identifier\n",
+			printf("minishell: export: « %s=%s » : not a valid identifier\n",
 				newnode->name, newnode->value);
 			return ;
 		}

@@ -52,7 +52,7 @@ LIBFT_SRCS = ${addprefix ${LIBFT_PATH}/, ft_strcpy.c \
 			ft_lstmap.c \
 			ft_lstnew.c \
 			ft_lstsize.c \
-			is_whitespace.c}
+			is_whitespace.c }
 
 PRINTF_PATH = ./printf
 PRINTF_SRCS = ${addprefix ${PRINTF_PATH}/, ft_printf.c \

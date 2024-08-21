@@ -12,6 +12,15 @@
 
 #include "../includes/minishell.h"
 
+int get_ctrl(int ctrl)
+{
+	static int	ctrl_c = 0;
+
+	if (ctrl)
+		ctrl_c = ctrl;
+	return (ctrl_c);
+}
+
 static void	sigint_handler(int signal)
 {
 	if (signal == SIGINT)
@@ -20,6 +29,7 @@ static void	sigint_handler(int signal)
 		rl_replace_line("", 1);
 		rl_on_new_line ();
 		rl_redisplay();
+		get_ctrl(1);
 	}
 }
 
@@ -27,6 +37,7 @@ void	set_signal_action(void)
 {
 	struct sigaction	act;
 
+	get_ctrl(0);
 	ft_bzero(&act, sizeof(act));
 	act.sa_handler = &sigint_handler;
 	sigaction(SIGINT, &act, NULL);

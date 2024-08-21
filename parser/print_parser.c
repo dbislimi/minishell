@@ -14,7 +14,7 @@
 
 void	print_redirections(t_lexer *redirections, int nb)
 {
-	printf("\n\n%d redirections :\n", nb);
+	printf("\n%d redirections :\n", nb);
 	while (redirections)
 	{
 		printf("	%d- {%d} %s\n", redirections->index + 1,

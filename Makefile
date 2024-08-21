@@ -16,8 +16,9 @@ OBJS 	= ${SRCS:.c=.o}
 
 
 NAME 	= minishell
+DEBUG 	= 1
 CC 		= cc
-CFLAGS	= -g3 -fsanitize=address
+CFLAGS	= -g3 -fsanitize=address -Wall -Wextra -Werror
 LDFLAGS = -lreadline
 RM 		= rm -rf
 INCLUDES = -Iincludes
@@ -31,7 +32,7 @@ $(LIBFT):
 	${MAKE} -C $(LIBFT_PATH) all
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $< $(INCLUDES)
+	$(CC) $(CFLAGS) -DDEBUG=$(DEBUG) -c -o $@ $< $(INCLUDES)
 	
 clean:
 	@${MAKE} clean --silent -C ${LIBFT_PATH}

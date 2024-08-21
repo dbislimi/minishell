@@ -45,7 +45,7 @@ void		execute_child(t_exe *exe, t_parser *cmd);
 void		execute_parent(t_exe *exe, t_parser *cmd);
 
 // tools.c
-int			free_all_exe(t_exe *exe, int is_malloc, int error,
+int			free_exe(t_exe *exe, int is_malloc, int error,
 				char *message);
 int			redirect_input(t_exe *exe, t_parser *cmd);
 int			redirect_output(t_exe *exe, t_parser *cmd);

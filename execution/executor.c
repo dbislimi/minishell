@@ -16,23 +16,29 @@ static int	redirect(t_exe *exe, t_parser *cmd)
 {
 	int	res;
 
-	res = redirect_input(exe, cmd);
-	if (res != 0)
-		return (res);
-	res = redirect_output(exe, cmd);
-	if (res != 0)
-		return (res);
+	res = 0;
+	while(cmd->redirections)
+	{
+		res = redirect_input(exe, cmd);
+		if (cmd->redirections && cmd->redirections->token == HEREDOC)
+			res = here_doc(exe, cmd);
+		if (res != 0)
+			return (res);
+		res = redirect_output(exe, cmd);
+		if (res != 0)
+			return (res);
+		cmd->redirections = cmd->redirections->next;
+	}
 	return (0);
 }
 int	execute_pipeline(t_exe *exe, t_parser *cmd)
 {
 	int	res;
 
-	(void)res;
 	if (cmd->next)
 	{
 		if (pipe(exe->fd) == -1)
-			return (free_all_exe(exe, 0, 1, "1"));
+			return (free_exe(exe, 0, 1, "1"));
 	}
 	if (cmd->builtin != NULL)
 	{
@@ -45,7 +51,7 @@ int	execute_pipeline(t_exe *exe, t_parser *cmd)
 	{
 		cmd->pid = fork();
 		if (cmd->pid == -1)
-			return (free_all_exe(exe, 0, 1, "1"));
+			return (free_exe(exe, 0, 1, "1"));
 		if (cmd->pid == 0)
 			execute_child(exe, cmd);
 		else
@@ -66,10 +72,10 @@ void	execute_child(t_exe *exe, t_parser *cmd)
 		res = get_path_cmd(exe, cmd->cmd[0]);
 		if (res != 0)
 			exit(res);
-		res = execve(exe->path, cmd->cmd, exe->envp);
+		res = execve(exe->path, cmd->cmd, exe->env_tab);
 		if (res == -1)
 		{
-			free_all_exe(exe, 0, 1, "1");
+			free_exe(exe, 0, 1, "1");
 			exit(1);
 		}
 		exe->split = free_all_split(exe->split);
@@ -82,7 +88,7 @@ void	execute_parent(t_exe *exe, t_parser *cmd)
 
 	if (cmd->next)
 	{
-		execute_pipeline(exe, cmd->next);
+ 		execute_pipeline(exe, cmd->next);
 		close(exe->fd[0]);
 		close(exe->fd[1]);
 	}
@@ -108,11 +114,15 @@ static t_exe	init_exe(t_env **env, t_parser *parser)
 	exe.error = 0;
 	return (exe);
 }
-int	executor(t_env **env, struct s_parser *parser)
+int	executor(t_env **env, t_parser *parser)
 {
 	t_exe	exe;
+	int		saved_stin;
 
+	saved_stin = dup(STDIN_FILENO);	
 	exe = init_exe(env, parser);
 	execute_pipeline(&exe, exe.parser);
-	return (free_all_exe(&exe, 0, 0, NULL));
+	dup2(saved_stin, STDIN_FILENO);
+	exe.env_tab = free_all_split(exe.env_tab);
+	return (free_exe(&exe, 0, 0, NULL));
 }
