@@ -23,33 +23,37 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-# define FILE_TEMP ".here_doc_tmp"
-
 typedef struct s_exe
 {
-	t_env	**env;
-	char	**env_tab;
-	struct	s_parser *parser;
+	t_env			**env;
+	char			**env_tab;
+	struct s_parser	*parser;
 
-	char	*path;
-	char	**envp;
-	int		fd[2];
-	int		fd_tmp;
-	int		error;
-}			t_exe;
+	char			*path;
+	char			**envp;
+	int				fd[2];
+	int				fd_tmp;
+	int				fd_in;
+	int				error;
+	pid_t			pid;
+}					t_exe;
 
 // pipex.c
-int			execute_pipeline(t_exe *exe, t_parser *cmd);
-void		execute_child(t_exe *exe, t_parser *cmd);
-void		execute_parent(t_exe *exe, t_parser *cmd);
+int					execute_pipeline(t_exe *exe, t_parser *cmd);
+void				execute_child(t_exe *exe, t_parser *cmd);
+void				execute_parent(t_exe *exe, t_parser *cmd);
+
+// redirections.c
+int					redirect_pipe(t_exe *exe, t_parser *cmd, int type);
+int					redirect_input(t_exe *exe, t_parser *cmd);
+int					redirect_output(t_exe *exe, t_parser *cmd);
+int					here_doc(t_exe *exe, t_parser *cmd);
 
 // tools.c
-int			free_exe(t_exe *exe, int is_malloc, int error,
-				char *message);
-int			redirect_input(t_exe *exe, t_parser *cmd);
-int			redirect_output(t_exe *exe, t_parser *cmd);
-int			get_path_cmd(t_exe *exe, char *cmd);
-void		create_path(t_exe *exe, char *cmd, char *path);
-int			here_doc(t_exe *exe, t_parser *cmd);
+t_exe				init_exe(t_env **env, t_parser *parser);
+int					free_exe(t_exe *exe, int is_malloc, int error,
+						char *message);
+int					get_path_cmd(t_exe *exe, char *cmd);
+void				create_path(t_exe *exe, char *cmd, char *path);
 
 #endif

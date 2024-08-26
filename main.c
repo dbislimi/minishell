@@ -32,6 +32,7 @@ static char	*get_pwd(char *line, char *pwd)
 {
 	char	*tmp;
 
+	line = ft_strjoinf(line, "\033[1;34m", 1);
 	if (ft_strncmp(pwd, "/home/", 6) == 0)
 	{
 		line = ft_strjoinf(line, "~", 1);
@@ -54,11 +55,14 @@ static char	*print_line(t_env *env)
 	line = NULL;
 	tmp = find_value("USER", env);
 	if (tmp)
-		line = ft_strjoinf(tmp, ":", 0);
+	{
+		line = ft_strjoinf("\033[1;32m", tmp, 0);
+		line = ft_strjoinf(line, "\033[0m:", 1);
+	}
 	tmp = find_value("PWD", env);
 	if (tmp)
 		line = get_pwd(line, tmp);
-	line = ft_strjoinf(line, "$ ", 1);
+	line = ft_strjoinf(line, "\033[0m$ ", 1);
 	tmp = readline(line);
 	free(line);
 	return (tmp);

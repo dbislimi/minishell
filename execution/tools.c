@@ -12,6 +12,22 @@
 
 #include "pipex.h"
 
+t_exe	init_exe(t_env **env, t_parser *parser)
+{
+	t_exe	exe;
+
+	exe.env = env;
+	exe.env_tab = convert_env_tab(*env);
+	exe.parser = parser;
+	exe.path = NULL;
+	exe.fd[0] = 0;
+	exe.fd[1] = 0;
+	exe.error = 0;
+	exe.fd_tmp = 0;
+	exe.fd_in = 0;
+	return (exe);
+}
+
 int	free_exe(t_exe *exe, int is_malloc, int error, char *message)
 {
 	if (access(FILE_TEMP, F_OK) == 0)
@@ -27,6 +43,7 @@ int	free_exe(t_exe *exe, int is_malloc, int error, char *message)
 		}
 		else if (message)
 		{
+			write(STDERR_FILENO, "minishell: ", 11);
 			write(STDERR_FILENO, message, ft_strlen(message));
 			if (message[ft_strlen(message) - 1] != '\n')
 				write(STDERR_FILENO, "\n", 1);
@@ -36,51 +53,6 @@ int	free_exe(t_exe *exe, int is_malloc, int error, char *message)
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
-}
-
-int	redirect_input(t_exe *exe, t_parser *cmd)
-{
-	char	*msg;
-
-	if (!cmd)
-		return (0);
-	if (cmd->redirections->token == HEREDOC)
-		return (here_doc(exe, cmd));
-	if (access(cmd->redirections->content, F_OK) != 0)
-	{
-		msg = ft_strjoin("minishell: ", cmd->redirections->content);
-		return (free_exe(exe, 1, 1, ft_strjoinf(msg,
-					": No such file or directory\n", 1)));
-	}
-	exe->fd_tmp = open(cmd->redirections->content, O_RDONLY);
-	if (exe->fd_tmp == -1)
-		return (free_exe(exe, 0, 1, "Failed to open input file"));
-	if (dup2(exe->fd_tmp, STDIN_FILENO) == -1)
-	{
-		exe->fd_tmp = close(exe->fd_tmp);
-		return (free_exe(exe, 0, 1, "Failed to redirect input"));
-	}
-	return (0);
-}
-
-int	redirect_output(t_exe *exe, t_parser *cmd)
-{
-	if (!cmd)
-		return (0);
-	if (cmd->redirections->token == APPENDOUTPUT)
-		exe->fd_tmp = open(cmd->redirections->content,
-				O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		exe->fd_tmp = open(cmd->redirections->content,
-				O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (exe->fd_tmp == -1)
-		return (free_exe(exe, 0, 1, "Failed to open output file"));
-	if (dup2(exe->fd_tmp, STDOUT_FILENO) == -1)
-	{
-		exe->fd_tmp = close(exe->fd_tmp);
-		return (free_exe(exe, 0, 1, "Failed to redirect output"));
-	}
-	return (0);
 }
 
 int	get_path_cmd(t_exe *exe, char *cmd)
@@ -93,10 +65,7 @@ int	get_path_cmd(t_exe *exe, char *cmd)
 			"PATH=", 5) != 0)
 		i++;
 	if (!exe->env_tab || !exe->env_tab[i])
-	{
-		exe->path = (ft_strdup(""));
 		return (0);
-	}
 	path = ft_split(exe->env_tab[i] + 5, ':');
 	if (!path)
 		return (free_exe(exe, 0, 1, "Failed to allocate memory\n"));
@@ -110,8 +79,8 @@ int	get_path_cmd(t_exe *exe, char *cmd)
 	}
 	path = free_all_split(path);
 	if (!exe->path)
-		return (free_exe(exe, 1, 127,
-				ft_strjoinf("minishell: command not found: ", cmd, 0)));
+		return (free_exe(exe, 1, 127, ft_strjoinf("command not found: ", cmd,
+					0)));
 	return (0);
 }
 
@@ -125,40 +94,4 @@ void	create_path(t_exe *exe, char *cmd, char *path)
 		exe->path = ft_strjoinf(path, "/", 0);
 		exe->path = ft_strjoinf(exe->path, cmd, 1);
 	}
-}
-
-int	here_doc(t_exe *exe, t_parser *cmd)
-{
-	char	*line;
-
-	exe->fd_tmp = open(FILE_TEMP, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (exe->fd_tmp == -1)
-		return (free_exe(exe, 0, 1, "1"));
-	while (1)
-	{
-		line = readline("> ");
-		if (!line)
-			return (free_exe(exe, 0, 1, "1"));
-		if (get_ctrl(0) == 1)
-		{
-			free(line);
-			exe->fd_tmp = close(exe->fd_tmp);
-			free_exe(exe, 0, 0, NULL);
-			get_ctrl(-1);
-			return (1);
-		}
-		if (ft_strncmp(line, cmd->redirections->content,
-				ft_strlen(cmd->redirections->content)) == 0
-			&& ft_strlen(line) == ft_strlen(cmd->redirections->content))
-			break ;
-		write(exe->fd_tmp, line, ft_strlen(line));
-		free(line);
-	}
-	free(line);
-	exe->fd_tmp = close(exe->fd_tmp);
-	exe->fd_tmp = open(FILE_TEMP, O_RDONLY);
-	if (cmd->cmd && dup2(exe->fd_tmp, STDIN_FILENO) == -1)
-		return (free_exe(exe, 0, 1, "1"));
-	exe->fd_tmp = close(exe->fd_tmp);
-	return (0);
 }

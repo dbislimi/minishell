@@ -12,23 +12,6 @@
 
 #include "pipex.h"
 
-static int	redirect_pipe(t_exe *exe, t_parser *cmd)
-{
-	if (exe->fd[0] != STDIN_FILENO)
-	{
-		if (dup2(exe->fd[0], STDIN_FILENO) == -1)
-			return (free_exe(exe, 0, 1, "Failed to redirect input"));
-		exe->fd[0] = close(exe->fd[0]);
-	}
-	if (cmd->next)
-	{
-		if (dup2(exe->fd[1], STDOUT_FILENO) == -1)
-			return (free_exe(exe, 0, 1, "Failed to redirect input"));
-		exe->fd[1] = close(exe->fd[1]);
-	}
-	return (0);
-}
-
 static int	redirect(t_exe *exe, t_parser *cmd)
 {
 	int		res;
@@ -36,18 +19,26 @@ static int	redirect(t_exe *exe, t_parser *cmd)
 
 	res = 0;
 	tmp = cmd->redirections;
+	if (!tmp)
+		return (redirect_pipe(exe, cmd, 2));
 	while (tmp)
 	{
+		printf("token = %d\n", tmp->token);
 		if (tmp->token == INPUT || tmp->token == HEREDOC)
 			res = redirect_input(exe, cmd);
-		else if (tmp->token == OUTPUT || tmp->token == APPENDOUTPUT)
+		else
+			res = redirect_pipe(exe, cmd, 0);
+		if (tmp->token == OUTPUT || tmp->token == APPENDOUTPUT)
 			res = redirect_output(exe, cmd);
+		else
+			res = redirect_pipe(exe, cmd, 1);
 		if (res != 0)
 			return (res);
 		tmp = tmp->next;
 	}
-	return (redirect_pipe(exe, cmd));
+	return (0);
 }
+
 int	execute_pipeline(t_exe *exe, t_parser *cmd)
 {
 	int	res;
@@ -72,6 +63,12 @@ int	execute_pipeline(t_exe *exe, t_parser *cmd)
 			execute_child(exe, cmd);
 		else
 			execute_parent(exe, cmd);
+		return (0);
+	}
+	else
+	{
+		redirect(exe, cmd);
+		execute_parent(exe, cmd);
 	}
 	return (0);
 }
@@ -82,22 +79,22 @@ void	execute_child(t_exe *exe, t_parser *cmd)
 	int		fd;
 	char	*gnl;
 
+	res = 0;
 	res = redirect(exe, cmd);
-	if (res != 0)
-		exit(res);
-	if (cmd->cmd && cmd->cmd[0])
+	if (res == 0 && cmd->cmd && cmd->cmd[0])
 	{
 		res = get_path_cmd(exe, cmd->cmd[0]);
 		if (res != 0)
 		{
 			exe->fd[1] = close(exe->fd[1]);
 			exe->fd[0] = close(exe->fd[0]);
-			exit(free_exe(exe, 0, 127, "1"));
+			exit(free_exe(exe, 0, 1, NULL));
 		}
 		res = execve(exe->path, cmd->cmd, exe->env_tab);
 		if (res == -1)
 			res = free_exe(exe, 0, 1, "1");
 	}
+	exe->fd[0] = close(exe->fd[0]);
 	exe->fd[1] = close(exe->fd[1]);
 	exit(res);
 }
@@ -109,8 +106,9 @@ void	execute_parent(t_exe *exe, t_parser *cmd)
 	if (cmd->next)
 	{
 		exe->fd[1] = close(exe->fd[1]);
+		exe->fd_in = exe->fd[0];
 		execute_pipeline(exe, cmd->next);
-		exe->fd[0] = close(exe->fd[0]);
+		exe->fd_in = close(exe->fd_in);
 	}
 	exe->fd[0] = close(exe->fd[0]);
 	exe->fd[1] = close(exe->fd[1]);
@@ -119,7 +117,6 @@ void	execute_parent(t_exe *exe, t_parser *cmd)
 	{
 		if (tmp->pid != 0)
 		{
-			printf("pid = %d\n", tmp->pid);
 			waitpid(tmp->pid, &exe->error, 0);
 			tmp->pid = 0;
 		}
@@ -127,20 +124,6 @@ void	execute_parent(t_exe *exe, t_parser *cmd)
 	}
 }
 
-static t_exe	init_exe(t_env **env, t_parser *parser)
-{
-	t_exe	exe;
-
-	exe.env = env;
-	exe.env_tab = convert_env_tab(*env);
-	exe.parser = parser;
-	exe.path = NULL;
-	exe.fd[0] = 0;
-	exe.fd[1] = 0;
-	exe.error = 0;
-	exe.fd_tmp = 0;
-	return (exe);
-}
 int	executor(t_env **env, t_parser *parser)
 {
 	t_exe	exe;
