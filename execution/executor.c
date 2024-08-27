@@ -23,7 +23,6 @@ static int	redirect(t_exe *exe, t_parser *cmd)
 		return (redirect_pipe(exe, cmd, 2));
 	while (tmp)
 	{
-		printf("token = %d\n", tmp->token);
 		if (tmp->token == INPUT || tmp->token == HEREDOC)
 			res = redirect_input(exe, tmp);
 		else
