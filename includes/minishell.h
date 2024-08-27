@@ -151,8 +151,9 @@ void				detach_redirections(t_lexer **lexer, t_parser_utils *utils);
 
 // BUILTINS
 
-int					get_ctrl(int ctrl);
-void				set_signal_action(void);
+void				sigint_handler(int signal);
+void				sigint_heredoc_handler(int signal);
+void				set_signal_action(void (*handler)(int));
 int					my_echo(t_env **env, struct s_parser *parser);
 int					my_cd(t_env **env, struct s_parser *parser);
 int					my_pwd(t_env **env, struct s_parser *parser);

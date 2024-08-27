@@ -68,7 +68,7 @@ static char	*print_line(t_env *env)
 	return (tmp);
 }
 
-void	minishell(t_env *env)
+void	minishell(t_env *env, int saved_stin, int saved_stout)
 {
 	t_parser	*parser_list;
 	char		*str;
@@ -89,6 +89,8 @@ void	minishell(t_env *env)
 		if (parser_list == NULL)
 			continue ;
 		executor(&env, parser_list);
+		dup2(saved_stin, STDIN_FILENO);
+		dup2(saved_stout, STDOUT_FILENO);
 		free_parser(&parser_list);
 	}
 }
@@ -96,7 +98,11 @@ void	minishell(t_env *env)
 int	main(int ac, char **av, char **envp)
 {
 	t_env	*env;
+	int		saved_stin;
+	int		saved_stout;
 
+	saved_stin = dup(STDIN_FILENO);
+	saved_stout = dup(STDOUT_FILENO);
 	(void)av;
 	env = NULL;
 	if (ac > 1)
@@ -105,7 +111,7 @@ int	main(int ac, char **av, char **envp)
 		exit(EXIT_FAILURE);
 	}
 	env_init(&env, envp);
-	set_signal_action();
-	minishell(env);
+	set_signal_action(sigint_handler);
+	minishell(env, saved_stin, saved_stout);
 	envclear(&env);
 }

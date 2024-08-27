@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../includes/execution.h"
 
 int	redirect_pipe(t_exe *exe, t_parser *cmd, int type)
 {
@@ -35,18 +35,16 @@ int	redirect_pipe(t_exe *exe, t_parser *cmd, int type)
 	return (0);
 }
 
-int	redirect_input(t_exe *exe, t_parser *cmd)
+int	redirect_input(t_exe *exe, t_lexer *red)
 {
-	char	*msg;
-
-	if (!cmd)
+	if (!red)
 		return (0);
-	if (cmd->redirections->token == HEREDOC)
-		return (here_doc(exe, cmd));
-	else if (access(cmd->redirections->content, F_OK) != 0)
-		return (free_exe(exe, 1, 1, ft_strjoinf(msg,
-					": No such file or directory\n", 1)));
-	exe->fd_tmp = open(cmd->redirections->content, O_RDONLY);
+	if (red->token == HEREDOC)
+		return (here_doc(exe, red));
+	else if (access(red->content, F_OK) != 0)
+		return (free_exe(exe, 1, 1, ft_strjoinf(red->content,
+					": No such file or directory\n", 0)));
+	exe->fd_tmp = open(red->content, O_RDONLY);
 	if (exe->fd_tmp == -1)
 		return (free_exe(exe, 0, 1, "Failed to open input file"));
 	if (dup2(exe->fd_tmp, STDIN_FILENO) == -1)
@@ -58,16 +56,14 @@ int	redirect_input(t_exe *exe, t_parser *cmd)
 	return (0);
 }
 
-int	redirect_output(t_exe *exe, t_parser *cmd)
+int	redirect_output(t_exe *exe, t_lexer *red)
 {
-	if (!cmd)
+	if (!red)
 		return (0);
-	if (cmd->redirections->token == APPENDOUTPUT)
-		exe->fd_tmp = open(cmd->redirections->content,
-				O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (red->token == APPENDOUTPUT)
+		exe->fd_tmp = open(red->content, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
-		exe->fd_tmp = open(cmd->redirections->content,
-				O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		exe->fd_tmp = open(red->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (exe->fd_tmp == -1)
 		return (free_exe(exe, 0, 1, "Failed to open output file"));
 	if (dup2(exe->fd_tmp, STDOUT_FILENO) == -1)
@@ -75,62 +71,63 @@ int	redirect_output(t_exe *exe, t_parser *cmd)
 		exe->fd_tmp = close(exe->fd_tmp);
 		return (free_exe(exe, 0, 1, "Failed to redirect output"));
 	}
+	exe->fd_tmp = close(exe->fd_tmp);
 	return (0);
 }
 
-static void	here_doc_child(t_parser *cmd, int pipefd[2])
+static void	here_doc_child(t_lexer *red, t_exe *exe)
 {
 	char	*line;
 
-	close(pipefd[0]);
+	set_signal_action(sigint_heredoc_handler);
+	close(exe->fd_heredoc[0]);
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
 		{
-			close(pipefd[1]);
-			exit(0);
+			close(exe->fd_heredoc[1]);
+			exit(1);
 		}
-		if (ft_strncmp(line, cmd->redirections->content,
-				ft_strlen(cmd->redirections->content)) == 0
-			&& ft_strlen(line) == ft_strlen(cmd->redirections->content))
+		if (ft_strncmp(line, red->content, ft_strlen(red->content)) == 0
+			&& ft_strlen(line) == ft_strlen(red->content))
 		{
 			free(line);
 			break ;
 		}
 		line = ft_strjoinf(line, "\n", 1);
-		write(pipefd[1], line, ft_strlen(line));
+		write(exe->fd_heredoc[1], line, ft_strlen(line));
 		free(line);
 	}
-	close(pipefd[1]);
+	close(exe->fd_heredoc[1]);
 	exit(0);
 }
 
-int	here_doc(t_exe *exe, t_parser *cmd)
+int	here_doc(t_exe *exe, t_lexer *red)
 {
-	int		pipefd[2];
-
-	if (pipe(pipefd) == -1)
+	if (pipe(exe->fd_heredoc) == -1)
 		return (free_exe(exe, 0, 1, "1"));
 	exe->pid = fork();
 	if (exe->pid == -1)
 	{
-		close(pipefd[0]);
-		close(pipefd[1]);
+		close(exe->fd_heredoc[0]);
+		close(exe->fd_heredoc[1]);
 		return (free_exe(exe, 0, 1, "1"));
 	}
 	if (exe->pid == 0)
-		here_doc_child(cmd, pipefd);
+		here_doc_child(red, exe);
 	else
 	{
-		close(pipefd[1]);
+		close(exe->fd_heredoc[1]);
 		wait(NULL);
-		if (dup2(pipefd[0], STDIN_FILENO) == -1)
+		waitpid(exe->pid, &exe->error, 0);
+		set_signal_action(sigint_handler);
+		if (dup2(exe->fd_heredoc[0], STDIN_FILENO) == -1)
 		{
-			close(pipefd[0]);
+			close(exe->fd_heredoc[0]);
 			return (free_exe(exe, 0, 1, "1"));
 		}
-		close(pipefd[0]);
+		close(exe->fd_heredoc[0]);
 	}
 	return (0);
 }

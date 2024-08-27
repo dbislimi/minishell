@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../includes/execution.h"
 
 t_exe	init_exe(t_env **env, t_parser *parser)
 {
@@ -22,6 +22,8 @@ t_exe	init_exe(t_env **env, t_parser *parser)
 	exe.path = NULL;
 	exe.fd[0] = 0;
 	exe.fd[1] = 0;
+	exe.fd_heredoc[0] = 0;
+	exe.fd_heredoc[1] = 0;
 	exe.error = 0;
 	exe.fd_tmp = 0;
 	exe.fd_in = 0;
@@ -30,8 +32,8 @@ t_exe	init_exe(t_env **env, t_parser *parser)
 
 int	free_exe(t_exe *exe, int is_malloc, int error, char *message)
 {
-	if (access(FILE_TEMP, F_OK) == 0)
-		unlink(FILE_TEMP);
+	if (exe->env_tab)
+		exe->env_tab = free_all_split(exe->env_tab);
 	if (exe->path)
 		exe->path = ft_free(exe->path);
 	if (error)

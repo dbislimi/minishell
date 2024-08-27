@@ -27,9 +27,9 @@ int	env_edit(t_env **lst, t_env *newnode)
 				free(tmp->value);
 				tmp->value = ft_strdup(newnode->value);
 			}
-				free(newnode->name);
-				free(newnode->value);
-				free(newnode);
+			free(newnode->name);
+			free(newnode->value);
+			free(newnode);
 			return (1);
 		}
 		tmp = tmp->next;

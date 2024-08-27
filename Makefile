@@ -16,9 +16,9 @@ OBJS 	= ${SRCS:.c=.o}
 
 
 NAME 	= minishell
-DEBUG 	= 1
+DEBUG 	= 0
 CC 		= cc
-CFLAGS	= -g3 -fsanitize=address #-Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror
 LDFLAGS = -lreadline
 RM 		= rm -rf
 INCLUDES = -Iincludes

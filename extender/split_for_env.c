@@ -67,7 +67,7 @@ char	**split_for_env(char const *s)
 	return (split);
 }
 
-char **convert_env_tab(t_env *env)
+char	**convert_env_tab(t_env *env)
 {
 	t_env	*tmp;
 	char	**tab;
@@ -95,4 +95,3 @@ char **convert_env_tab(t_env *env)
 	tab[i] = NULL;
 	return (tab);
 }
-

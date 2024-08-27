@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thmouty <theo@student.42.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../includes/execution.h"
 
 static int	redirect(t_exe *exe, t_parser *cmd)
 {
@@ -25,11 +25,13 @@ static int	redirect(t_exe *exe, t_parser *cmd)
 	{
 		printf("token = %d\n", tmp->token);
 		if (tmp->token == INPUT || tmp->token == HEREDOC)
-			res = redirect_input(exe, cmd);
+			res = redirect_input(exe, tmp);
 		else
 			res = redirect_pipe(exe, cmd, 0);
+		if (res != 0)
+			return (res);
 		if (tmp->token == OUTPUT || tmp->token == APPENDOUTPUT)
-			res = redirect_output(exe, cmd);
+			res = redirect_output(exe, tmp);
 		else
 			res = redirect_pipe(exe, cmd, 1);
 		if (res != 0)
@@ -43,14 +45,9 @@ int	execute_pipeline(t_exe *exe, t_parser *cmd)
 {
 	int	res;
 
-	if (cmd->builtin != NULL)
-	{
-		res = redirect(exe, cmd);
-		if (res != 0)
-			return (res);
+	if (cmd->builtin == &my_export || cmd->builtin == &my_unset
+		|| cmd->builtin == &my_cd)
 		cmd->builtin(exe->env, cmd);
-		execute_parent(exe, cmd);
-	}
 	else if (cmd->cmd && cmd->cmd[0])
 	{
 		if (cmd->next)
@@ -61,27 +58,25 @@ int	execute_pipeline(t_exe *exe, t_parser *cmd)
 			return (free_exe(exe, 0, 1, "1"));
 		if (cmd->pid == 0)
 			execute_child(exe, cmd);
-		else
-			execute_parent(exe, cmd);
-		return (0);
 	}
 	else
 	{
-		redirect(exe, cmd);
-		execute_parent(exe, cmd);
+		res = redirect(exe, cmd);
+		if (res != 0)
+			return (res);
 	}
+	execute_parent(exe, cmd);
 	return (0);
 }
 
 void	execute_child(t_exe *exe, t_parser *cmd)
 {
-	int		res;
-	int		fd;
-	char	*gnl;
+	int	res;
 
-	res = 0;
 	res = redirect(exe, cmd);
-	if (res == 0 && cmd->cmd && cmd->cmd[0])
+	if (res == 0 && cmd->builtin)
+		cmd->builtin(exe->env, cmd);
+	else if (res == 0 && cmd->cmd && cmd->cmd[0])
 	{
 		res = get_path_cmd(exe, cmd->cmd[0]);
 		if (res != 0)
@@ -128,11 +123,13 @@ int	executor(t_env **env, t_parser *parser)
 {
 	t_exe	exe;
 	int		saved_stin;
+	int		saved_stout;
 
 	saved_stin = dup(STDIN_FILENO);
+	saved_stout = dup(STDOUT_FILENO);
 	exe = init_exe(env, parser);
 	execute_pipeline(&exe, exe.parser);
 	dup2(saved_stin, STDIN_FILENO);
-	exe.env_tab = free_all_split(exe.env_tab);
+	dup2(saved_stout, STDOUT_FILENO);
 	return (free_exe(&exe, 0, 0, NULL));
 }

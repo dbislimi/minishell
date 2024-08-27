@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thmouty <theo@student.42.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef EXECUTION_H
+# define EXECUTION_H
 
 # include "../includes/minishell.h"
 # include <errno.h>
@@ -32,22 +32,23 @@ typedef struct s_exe
 	char			*path;
 	char			**envp;
 	int				fd[2];
+	int				fd_heredoc[2];
 	int				fd_tmp;
 	int				fd_in;
 	int				error;
 	pid_t			pid;
 }					t_exe;
 
-// pipex.c
+// execution.c
 int					execute_pipeline(t_exe *exe, t_parser *cmd);
 void				execute_child(t_exe *exe, t_parser *cmd);
 void				execute_parent(t_exe *exe, t_parser *cmd);
 
 // redirections.c
 int					redirect_pipe(t_exe *exe, t_parser *cmd, int type);
-int					redirect_input(t_exe *exe, t_parser *cmd);
-int					redirect_output(t_exe *exe, t_parser *cmd);
-int					here_doc(t_exe *exe, t_parser *cmd);
+int					redirect_input(t_exe *exe, t_lexer *red);
+int					redirect_output(t_exe *exe, t_lexer *red);
+int					here_doc(t_exe *exe, t_lexer *red);
 
 // tools.c
 t_exe				init_exe(t_env **env, t_parser *parser);

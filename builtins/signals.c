@@ -12,34 +12,31 @@
 
 #include "../includes/minishell.h"
 
-int get_ctrl(int ctrl)
-{
-	static int	ctrl_c = 0;
-
-	if (ctrl)
-		ctrl_c = ctrl;
-	return (ctrl_c);
-}
-
-static void	sigint_handler(int signal)
+void	sigint_handler(int signal)
 {
 	if (signal == SIGINT)
 	{
 		printf("\n");
 		rl_replace_line("", 1);
-		rl_on_new_line ();
-		rl_redisplay();
-		get_ctrl(1);
+		rl_on_new_line();
 	}
 }
 
-void	set_signal_action(void)
+void	sigint_heredoc_handler(int signal)
+{
+	if (signal == SIGINT)
+	{
+		printf("\n");
+		close(STDIN_FILENO);
+	}
+}
+
+void	set_signal_action(void (*handler)(int))
 {
 	struct sigaction	act;
 
-	get_ctrl(0);
 	ft_bzero(&act, sizeof(act));
-	act.sa_handler = &sigint_handler;
+	act.sa_handler = handler;
 	sigaction(SIGINT, &act, NULL);
 	act.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &act, NULL);

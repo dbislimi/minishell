@@ -12,7 +12,6 @@
 
 #include "libft.h"
 
-
 char	*ft_free(char *tab)
 {
 	if (tab)
