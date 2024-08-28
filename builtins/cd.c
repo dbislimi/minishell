@@ -21,13 +21,13 @@ char	*get_target_dir(t_env *env, t_parser *parser)
 	{
 		dir = find_value("HOME", env);
 		if (!dir)
-			write(2, "minishell: cd: HOME not set\n", 23);
+			ft_fprintf(STDERR_FILENO, "minishell: cd: HOME not set\n");
 	}
 	else if (strcmp(parser->cmd[1], "-") == 0)
 	{
 		dir = find_value("OLDPWD", env);
 		if (!dir)
-			write(2, "minishell: cd: OLDPWD not set\n", 25);
+			ft_fprintf(STDERR_FILENO, "minishell: cd: OLDPWD not set\n");
 		else
 			printf("%s\n", dir);
 	}
@@ -41,24 +41,25 @@ int	my_cd(t_env **env, t_parser *parser)
 	char	*temp;
 	char	*dir;
 
+	if (parser->cmd[1] && parser->cmd[2])
+	{
+		ft_fprintf(STDERR_FILENO, "minishell: cd: too many arguments\n");
+		return (1);
+	}
 	dir = get_target_dir(*env, parser);
 	if (!dir)
 		return (1);
 	if (chdir(dir) != 0)
 	{
-		write(STDERR_FILENO, "minishell: cd: ", 10);
-		write(STDERR_FILENO, dir, ft_strlen(dir));
-		write(STDERR_FILENO, ": ", 2);
-		write(STDERR_FILENO, strerror(errno), ft_strlen(strerror(errno)));
-		write(STDERR_FILENO, "\n", 1);
+		ft_fprintf(STDERR_FILENO, "minishell: cd: %s: %s\n", dir,
+			strerror(errno));
 		return (1);
 	}
-	temp = find_value("PWD", *env);
-	temp = ft_strjoinf("OLDPWD=", temp, 0);
-	add_node(env, new_node(temp));
+	temp = ft_strjoinf("OLDPWD=", find_value("PWD", *env), 0);
+	add_node(env, new_node(temp), 0);
 	free(temp);
 	temp = ft_strjoinf("PWD=", getcwd(NULL, 0), 2);
-	add_node(env, new_node(temp));
+	add_node(env, new_node(temp), 0);
 	free(temp);
 	return (0);
 }

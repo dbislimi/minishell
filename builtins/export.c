@@ -18,8 +18,23 @@ int	my_export(t_env **env, struct s_parser *parser)
 
 	i = 0;
 	while (parser->cmd[++i])
-		add_node(env, new_node(parser->cmd[i]));
+	{
+		if (add_node(env, new_node(parser->cmd[i]), 0))
+			return (1);
+	}
 	if (!parser->cmd[1])
 		print_env(*env, "export");
 	return (0);
+}
+
+void	add_node_char(char *name, char *value, bool is_free, t_env **env)
+{
+	char	*temp;
+
+	temp = ft_strjoinf(name, "=", 0);
+	temp = ft_strjoinf(temp, value, 1);
+	add_node(env, new_node(temp), 1);
+	free(temp);
+	if (is_free)
+		free(value);
 }

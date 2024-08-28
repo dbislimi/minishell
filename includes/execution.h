@@ -25,12 +25,14 @@
 
 typedef struct s_exe
 {
+	t_env			**env_cpy;
 	t_env			**env;
 	char			**env_tab;
 	struct s_parser	*parser;
 
 	char			*path;
 	char			**envp;
+	char			*tmp;
 	int				fd[2];
 	int				fd_heredoc[2];
 	int				fd_tmp;
@@ -40,7 +42,7 @@ typedef struct s_exe
 }					t_exe;
 
 // execution.c
-int					execute_pipeline(t_exe *exe, t_parser *cmd);
+void				execute_pipeline(t_exe *exe, t_parser *cmd);
 void				execute_child(t_exe *exe, t_parser *cmd);
 void				execute_parent(t_exe *exe, t_parser *cmd);
 
@@ -56,5 +58,5 @@ int					free_exe(t_exe *exe, int is_malloc, int error,
 						char *message);
 int					get_path_cmd(t_exe *exe, char *cmd);
 void				create_path(t_exe *exe, char *cmd, char *path);
-
+void				check_bultins(t_exe *exe, t_parser *cmd);
 #endif

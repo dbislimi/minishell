@@ -35,6 +35,7 @@ LIBFT_SRCS = ${addprefix ${LIBFT_PATH}/, ft_strcpy.c \
 			ft_putnbr_fd.c \
 			ft_strjoin.c \
 			ft_strjoinf.c \
+			ft_strjoinc.c \
 			ft_strjoinwsep.c \
 			ft_substr.c \
 			ft_strtrim.c \
@@ -52,6 +53,7 @@ LIBFT_SRCS = ${addprefix ${LIBFT_PATH}/, ft_strcpy.c \
 			ft_lstmap.c \
 			ft_lstnew.c \
 			ft_lstsize.c \
+			ft_joinf.c \
 			is_whitespace.c }
 
 PRINTF_PATH = ./printf

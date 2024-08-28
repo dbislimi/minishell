@@ -45,31 +45,31 @@ static t_env	*last_node(t_env *lst)
 	return (lst);
 }
 
-void	add_node(t_env **lst, t_env *newnode)
+int	add_node(t_env **lst, t_env *nw, int force)
 {
 	int		i;
 	t_env	*last;
 
-	if (!newnode)
-		return ;
-	i = 0;
-	while (newnode->name[i])
+	i = -1;
+	while (nw && nw->name[++i] && !force)
 	{
-		if ((i == 0 && ft_isdigit(newnode->name[i]))
-			|| (!ft_isalnum(newnode->name[i]) && newnode->name[i] != '_'))
+		if ((i == 0 && ft_isdigit(nw->name[i])) || (!ft_isalnum(nw->name[i])
+				&& nw->name[i] != '_'))
 		{
-			printf("minishell: export: « %s=%s » : not a valid identifier\n",
-				newnode->name, newnode->value);
-			return ;
+			ft_fprintf(STDERR_FILENO,
+				"minishell: export: `$s=$s': not a valid identifier\n",
+				&nw->name, &nw->value);
+			free(nw);
+			return (1);
 		}
-		i++;
 	}
-	i = env_edit(lst, newnode);
-	if (!i && *lst)
+	i = env_edit(lst, nw);
+	if (nw && !i && *lst)
 	{
 		last = last_node(*lst);
-		last->next = newnode;
+		last->next = nw;
 	}
-	else if (!i)
-		*lst = newnode;
+	else if (nw && !i)
+		*lst = nw;
+	return (0);
 }

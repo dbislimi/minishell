@@ -68,7 +68,7 @@ static char	*print_line(t_env *env)
 	return (tmp);
 }
 
-void	minishell(t_env *env, int saved_stin, int saved_stout)
+void	minishell(t_env **env, int saved_stin, int saved_stout)
 {
 	t_parser	*parser_list;
 	char		*str;
@@ -79,20 +79,22 @@ void	minishell(t_env *env, int saved_stin, int saved_stout)
 	while (1)
 	{
 		old = str;
-		str = print_line(env);
+		str = print_line(*env);
 		if (str == NULL)
 			break ;
 		if (ft_strlen(str) != 0 && (!old || ft_strcmp(str, old) != 0))
 			add_history(str);
 		old = ft_free(old);
-		lexer_parser(&parser_list, str, env);
+		lexer_parser(&parser_list, str, *env);
 		if (parser_list == NULL)
 			continue ;
-		executor(&env, parser_list);
+		executor(env, parser_list);
 		dup2(saved_stin, STDIN_FILENO);
 		dup2(saved_stout, STDOUT_FILENO);
 		free_parser(&parser_list);
 	}
+	free(old);
+	free(str);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -101,17 +103,17 @@ int	main(int ac, char **av, char **envp)
 	int		saved_stin;
 	int		saved_stout;
 
+	env = NULL;
 	saved_stin = dup(STDIN_FILENO);
 	saved_stout = dup(STDOUT_FILENO);
 	(void)av;
-	env = NULL;
 	if (ac > 1)
 	{
-		write(2, "minishell requires no arguments\n", 33);
+		ft_fprintf(2, "minishell requires no arguments\n");
 		exit(EXIT_FAILURE);
 	}
 	env_init(&env, envp);
 	set_signal_action(sigint_handler);
-	minishell(env, saved_stin, saved_stout);
+	minishell(&env, saved_stin, saved_stout);
 	envclear(&env);
 }

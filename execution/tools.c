@@ -16,6 +16,7 @@ t_exe	init_exe(t_env **env, t_parser *parser)
 {
 	t_exe	exe;
 
+	exe.env_cpy = dup_env(*env);
 	exe.env = env;
 	exe.env_tab = convert_env_tab(*env);
 	exe.parser = parser;
@@ -39,16 +40,13 @@ int	free_exe(t_exe *exe, int is_malloc, int error, char *message)
 	if (error)
 	{
 		if (message && (*message == '1' || *message == '2'))
-		{
-			write(STDERR_FILENO, strerror(errno), ft_strlen(strerror(errno)));
-			write(STDERR_FILENO, "\n", 1);
-		}
+			ft_fprintf(STDERR_FILENO, "minishell: %s: %s\n", exe->path,
+				strerror(errno));
 		else if (message)
 		{
-			write(STDERR_FILENO, "minishell: ", 11);
-			write(STDERR_FILENO, message, ft_strlen(message));
+			ft_fprintf(STDERR_FILENO, "minishell: %s\n", message);
 			if (message[ft_strlen(message) - 1] != '\n')
-				write(STDERR_FILENO, "\n", 1);
+				ft_fprintf(STDERR_FILENO, "\n");
 		}
 		if (is_malloc)
 			free(message);
@@ -96,4 +94,17 @@ void	create_path(t_exe *exe, char *cmd, char *path)
 		exe->path = ft_strjoinf(path, "/", 0);
 		exe->path = ft_strjoinf(exe->path, cmd, 1);
 	}
+}
+
+void	check_bultins(t_exe *exe, t_parser *cmd)
+{
+	t_env	**used_env;
+
+	used_env = exe->env;
+	if (cmd->builtin == &my_export && cmd->cmd[1])
+		used_env = exe->env_cpy;
+	else if (cmd->builtin == &my_unset || cmd->builtin == &my_cd)
+		used_env = exe->env_cpy;
+	add_node_char("?", ft_itoa(cmd->builtin(used_env, cmd)), true,
+		exe->env_cpy);
 }

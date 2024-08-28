@@ -15,7 +15,7 @@
 size_t	handle_dollar(char *clean, char **tab, char *env_value)
 {
 	++*tab;
-	while ((ft_isalnum(**tab) || **tab == '_') && **tab != '"')
+	while ((ft_isalnum(**tab) || **tab == '_' || **tab == '?') && **tab != '"')
 		++*tab;
 	if (env_value == NULL)
 		return (0);
@@ -39,7 +39,8 @@ char	*find_value(char *str, t_env *env)
 	size_t	j;
 
 	j = 0;
-	while ((ft_isalnum(str[j]) || str[j] == '_') && str[j] != '"')
+	while ((ft_isalnum(str[j]) || str[j] == '_' || str[j] == '?')
+		&& str[j] != '"')
 		++j;
 	while (env)
 	{
@@ -67,7 +68,7 @@ int	strlen2(char *str, t_env *env, bool flag)
 		else if (str[j] == '$')
 		{
 			i += count_dollar((str + ++j), env);
-			while (ft_isalnum(str[j]) || str[j] == '_')
+			while (ft_isalnum(str[j]) || str[j] == '_' || str[j] == '?')
 				++j;
 			continue ;
 		}

@@ -28,44 +28,37 @@ static int	redirect(t_exe *exe, t_parser *cmd)
 		else
 			res = redirect_pipe(exe, cmd, 0);
 		if (res != 0)
-			return (res);
+			break ;
 		if (tmp->token == OUTPUT || tmp->token == APPENDOUTPUT)
 			res = redirect_output(exe, tmp);
 		else
 			res = redirect_pipe(exe, cmd, 1);
 		if (res != 0)
-			return (res);
+			break ;
 		tmp = tmp->next;
 	}
-	return (0);
+	add_node_char("?", ft_itoa(exe->error), true, exe->env_cpy);
+	return (res);
 }
 
-int	execute_pipeline(t_exe *exe, t_parser *cmd)
+void	execute_pipeline(t_exe *exe, t_parser *cmd)
 {
-	int	res;
-
-	if (cmd->builtin == &my_export || cmd->builtin == &my_unset
-		|| cmd->builtin == &my_cd)
-		cmd->builtin(exe->env, cmd);
+	if (cmd->builtin)
+		check_bultins(exe, cmd);
 	else if (cmd->cmd && cmd->cmd[0])
 	{
 		if (cmd->next)
 			if (pipe(exe->fd) == -1)
-				return (free_exe(exe, 0, 1, "1"));
+				return ;
 		cmd->pid = fork();
 		if (cmd->pid == -1)
-			return (free_exe(exe, 0, 1, "1"));
+			return ;
 		if (cmd->pid == 0)
 			execute_child(exe, cmd);
 	}
 	else
-	{
-		res = redirect(exe, cmd);
-		if (res != 0)
-			return (res);
-	}
+		redirect(exe, cmd);
 	execute_parent(exe, cmd);
-	return (0);
 }
 
 void	execute_child(t_exe *exe, t_parser *cmd)
@@ -74,7 +67,7 @@ void	execute_child(t_exe *exe, t_parser *cmd)
 
 	res = redirect(exe, cmd);
 	if (res == 0 && cmd->builtin)
-		cmd->builtin(exe->env, cmd);
+		cmd->builtin(exe->env_cpy, cmd);
 	else if (res == 0 && cmd->cmd && cmd->cmd[0])
 	{
 		res = get_path_cmd(exe, cmd->cmd[0]);
@@ -112,6 +105,8 @@ void	execute_parent(t_exe *exe, t_parser *cmd)
 		if (tmp->pid != 0)
 		{
 			waitpid(tmp->pid, &exe->error, 0);
+			add_node_char("?", ft_itoa(WEXITSTATUS(exe->error)), true,
+				exe->env_cpy);
 			tmp->pid = 0;
 		}
 		tmp = tmp->next;
@@ -130,5 +125,6 @@ int	executor(t_env **env, t_parser *parser)
 	execute_pipeline(&exe, exe.parser);
 	dup2(saved_stin, STDIN_FILENO);
 	dup2(saved_stout, STDOUT_FILENO);
+	move_env(env, exe.env_cpy);
 	return (free_exe(&exe, 0, 0, NULL));
 }

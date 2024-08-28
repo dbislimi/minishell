@@ -19,7 +19,12 @@ void	print_env(t_env *env, char *type)
 	while (env)
 	{
 		i = 0;
-		if (strcmp(type, "env") == 0)
+		if (strcmp(env->name, "?") == 0)
+		{
+			env = env->next;
+			continue ;
+		}
+		else if (strcmp(type, "env") == 0)
 			printf("%s=%s\n", env->name, env->value);
 		else if (strcmp(type, "export") == 0)
 			print_export(env, i);

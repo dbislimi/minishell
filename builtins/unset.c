@@ -38,15 +38,20 @@ int	my_unset(t_env **env, struct s_parser *parser)
 	i = 1;
 	while (temp && parser->cmd[i])
 	{
-		if (strcmp(parser->cmd[i], temp->name) == 0)
+		if (strcmp(parser->cmd[i], temp->name) == 0 && strcmp(parser->cmd[i],
+				"?") != 0)
 		{
 			if (remove_env_var(env, &old, &temp))
 				continue ;
 			if (parser->cmd[i++ + 1] == NULL)
-				return (1);
+			{
+				add_node_char("?", "1", false, env);
+				return (0);
+			}
 		}
 		old = temp;
 		temp = temp->next;
 	}
+	add_node_char("?", "0", false, env);
 	return (0);
 }

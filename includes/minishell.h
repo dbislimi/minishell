@@ -46,10 +46,14 @@ typedef struct s_env
 }					t_env;
 
 void				env_init(t_env **env, char **envp);
+t_env				**dup_env(t_env *envp);
+void				move_env(t_env **env, t_env **move);
 char				**split_for_env(char const *s);
 char				**convert_env_tab(t_env *env);
 int					env_edit(t_env **lst, t_env *newnode);
-void				add_node(t_env **lst, t_env *newnode);
+int					add_node(t_env **lst, t_env *newnode, int force);
+void				add_node_char(char *name, char *value, bool is_free,
+						t_env **env);
 t_env				*new_node(void *content);
 void				envclear(t_env **lst);
 void				print_env(t_env *env, char *type);
@@ -159,6 +163,7 @@ int					my_cd(t_env **env, struct s_parser *parser);
 int					my_pwd(t_env **env, struct s_parser *parser);
 int					my_export(t_env **env, struct s_parser *parser);
 int					my_unset(t_env **env, struct s_parser *parser);
+int					remove_env_var(t_env **env, t_env **old, t_env **temp);
 int					my_env(t_env **env, struct s_parser *parser);
 int					my_exit(t_env **env, struct s_parser *parser);
 
