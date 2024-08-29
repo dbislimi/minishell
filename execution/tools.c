@@ -44,7 +44,7 @@ int	free_exe(t_exe *exe, int is_malloc, int error, char *message)
 				strerror(errno));
 		else if (message)
 		{
-			ft_fprintf(STDERR_FILENO, "minishell: %s\n", message);
+			ft_fprintf(STDERR_FILENO, "minishell: %s", message);
 			if (message[ft_strlen(message) - 1] != '\n')
 				ft_fprintf(STDERR_FILENO, "\n");
 		}

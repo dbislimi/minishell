@@ -18,7 +18,7 @@ static char	*checker_buffer(char *arg)
 	char	*buffer;
 
 	if (arg == NULL)
-		buffer = ft_strdup("(null)");
+		return (ft_strdup(""));
 	else
 		buffer = ft_strdup(arg);
 	return (buffer);
@@ -29,7 +29,7 @@ static char	*checker_buffer_free(char **arg, int dollar)
 	char	*buffer;
 
 	if (!arg || *arg == NULL)
-		buffer = ft_strdup("(null)");
+		buffer = ft_strdup("");
 	else
 		buffer = ft_strdup(*arg);
 	if (dollar && *arg)

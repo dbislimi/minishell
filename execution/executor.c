@@ -43,8 +43,9 @@ static int	redirect(t_exe *exe, t_parser *cmd)
 
 void	execute_pipeline(t_exe *exe, t_parser *cmd)
 {
-	if (cmd->builtin)
-		check_bultins(exe, cmd);
+	if (cmd->builtin == &my_export || cmd->builtin == &my_unset
+		|| cmd->builtin == &my_cd || (cmd->builtin == &my_exit && !cmd->next))
+		cmd->builtin(exe->env_cpy, cmd);
 	else if (cmd->cmd && cmd->cmd[0])
 	{
 		if (cmd->next)
@@ -67,7 +68,7 @@ void	execute_child(t_exe *exe, t_parser *cmd)
 
 	res = redirect(exe, cmd);
 	if (res == 0 && cmd->builtin)
-		cmd->builtin(exe->env_cpy, cmd);
+		cmd->builtin(exe->env, cmd);
 	else if (res == 0 && cmd->cmd && cmd->cmd[0])
 	{
 		res = get_path_cmd(exe, cmd->cmd[0]);

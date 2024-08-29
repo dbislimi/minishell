@@ -29,9 +29,11 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-# define FILE_TEMP ".here_doc_tmp"
 # define SYNTAX_ERROR "minishell: syntax error near unexpected token"
 # define MALLOC "Error: malloc did not work."
+# define BOLD_GREEN "\e[1;32m"
+# define BOLD_BLUE "\e[1;34m"
+# define RESET_COLOR "\e[0m"
 // EXTENDER
 
 # ifndef DEBUG

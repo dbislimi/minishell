@@ -28,43 +28,27 @@ void	lexer_parser(t_parser **parser, char *str, t_env *env)
 		print_parser(*parser);
 }
 
-static char	*get_pwd(char *line, char *pwd)
-{
-	char	*tmp;
-
-	line = ft_strjoinf(line, "\033[1;34m", 1);
-	if (ft_strncmp(pwd, "/home/", 6) == 0)
-	{
-		line = ft_strjoinf(line, "~", 1);
-		tmp = ft_strchr(pwd + 6, '/');
-	}
-	else
-	{
-		tmp = pwd + 1;
-		line = ft_strjoinf(line, "/", 1);
-	}
-	line = ft_strjoinf(line, tmp, 1);
-	return (line);
-}
-
 static char	*print_line(t_env *env)
 {
-	char	*line;
+	char	*str;
 	char	*tmp;
 
-	line = NULL;
+	str = NULL;
 	tmp = find_value("USER", env);
 	if (tmp)
-	{
-		line = ft_strjoinf("\033[1;32m", tmp, 0);
-		line = ft_strjoinf(line, "\033[0m:", 1);
-	}
+		str = ft_joinf("%s%s%s", BOLD_GREEN, tmp, RESET_COLOR);
 	tmp = find_value("PWD", env);
 	if (tmp)
-		line = get_pwd(line, tmp);
-	line = ft_strjoinf(line, "\033[0m$ ", 1);
-	tmp = readline(line);
-	free(line);
+	{
+		if (ft_strncmp(tmp, "/home/", 6) == 0)
+			str = ft_joinf("$s:%s~%s", &str, BOLD_BLUE, ft_strchr(tmp + 6,
+						'/'));
+		else
+			str = ft_joinf("$s:%s/%s", &str, BOLD_BLUE, tmp + 1);
+	}
+	str = ft_joinf("$s%s$$ ", &str, RESET_COLOR);
+	tmp = readline(str);
+	free(str);
 	return (tmp);
 }
 

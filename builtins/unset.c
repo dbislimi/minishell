@@ -45,7 +45,7 @@ int	my_unset(t_env **env, struct s_parser *parser)
 				continue ;
 			if (parser->cmd[i++ + 1] == NULL)
 			{
-				add_node_char("?", "1", false, env);
+				add_node_char("?", "0", false, env);
 				return (0);
 			}
 		}

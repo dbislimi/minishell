@@ -20,7 +20,10 @@ int	my_export(t_env **env, struct s_parser *parser)
 	while (parser->cmd[++i])
 	{
 		if (add_node(env, new_node(parser->cmd[i]), 0))
+		{
+			add_node_char("?", "1", false, env);
 			return (1);
+		}
 	}
 	if (!parser->cmd[1])
 		print_env(*env, "export");

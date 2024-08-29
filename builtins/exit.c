@@ -20,8 +20,9 @@ static void	check_exit_code(struct s_parser *parser, int exit_code)
 			&& parser->cmd[1][exit_code] != '-'
 			&& parser->cmd[1][exit_code] != '+')
 		{
-			ft_fprintf(STDERR_FILENO, "minishell: exit: %s: \
-				numeric argument required\n", parser->cmd[1]);
+			ft_fprintf(STDERR_FILENO,
+				"minishell: exit: %s: numeric argument required\n",
+				parser->cmd[1]);
 			exit(2);
 		}
 		exit_code++;
@@ -41,11 +42,13 @@ int	my_exit(t_env **env, struct s_parser *parser)
 		if (exit_code < 0)
 			exit_code = 256 + exit_code;
 	}
-	else
+	else if (parser->cmd[1] && parser->cmd[2])
 	{
 		ft_fprintf(STDERR_FILENO, "minishell: exit: too many arguments\n");
 		exit_code = 1;
 	}
+	else
+		exit_code = 1;
 	exit(exit_code);
 	return (exit_code);
 }
