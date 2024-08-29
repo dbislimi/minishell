@@ -30,7 +30,7 @@ static int	redirect(t_exe *exe, t_parser *cmd)
 		if (res != 0)
 			break ;
 		if (tmp->token == OUTPUT || tmp->token == APPENDOUTPUT)
-			res = redirect_output(exe, tmp);
+			res = redirect_output(exe, tmp, cmd);
 		else
 			res = redirect_pipe(exe, cmd, 1);
 		if (res != 0)

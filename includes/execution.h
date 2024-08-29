@@ -49,7 +49,7 @@ void				execute_parent(t_exe *exe, t_parser *cmd);
 // redirections.c
 int					redirect_pipe(t_exe *exe, t_parser *cmd, int type);
 int					redirect_input(t_exe *exe, t_lexer *red);
-int					redirect_output(t_exe *exe, t_lexer *red);
+int					redirect_output(t_exe *exe, t_lexer *red, t_parser *cmd);
 int					here_doc(t_exe *exe, t_lexer *red);
 
 // tools.c
