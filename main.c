@@ -33,7 +33,6 @@ static char	*print_line(t_env *env)
 	char	*str;
 	char	*tmp;
 
-	str = NULL;
 	tmp = find_value("USER", env);
 	if (tmp)
 		str = ft_joinf("%s%s%s", BOLD_GREEN, tmp, RESET_COLOR);

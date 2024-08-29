@@ -31,9 +31,10 @@
 
 # define SYNTAX_ERROR "minishell: syntax error near unexpected token"
 # define MALLOC "Error: malloc did not work."
-# define BOLD_GREEN "\e[1;32m"
-# define BOLD_BLUE "\e[1;34m"
-# define RESET_COLOR "\e[0m"
+# define BOLD_GREEN "\001\033[1;32m\002"
+# define BOLD_BLUE "\001\033[1;34m\002"
+# define RESET_COLOR "\001\033[0m\002"
+
 // EXTENDER
 
 # ifndef DEBUG
