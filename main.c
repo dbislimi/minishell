@@ -36,6 +36,8 @@ static char	*print_line(t_env *env)
 	tmp = find_value("USER", env);
 	if (tmp)
 		str = ft_joinf("%s%s%s", BOLD_GREEN, tmp, RESET_COLOR);
+	else
+		str = ft_strdup("");
 	tmp = find_value("PWD", env);
 	if (tmp)
 	{

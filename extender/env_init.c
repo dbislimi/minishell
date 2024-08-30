@@ -19,7 +19,7 @@ void	env_init(t_env **env, char **envp)
 	while (envp && *envp)
 	{
 		new = new_node(*envp);
-		add_node(env, new, 0);
+		add_node(env, new, 1);
 		++envp;
 	}
 	add_node_char("?", "0", false, env);

@@ -34,7 +34,7 @@
 # define BOLD_GREEN "\001\033[1;32m\002"
 # define BOLD_BLUE "\001\033[1;34m\002"
 # define RESET_COLOR "\001\033[0m\002"
-
+# define CHAR_OK_ENV "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
 // EXTENDER
 
 # ifndef DEBUG
