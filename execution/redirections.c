@@ -65,7 +65,7 @@ int	redirect_output(t_exe *exe, t_lexer *red, t_parser *cmd)
 	else
 		exe->fd_tmp = open(red->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (exe->fd_tmp == -1)
-		return (free_exe(exe, 0, 1, "Failed to open output file"));
+		return (free_exe(exe, 0, 1, "1"));
 	if (!cmd->cmd)
 	{
 		exe->tmp = get_next_line(STDIN_FILENO);
@@ -79,7 +79,7 @@ int	redirect_output(t_exe *exe, t_lexer *red, t_parser *cmd)
 	else if (dup2(exe->fd_tmp, STDOUT_FILENO) == -1)
 	{
 		exe->fd_tmp = close(exe->fd_tmp);
-		return (free_exe(exe, 0, 1, "Failed to redirect output"));
+		return (free_exe(exe, 0, 1, "1"));
 	}
 	exe->fd_tmp = close(exe->fd_tmp);
 	return (0);
