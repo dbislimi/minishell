@@ -22,11 +22,7 @@ size_t	handle_dollar(char *clean, char **tab, char *env_value)
 	}
 	++*tab;
 	if (*(--*tab) == '?')
-	{
 		++*tab;
-		ft_strcat(clean, env_value);
-		return (1);
-	}
 	else
 		while (**tab && (ft_strchr(CHAR_OK_ENV, **tab)) && **tab != '"')
 			++*tab;
@@ -73,6 +69,12 @@ void	strlen2_check_dollar(size_t *i, size_t *j, char *str, t_env *env)
 	{
 		++(*j);
 		++(*i);
+		return ;
+	}
+	else if (str[*j + 1] == '?')
+	{
+		*i += 1;
+		*j += 2;
 		return ;
 	}
 	*i += count_dollar((str + ++(*j)), env);
