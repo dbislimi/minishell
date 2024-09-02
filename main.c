@@ -92,13 +92,15 @@ int	main(int ac, char **av, char **envp)
 	saved_stin = dup(STDIN_FILENO);
 	saved_stout = dup(STDOUT_FILENO);
 	(void)av;
+	(void)envp;
 	if (ac > 1)
 	{
 		ft_fprintf(2, "minishell requires no arguments\n");
 		exit(EXIT_FAILURE);
 	}
+	env_init(&env, (char *[]){NULL}); 
 	env_init(&env, envp);
-	set_signal_action(sigint_handler);
+	// set_signal_action(sigint_handler);
 	minishell(&env, saved_stin, saved_stout);
 	envclear(&env);
 }

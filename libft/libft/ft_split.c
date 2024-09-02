@@ -61,7 +61,7 @@ char	**free_all_split(char **tab)
 	int	i;
 
 	i = 0;
-	while (tab[i])
+	while (tab && tab[i])
 		free(tab[i++]);
 	free(tab);
 	return (NULL);

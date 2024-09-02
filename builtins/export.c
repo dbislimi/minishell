@@ -34,8 +34,7 @@ void	add_node_char(char *name, char *value, bool is_free, t_env **env)
 {
 	char	*temp;
 
-	temp = ft_strjoinf(name, "=", 0);
-	temp = ft_strjoinf(temp, value, 1);
+	temp = ft_joinf("%s=%s", name, value);
 	add_node(env, new_node(temp), 1);
 	free(temp);
 	if (is_free)

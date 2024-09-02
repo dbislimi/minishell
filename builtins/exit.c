@@ -33,6 +33,7 @@ int	my_exit(t_env **env, struct s_parser *parser)
 {
 	int	exit_code;
 
+	printf("exit\n");
 	(void)env;
 	exit_code = 0;
 	check_exit_code(parser, 0);
@@ -45,7 +46,7 @@ int	my_exit(t_env **env, struct s_parser *parser)
 	else if (parser->cmd[1] && parser->cmd[2])
 	{
 		ft_fprintf(STDERR_FILENO, "minishell: exit: too many arguments\n");
-		exit_code = 1;
+		return (1);
 	}
 	else
 		exit_code = 1;

@@ -73,7 +73,7 @@ void	strlen2_check_dollar(size_t *i, size_t *j, char *str, t_env *env)
 	}
 	else if (str[*j + 1] == '?')
 	{
-		*i += 1;
+		*i += ft_strlen(find_value("?", env));
 		*j += 2;
 		return ;
 	}

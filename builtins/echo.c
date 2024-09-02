@@ -12,14 +12,34 @@
 
 #include "../includes/minishell.h"
 
+int	pass_args(t_parser *parser, int *i)
+{
+	int	j;
+
+	while (parser->cmd[*i])
+	{
+		if (parser->cmd[*i][0] != '-' || parser->cmd[*i][1] != 'n')
+			break ;
+		j = 2;
+		while (parser->cmd[*i][j] == 'n')
+			j++;
+		if (parser->cmd[*i][j] != '\0' && parser->cmd[*i][j] != 'n')
+			break ;
+		(*i)++;
+	}
+	if ((*i) == 1)
+		return (1);
+	return (0);
+}
+
 int	my_echo(t_env **env, struct s_parser *parser)
 {
 	int	i;
+	int	back_slash_n;
 
 	(void)env;
 	i = 1;
-	if (parser->cmd[1] && strcmp(parser->cmd[1], "-n") == 0)
-		i++;
+	back_slash_n = pass_args(parser, &i);
 	while (parser->cmd[i])
 	{
 		ft_printf("%s", parser->cmd[i]);
@@ -27,7 +47,7 @@ int	my_echo(t_env **env, struct s_parser *parser)
 			ft_printf(" ");
 		i++;
 	}
-	if (!parser->cmd[1] || strcmp(parser->cmd[1], "-n") != 0)
+	if (back_slash_n)
 		printf("\n");
 	return (0);
 }

@@ -34,8 +34,10 @@ t_env	**dup_env(t_env *envp)
 	*new = NULL;
 	while (envp)
 	{
-		buffer = ft_strjoin(envp->name, "=");
-		buffer = ft_strjoinf(buffer, envp->value, 1);
+		if (!envp->value)
+			buffer = ft_strdup(envp->name);
+		else
+			buffer = ft_joinf("%s=%s", envp->name, envp->value);
 		add_node(new, new_node(buffer), 1);
 		free(buffer);
 		envp = envp->next;
@@ -79,8 +81,10 @@ void	move_env(t_env **env, t_env **move)
 	tmove = *move;
 	while (tmove)
 	{
-		buffer = ft_strjoin(tmove->name, "=");
-		buffer = ft_strjoinf(buffer, tmove->value, 1);
+		if (!tmove->value)
+			buffer = ft_joinf("%s", tmove->name);
+		else
+			buffer = ft_joinf("%s=%s", tmove->name, tmove->value);
 		new = new_node(buffer);
 		if (add_node(env, new, 1) == 2)
 		{

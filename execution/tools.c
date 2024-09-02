@@ -28,6 +28,7 @@ t_exe	init_exe(t_env **env, t_parser *parser)
 	exe.error = 0;
 	exe.fd_tmp = 0;
 	exe.fd_in = 0;
+	exe.i = 0;
 	return (exe);
 }
 
@@ -50,7 +51,7 @@ int	free_exe(t_exe *exe, int is_malloc, int error, char *message)
 		}
 		if (is_malloc)
 			free(message);
-		return (EXIT_FAILURE);
+		return (error);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -58,24 +59,23 @@ int	free_exe(t_exe *exe, int is_malloc, int error, char *message)
 int	get_path_cmd(t_exe *exe, char *cmd)
 {
 	char	**path;
-	int		i;
 
-	i = 0;
-	while (exe->env_tab && exe->env_tab[i] && ft_strncmp(exe->env_tab[i],
-			"PATH=", 5) != 0)
-		i++;
-	if (!exe->env_tab || !exe->env_tab[i])
-		return (0);
-	path = ft_split(exe->env_tab[i] + 5, ':');
-	if (!path)
-		return (free_exe(exe, 0, 1, "Failed to allocate memory\n"));
-	i = -1;
-	while (path[++i])
+	path = NULL;
+	exe->i = 0;
+	exe->tmp = find_value("PATH", *exe->env);
+	if (exe->tmp)
 	{
-		create_path(exe, cmd, path[i]);
-		if (access(exe->path, 0) == 0)
-			break ;
-		exe->path = ft_free(exe->path);
+		path = ft_split(exe->tmp, ':');
+		if (!path)
+			return (free_exe(exe, 0, 1, "Failed to allocate memory\n"));
+		exe->i = -1;
+		while (path[++exe->i])
+		{
+			create_path(exe, cmd, path[exe->i]);
+			if (access(exe->path, 0) == 0)
+				break ;
+			exe->path = ft_free(exe->path);
+		}
 	}
 	path = free_all_split(path);
 	if (!exe->path)

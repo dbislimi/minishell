@@ -43,48 +43,68 @@ static int	redirect(t_exe *exe, t_parser *cmd)
 
 void	execute_pipeline(t_exe *exe, t_parser *cmd)
 {
-	if (cmd->builtin == &my_export || cmd->builtin == &my_unset
-		|| cmd->builtin == &my_cd || (cmd->builtin == &my_exit && !cmd->next))
-		cmd->builtin(exe->env_cpy, cmd);
-	else if (cmd->cmd && cmd->cmd[0])
+	if (cmd->cmd && cmd->cmd[0])
 	{
-		if (cmd->next)
-			if (pipe(exe->fd) == -1)
-				return ;
-		cmd->pid = fork();
-		if (cmd->pid == -1)
+		if (!cmd->next && !cmd->prev && cmd->builtin)
+		{
+			add_node_char("?", ft_itoa(execute_child(exe, cmd, 0)), true,
+				exe->env_cpy);
 			return ;
-		if (cmd->pid == 0)
-			execute_child(exe, cmd);
+		}
+		else
+		{
+			if ((cmd->next || cmd->prev) && pipe(exe->fd) == -1)
+				return ;
+			cmd->pid = fork();
+			if (cmd->pid == -1)
+				return ;
+			if (cmd->pid == 0)
+				execute_child(exe, cmd, 1);
+		}
 	}
 	else
 		redirect(exe, cmd);
 	execute_parent(exe, cmd);
 }
 
-void	execute_child(t_exe *exe, t_parser *cmd)
+int	check_path(t_exe *exe, t_parser *cmd)
+{
+	struct stat	path_stat;
+	int			res;
+
+	res = get_path_cmd(exe, cmd->cmd[0]);
+	if (res == 0)
+	{
+		if (stat(cmd->cmd[0], &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+			return (free_exe(exe, 1, 126, ft_strjoin(cmd->cmd[0],
+						": is a directory")));
+	}
+	return (res);
+}
+
+int	execute_child(t_exe *exe, t_parser *cmd, bool is_exit)
 {
 	int	res;
 
 	res = redirect(exe, cmd);
 	if (res == 0 && cmd->builtin)
-		cmd->builtin(exe->env, cmd);
+		res = cmd->builtin(exe->env_cpy, cmd);
 	else if (res == 0 && cmd->cmd && cmd->cmd[0])
 	{
-		res = get_path_cmd(exe, cmd->cmd[0]);
-		if (res != 0)
+		res = check_path(exe, cmd);
+		if (res == 0)
 		{
-			exe->fd[1] = close(exe->fd[1]);
-			exe->fd[0] = close(exe->fd[0]);
-			exit(free_exe(exe, 0, 1, NULL));
+			if (exe->fd[0] != STDIN_FILENO)
+				exe->fd[0] = close(exe->fd[0]);
+			res = execve(exe->path, cmd->cmd, exe->env_tab);
+			if (res == -1)
+				res = free_exe(exe, 0, 1, "1");
 		}
-		res = execve(exe->path, cmd->cmd, exe->env_tab);
-		if (res == -1)
-			res = free_exe(exe, 0, 1, "1");
 	}
-	exe->fd[0] = close(exe->fd[0]);
 	exe->fd[1] = close(exe->fd[1]);
-	exit(res);
+	if (is_exit)
+		exit(res);
+	return (res);
 }
 
 void	execute_parent(t_exe *exe, t_parser *cmd)

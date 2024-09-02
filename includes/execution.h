@@ -37,6 +37,7 @@ typedef struct s_exe
 	int				fd[2];
 	int				fd_heredoc[2];
 	int				fd_tmp;
+	int				i;
 	int				fd_in;
 	int				error;
 	pid_t			pid;
@@ -44,7 +45,7 @@ typedef struct s_exe
 
 // execution.c
 void				execute_pipeline(t_exe *exe, t_parser *cmd);
-void				execute_child(t_exe *exe, t_parser *cmd);
+int					execute_child(t_exe *exe, t_parser *cmd, bool is_exit);
 void				execute_parent(t_exe *exe, t_parser *cmd);
 
 // redirections.c
