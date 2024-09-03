@@ -59,6 +59,6 @@ t_exe				init_exe(t_env **env, t_parser *parser);
 int					free_exe(t_exe *exe, int is_malloc, int error,
 						char *message);
 int					get_path_cmd(t_exe *exe, char *cmd);
-void				create_path(t_exe *exe, char *cmd, char *path);
+int					create_path(t_exe *exe, char *cmd, char *path);
 void				check_bultins(t_exe *exe, t_parser *cmd);
 #endif

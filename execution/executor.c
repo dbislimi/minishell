@@ -77,7 +77,7 @@ int	check_path(t_exe *exe, t_parser *cmd)
 	{
 		if (stat(cmd->cmd[0], &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
 			return (free_exe(exe, 1, 126, ft_strjoin(cmd->cmd[0],
-						": is a directory")));
+						": Is a directory")));
 	}
 	return (res);
 }

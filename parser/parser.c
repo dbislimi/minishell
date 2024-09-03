@@ -81,6 +81,8 @@ void	parser_init(t_parser **parser, t_lexer **lexer, t_parser_utils *utils)
 	int		cmds;
 
 	i = 0;
+
+
 	lxr = *lexer;
 	cmds = count_pipes(lxr) + 1;
 	while (cmds--)
