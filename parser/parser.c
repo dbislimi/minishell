@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-int	(*is_builtin(char	**cmd))(t_env **env, struct s_parser *parser)
+int	(*is_builtin(char **cmd))(t_env **env, struct s_parser *parser)
 {
 	if (cmd == NULL || cmd[0] == NULL)
 		return ((void *)0);
@@ -81,8 +81,6 @@ void	parser_init(t_parser **parser, t_lexer **lexer, t_parser_utils *utils)
 	int		cmds;
 
 	i = 0;
-
-
 	lxr = *lexer;
 	cmds = count_pipes(lxr) + 1;
 	while (cmds--)

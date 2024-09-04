@@ -98,7 +98,6 @@ int	main(int ac, char **av, char **envp)
 		ft_fprintf(2, "minishell requires no arguments\n");
 		exit(EXIT_FAILURE);
 	}
-	// env_init(&env, (char *[]){NULL}); 
 	env_init(&env, envp);
 	set_signal_action(sigint_handler);
 	minishell(&env, saved_stin, saved_stout);

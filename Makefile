@@ -11,7 +11,7 @@ SRCS 	= main.c ${addprefix ${EXTENDER_PATH}/, env_edit.c split_for_env.c env_ini
 				 ${addprefix ${BUILTINS_PATH}/, signals.c cd.c echo.c env.c exit.c export.c pwd.c unset.c} \
 				 ${addprefix ${LEXER_PATH}/, split.c split_utils.c split_utils2.c lexer.c lexer_init.c lexer_clean.c lexer_clear.c clean_str.c clean_utils.c clean_utils2.c} \
 				 ${addprefix ${PARSER_PATH}/, parser.c redirections.c free_parser.c print_parser.c parse_utils.c} \
-				 ${addprefix ${EXECUTION_PATH}/, executor.c redirections.c tools.c}
+				 ${addprefix ${EXECUTION_PATH}/, executor.c redirections.c path.c tools.c}
 OBJS 	= ${SRCS:.c=.o}
 
 

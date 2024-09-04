@@ -23,7 +23,7 @@ int	env_edit(t_env **lst, t_env *newnode)
 				newnode->name) == 0)
 		{
 			if (!tmp->value || (newnode->value && strcmp(tmp->value,
-					newnode->value) != 0))
+						newnode->value) != 0))
 			{
 				free(tmp->value);
 				tmp->value = ft_strdup(newnode->value);

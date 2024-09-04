@@ -34,7 +34,7 @@
 # define BOLD_GREEN "\001\033[1;32m\002"
 # define BOLD_BLUE "\001\033[1;34m\002"
 # define RESET_COLOR "\001\033[0m\002"
-# define CHAR_OK_ENV "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
+# define CHAR "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
 // EXTENDER
 
 # ifndef DEBUG
@@ -119,6 +119,8 @@ void				print_lexer(t_lexer *lexer);
 int					handle_backslash(char c, int *backslash);
 t_lexer				*delete_empty_nodes(t_lexer *lexer);
 int					strlen2(char *str, t_env *env, bool flag);
+void				strlen2_check_dollar(size_t *i, size_t *j, char *str,
+						t_env *env);
 char				*find_value(char *str, t_env *env);
 int					is_special_char(char c);
 bool				is_quote(char c, int backslash);

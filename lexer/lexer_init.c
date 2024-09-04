@@ -80,14 +80,14 @@ void	lexer_init(t_lexer **lexer, char **split, t_env *env)
 		content = NULL;
 		token = tokenize(split[i]);
 		if (!token)
+		{
+			content = clean_str(split[i], env);
+			if (ft_strlen(content) == 0)
 			{
-				content = clean_str(split[i], env);
-				if (ft_strlen(content) == 0)
-					{
-						free(content);
-						continue ;
-					}
+				free(content);
+				continue ;
 			}
+		}
 		add_node_lexer(lexer, new_node_lexer(content, token, i));
 	}
 }

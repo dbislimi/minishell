@@ -15,7 +15,7 @@
 size_t	handle_dollar(char *clean, char **tab, char *env_value)
 {
 	if ((**tab == ' ' || **tab == '\0' || **tab == '"'
-			|| !ft_strchr(CHAR_OK_ENV, **tab)) && **tab != '?')
+			|| !ft_strchr(CHAR, **tab)) && **tab != '?')
 	{
 		ft_strcat(clean, "$");
 		return (1);
@@ -24,7 +24,7 @@ size_t	handle_dollar(char *clean, char **tab, char *env_value)
 	if (*(--*tab) == '?')
 		++*tab;
 	else
-		while (**tab && (ft_strchr(CHAR_OK_ENV, **tab)) && **tab != '"')
+		while (**tab && (ft_strchr(CHAR, **tab)) && **tab != '"')
 			++*tab;
 	if (env_value == NULL)
 		return (0);
@@ -51,7 +51,7 @@ char	*find_value(char *str, t_env *env)
 	if (str[j] == '?')
 		++j;
 	else
-		while (str[j] && str[j] != '"' && ft_strchr(CHAR_OK_ENV, str[j]))
+		while (str[j] && str[j] != '"' && ft_strchr(CHAR, str[j]))
 			++j;
 	while (env)
 	{
@@ -61,25 +61,6 @@ char	*find_value(char *str, t_env *env)
 		env = env->next;
 	}
 	return (NULL);
-}
-
-void	strlen2_check_dollar(size_t *i, size_t *j, char *str, t_env *env)
-{
-	if (str[*j + 1] == ' ' || str[*j + 1] == '\0' || str[*j + 1] == '"')
-	{
-		++(*j);
-		++(*i);
-		return ;
-	}
-	else if (str[*j + 1] == '?')
-	{
-		*i += ft_strlen(find_value("?", env));
-		*j += 2;
-		return ;
-	}
-	*i += count_dollar((str + ++(*j)), env);
-	while (str[*j] && ft_strchr(CHAR_OK_ENV, str[*j]) && str[*j] != '"')
-		++(*j);
 }
 
 int	strlen2(char *str, t_env *env, bool flag)

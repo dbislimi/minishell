@@ -19,10 +19,10 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-#include <sys/stat.h>
 
 typedef struct s_exe
 {
@@ -44,21 +44,22 @@ typedef struct s_exe
 }					t_exe;
 
 // execution.c
-void				execute_pipeline(t_exe *exe, t_parser *cmd);
-int					execute_child(t_exe *exe, t_parser *cmd, bool is_exit);
 void				execute_parent(t_exe *exe, t_parser *cmd);
 
 // redirections.c
 int					redirect_pipe(t_exe *exe, t_parser *cmd, int type);
 int					redirect_input(t_exe *exe, t_lexer *red);
-int					redirect_output(t_exe *exe, t_lexer *red, t_parser *cmd);
+int					redirect_output(t_exe *exe, t_lexer *red);
 int					here_doc(t_exe *exe, t_lexer *red);
+
+// path.c
+int					check_path(t_exe *exe, t_parser *cmd);
+int					get_path_cmd(t_exe *exe, char *cmd);
+int					create_path(t_exe *exe, char *cmd, char *path);
 
 // tools.c
 t_exe				init_exe(t_env **env, t_parser *parser);
 int					free_exe(t_exe *exe, int is_malloc, int error,
 						char *message);
-int					get_path_cmd(t_exe *exe, char *cmd);
-int					create_path(t_exe *exe, char *cmd, char *path);
 void				check_bultins(t_exe *exe, t_parser *cmd);
 #endif

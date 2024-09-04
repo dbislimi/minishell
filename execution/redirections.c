@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tools.h                                            :+:      :+:    :+:   */
+/*   redirections.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thmouty <theo@student.42.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -56,7 +56,7 @@ int	redirect_input(t_exe *exe, t_lexer *red)
 	return (0);
 }
 
-int	redirect_output(t_exe *exe, t_lexer *red, t_parser *cmd)
+int	redirect_output(t_exe *exe, t_lexer *red)
 {
 	if (!red)
 		return (0);
@@ -66,17 +66,7 @@ int	redirect_output(t_exe *exe, t_lexer *red, t_parser *cmd)
 		exe->fd_tmp = open(red->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (exe->fd_tmp == -1)
 		return (free_exe(exe, 0, 1, "1"));
-	if (!cmd->cmd)
-	{
-		exe->tmp = get_next_line(STDIN_FILENO);
-		while (exe->tmp)
-		{
-			ft_fprintf(exe->fd_tmp, "%s", exe->tmp);
-			exe->tmp = ft_free(exe->tmp);
-			exe->tmp = get_next_line(STDIN_FILENO);
-		}
-	}
-	else if (dup2(exe->fd_tmp, STDOUT_FILENO) == -1)
+	if (dup2(exe->fd_tmp, STDOUT_FILENO) == -1)
 	{
 		exe->fd_tmp = close(exe->fd_tmp);
 		return (free_exe(exe, 0, 1, "1"));
