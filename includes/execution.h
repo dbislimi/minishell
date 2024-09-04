@@ -52,14 +52,11 @@ int					redirect_input(t_exe *exe, t_lexer *red);
 int					redirect_output(t_exe *exe, t_lexer *red);
 int					here_doc(t_exe *exe, t_lexer *red);
 
-// path.c
-int					check_path(t_exe *exe, t_parser *cmd);
-int					get_path_cmd(t_exe *exe, char *cmd);
-int					create_path(t_exe *exe, char *cmd, char *path);
-
 // tools.c
 t_exe				init_exe(t_env **env, t_parser *parser);
 int					free_exe(t_exe *exe, int is_malloc, int error,
 						char *message);
-void				check_bultins(t_exe *exe, t_parser *cmd);
+int					check_path(t_exe *exe, t_parser *cmd);
+int					get_path_cmd(t_exe *exe, char *cmd);
+int					create_path(t_exe *exe, char *cmd, char *path);
 #endif

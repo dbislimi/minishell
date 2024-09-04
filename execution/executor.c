@@ -37,7 +37,7 @@ static int	redirect(t_exe *exe, t_parser *cmd)
 			break ;
 		tmp = tmp->next;
 	}
-	add_node_char("?", ft_itoa(exe->error), true, exe->env_cpy);
+	add_node_char("?", ft_itoa(exe->error), true, exe->env);
 	return (res);
 }
 
@@ -47,7 +47,7 @@ static int	execute_child(t_exe *exe, t_parser *cmd, bool is_exit)
 
 	res = redirect(exe, cmd);
 	if (res == 0 && cmd->builtin)
-		res = cmd->builtin(exe->env_cpy, cmd);
+		res = cmd->builtin(exe->env, cmd);
 	else if (res == 0 && cmd->cmd && cmd->cmd[0])
 	{
 		res = check_path(exe, cmd);
@@ -73,7 +73,7 @@ static void	execute_pipeline(t_exe *exe, t_parser *cmd)
 		if (!cmd->next && !cmd->prev && cmd->builtin)
 		{
 			add_node_char("?", ft_itoa(execute_child(exe, cmd, 0)), true,
-				exe->env_cpy);
+				exe->env);
 			return ;
 		}
 		else
@@ -112,7 +112,7 @@ void	execute_parent(t_exe *exe, t_parser *cmd)
 		{
 			waitpid(tmp->pid, &exe->error, 0);
 			add_node_char("?", ft_itoa(WEXITSTATUS(exe->error)), true,
-				exe->env_cpy);
+				exe->env);
 			tmp->pid = 0;
 		}
 		tmp = tmp->next;
@@ -131,6 +131,5 @@ int	executor(t_env **env, t_parser *parser)
 	execute_pipeline(&exe, exe.parser);
 	dup2(saved_stin, STDIN_FILENO);
 	dup2(saved_stout, STDOUT_FILENO);
-	move_env(env, exe.env_cpy);
 	return (free_exe(&exe, 0, 0, NULL));
 }

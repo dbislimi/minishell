@@ -71,29 +71,3 @@ void	check_delete(t_env **env, t_env **cpy)
 		temp = temp->next;
 	}
 }
-
-void	move_env(t_env **env, t_env **move)
-{
-	t_env	*tmove;
-	t_env	*new;
-	char	*buffer;
-
-	tmove = *move;
-	while (tmove)
-	{
-		if (!tmove->value)
-			buffer = ft_joinf("%s", tmove->name);
-		else
-			buffer = ft_joinf("%s=%s", tmove->name, tmove->value);
-		new = new_node(buffer);
-		if (add_node(env, new, 1) == 2)
-		{
-			free(new->name);
-		}
-		free(buffer);
-		tmove = tmove->next;
-	}
-	check_delete(env, move);
-	envclear(move);
-	free(move);
-}

@@ -50,7 +50,6 @@ typedef struct s_env
 
 void				env_init(t_env **env, char **envp);
 t_env				**dup_env(t_env *envp);
-void				move_env(t_env **env, t_env **move);
 char				**split_for_env(char const *s);
 char				**convert_env_tab(t_env *env);
 int					env_edit(t_env **lst, t_env *newnode);
