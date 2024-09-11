@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 19:30:11 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/16 16:35:56 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/09/11 16:31:33 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,15 +90,15 @@ void	parser_init(t_parser **parser, t_lexer **lexer, t_parser_utils *utils)
 		detach_redirections(&lxr, utils);
 		if (*utils->lexer == NULL)
 			return ;
-		if (!i)
+		if (!i++)
 			*lexer = lxr;
-		i = 1;
+		else
+			lxr = lxr->next;
 		add_node_parser(parser, new_node_parser(lxr, utils));
 		if (cmds == 0)
 			break ;
 		while (lxr->token != PIPE)
 			lxr = lxr->next;
-		lxr = lxr->next;
 	}
 	free_lexer(lexer);
 }

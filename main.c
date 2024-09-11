@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:09:00 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/16 16:33:56 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/09/11 16:37:16 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void	minishell(t_env **env, int saved_stin, int saved_stout)
 
 	str = NULL;
 	parser_list = NULL;
+	(void)saved_stin;
+	(void)saved_stout;
 	while (1)
 	{
 		old = str;
@@ -73,9 +75,9 @@ void	minishell(t_env **env, int saved_stin, int saved_stout)
 		lexer_parser(&parser_list, str, *env);
 		if (parser_list == NULL)
 			continue ;
-		executor(env, parser_list);
-		dup2(saved_stin, STDIN_FILENO);
-		dup2(saved_stout, STDOUT_FILENO);
+		// executor(env, parser_list);
+		// dup2(saved_stin, STDIN_FILENO);
+		// dup2(saved_stout, STDOUT_FILENO);
 		free_parser(&parser_list);
 	}
 	free(old);

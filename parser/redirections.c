@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 15:03:16 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/16 16:35:18 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/09/11 16:37:34 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,25 +69,21 @@ void	add_new_redirection(t_lexer *to_add, t_lexer **lexer,
 
 void	token_error(t_lexer *problem, t_parser_utils *utils)
 {
-	char	*error;
-
 	if (!problem)
-		error = ft_strdup("`newline'");
+		printf("%s `newline'\n", SYNTAX_ERROR);
 	else
 	{
 		if (problem->token == INPUT)
-			error = ft_strdup("`<'");
+			printf("%s `<'\n", SYNTAX_ERROR);
 		else if (problem->token == OUTPUT)
-			error = ft_strdup("`>'");
+			printf("%s `>'\n", SYNTAX_ERROR);
 		else if (problem->token == HEREDOC)
-			error = ft_strdup("`<<'");
+			printf("%s `<<'\n", SYNTAX_ERROR);
 		else if (problem->token == APPENDOUTPUT)
-			error = ft_strdup("`>>'");
+			printf("%s `>>'\n", SYNTAX_ERROR);
 		else
-			error = ft_strdup("`|'");
+			printf("%s `|'\n", SYNTAX_ERROR);
 	}
-	printf("%s %s\n", SYNTAX_ERROR, error);
-	free(error);
 	free_lexer(utils->lexer);
 	free_parser(utils->parser);
 }
@@ -96,10 +92,14 @@ void	detach_redirections(t_lexer **lexer, t_parser_utils *utils)
 {
 	t_lexer	*to_remove;
 
-	to_remove = *lexer;
+	if ((*lexer)->token == PIPE)
+		to_remove = (*lexer)->next;
+	else
+		to_remove = *lexer;
 	while (to_remove && to_remove->token == 0)
 		to_remove = to_remove->next;
-	if (!to_remove || to_remove->token == PIPE)
+	if (!to_remove || (to_remove->token == PIPE
+			&& to_remove->next && to_remove->next->token != PIPE))
 		return ;
 	if (!to_remove->next || to_remove->next->token)
 		return (token_error(to_remove->next, utils));
