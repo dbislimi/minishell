@@ -122,14 +122,8 @@ void	execute_parent(t_exe *exe, t_parser *cmd)
 int	executor(t_env **env, t_parser *parser)
 {
 	t_exe	exe;
-	int		saved_stin;
-	int		saved_stout;
 
-	saved_stin = dup(STDIN_FILENO);
-	saved_stout = dup(STDOUT_FILENO);
 	exe = init_exe(env, parser);
 	execute_pipeline(&exe, exe.parser);
-	dup2(saved_stin, STDIN_FILENO);
-	dup2(saved_stout, STDOUT_FILENO);
 	return (free_exe(&exe, 0, 0, NULL));
 }
