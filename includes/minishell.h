@@ -43,13 +43,13 @@
 
 typedef struct s_env
 {
+	int				index;
 	char			*name;
 	char			*value;
 	struct s_env	*next;
 }					t_env;
 
 void				env_init(t_env **env, char **envp);
-t_env				**dup_env(t_env *envp);
 char				**split_for_env(char const *s);
 char				**convert_env_tab(t_env *env);
 int					env_edit(t_env **lst, t_env *newnode);
@@ -57,9 +57,12 @@ int					add_node(t_env **lst, t_env *newnode, int force);
 void				add_node_char(char *name, char *value, bool is_free,
 						t_env **env);
 t_env				*new_node(void *content);
+int					max_index(t_env *env);
 void				envclear(t_env **lst);
-void				print_env(t_env *env, char *type);
-void				print_export(t_env *env, int i);
+void				print_env(t_env *env);
+void				print_export(t_env *env);
+t_env				*find_next_index(t_env *env, int index);
+void				print_export2(t_env *env);
 void				print_brut_format(char c);
 
 // LEXER

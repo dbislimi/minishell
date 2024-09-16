@@ -25,26 +25,6 @@ void	env_init(t_env **env, char **envp)
 	add_node_char("?", "0", false, env);
 }
 
-t_env	**dup_env(t_env *envp)
-{
-	t_env	**new;
-	char	*buffer;
-
-	new = malloc(sizeof(t_env *));
-	*new = NULL;
-	while (envp)
-	{
-		if (!envp->value)
-			buffer = ft_strdup(envp->name);
-		else
-			buffer = ft_joinf("%s=%s", envp->name, envp->value);
-		add_node(new, new_node(buffer), 1);
-		free(buffer);
-		envp = envp->next;
-	}
-	return (new);
-}
-
 void	check_delete(t_env **env, t_env **cpy)
 {
 	t_env	*temp;

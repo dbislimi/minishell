@@ -12,10 +12,13 @@
 
 #include "../includes/minishell.h"
 
+
+
 int	env_edit(t_env **lst, t_env *newnode)
 {
 	t_env	*tmp;
 
+	newnode->index = max_index(*lst) + 1;
 	tmp = *lst;
 	while (tmp)
 	{

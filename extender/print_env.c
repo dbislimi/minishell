@@ -12,42 +12,91 @@
 
 #include "../includes/minishell.h"
 
-void	print_env(t_env *env, char *type)
+void	print_env(t_env *env)
 {
-	int	i;
-
 	while (env)
 	{
-		i = 0;
-		if (strcmp(env->name, "?") == 0)
-		{
-			env = env->next;
-			continue ;
-		}
-		else if (strcmp(type, "env") == 0)
+		if (env->value && ft_strcmp(env->name, "?") != 0)
 			printf("%s=%s\n", env->name, env->value);
-		else if (strcmp(type, "export") == 0)
-			print_export(env, i);
 		env = env->next;
 	}
 }
 
-void	print_export(t_env *env, int i)
+t_env	*find_next_index(t_env *env, int index)
 {
-	printf("declare -x %s", env->name);
-	if (env->value)
+	t_env	*next;
+
+	next = NULL;
+	while (env)
 	{
-		printf("=\"");
-		while (env->value[i])
+		if (env->index > index)
 		{
-			if (ft_strchr("$\"\\`", env->value[i]))
-				printf("\\");
-			print_brut_format(env->value[i]);
-			i++;
+			if (!next || env->index < next->index)
+				next = env;
 		}
-		printf("\"");
+		env = env->next;
 	}
-	printf("\n");
+	return (next);
+}
+
+void	print_export(t_env *env)
+{
+	t_env	*temp_env;
+	t_env	*tmp;
+	int		temp;
+
+	temp_env = env;
+	while (env)
+	{
+		while (find_next_index(env, env->index))
+		{
+			tmp = find_next_index(env, env->index);
+			printf("%s == %s\n", env->name, tmp->name);
+			if (ft_strcmp(env->name, tmp->name) >= 0 && env->index < tmp->index)
+			{
+				printf("swap %s with %s\n", env->name, tmp->name);
+				temp = env->index;
+				env->index = tmp->index;
+				tmp->index = temp;
+				break ;
+			}
+			env = find_next_index(env, env->index);
+		}
+		if (!find_next_index(env, env->index))
+			break ;
+		env = temp_env;
+	}
+	print_export2(temp_env);
+}
+
+void	print_export2(t_env *env)
+{
+	int	i;
+
+	i = 0;
+	env = find_next_index(env, 0);
+	while (env)
+	{
+		if (strcmp(env->name, "?") != 0)
+		{
+			printf("declare -x %s", env->name);
+			if (env->value)
+			{
+				printf("=\"");
+				while (env->value[i])
+				{
+					if (ft_strchr("$\"\\`", env->value[i]))
+						printf("\\");
+					print_brut_format(env->value[i]);
+					i++;
+				}
+				printf("\"");
+				printf("%d\n", env->index);
+			}
+			printf("\n");
+		}
+		env = find_next_index(env, env->index);
+	}
 }
 
 void	print_brut_format(char c)

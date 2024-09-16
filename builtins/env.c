@@ -15,6 +15,6 @@
 int	my_env(t_env **env, struct s_parser *parser)
 {
 	(void)parser;
-	print_env(*env, "env");
+	print_env(*env);
 	return (0);
 }

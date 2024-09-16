@@ -64,6 +64,8 @@ void	minishell(t_env **env, int saved_stin, int saved_stout)
 	(void)saved_stout;
 	while (1)
 	{
+		if (str)
+			free(str);
 		str = print_line(*env);
 		if (str == NULL)
 			break ;

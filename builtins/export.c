@@ -26,7 +26,7 @@ int	my_export(t_env **env, struct s_parser *parser)
 		}
 	}
 	if (!parser->cmd[1])
-		print_env(*env, "export");
+		print_export(*env);
 	return (0);
 }
 
