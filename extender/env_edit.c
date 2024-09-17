@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_build.c                                        :+:      :+:    :+:   */
+/*   env_edit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 15:13:38 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/23 19:55:33 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:39:23 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-
 
 int	env_edit(t_env **lst, t_env *newnode)
 {
