@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 15:13:38 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/15 15:07:35 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:21:15 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_env	*new_node(void *content)
 	if (!new)
 		return (0);
 	line = split_for_env(content);
+	new->index = 0;
 	new->name = ft_strdup(line[0]);
 	if (line[1] && ft_strlen(line[1]) > 0)
 		new->value = ft_strdup(line[1]);
@@ -43,6 +44,20 @@ static t_env	*last_node(t_env *lst)
 			lst = lst->next;
 	}
 	return (lst);
+}
+
+int	max_index(t_env *env)
+{
+	int	max;
+
+	max = 0;
+	while (env)
+	{
+		if (env->index > max)
+			max = env->index;
+		env = env->next;
+	}
+	return (max);
 }
 
 int	add_node(t_env **lst, t_env *nw, int force)

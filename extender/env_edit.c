@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/22 15:13:38 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/09/23 17:17:37 by dbislimi         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/09/23 17:28:21 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
@@ -16,6 +17,7 @@ int	env_edit(t_env **lst, t_env *newnode)
 {
 	t_env	*tmp;
 
+	newnode->index = max_index(*lst) + 1;
 	tmp = *lst;
 	while (tmp)
 	{

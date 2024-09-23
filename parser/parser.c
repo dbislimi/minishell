@@ -77,7 +77,7 @@ static void	add_node_parser(t_parser **lst, t_parser *newnode)
 void	parser_init(t_parser **parser, t_lexer **lexer, t_parser_utils *utils)
 {
 	t_lexer	*lxr;
-	bool	i;
+	int		i;
 	int		cmds;
 
 	i = 0;

@@ -6,16 +6,14 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:24:13 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/09/23 17:17:56 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:26:39 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	print_env(t_env *env, char *type)
+void	print_env(t_env *env)
 {
-	int	i;
-
 	while (env)
 	{
 		i = 0;
@@ -30,24 +28,6 @@ void	print_env(t_env *env, char *type)
 			print_export(env, i);
 		env = env->next;
 	}
-}
-
-void	print_export(t_env *env, int i)
-{
-	printf("declare -x %s", env->name);
-	if (env->value)
-	{
-		printf("=\"");
-		while (env->value[i])
-		{
-			if (ft_strchr("$\"\\`", env->value[i]))
-				printf("\\");
-			print_brut_format(env->value[i]);
-			i++;
-		}
-		printf("\"");
-	}
-	printf("\n");
 }
 
 void	print_brut_format(char c)

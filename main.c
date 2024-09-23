@@ -57,19 +57,17 @@ void	minishell(t_env **env, int saved_stin, int saved_stout)
 {
 	t_parser	*parser_list;
 	char		*str;
-	char		*old;
 
 	str = NULL;
 	parser_list = NULL;
 	while (1)
 	{
-		old = str;
+		if (str)
+			free(str);
 		str = print_line(*env);
 		if (str == NULL)
 			break ;
-		if (ft_strlen(str) != 0 && (!old || ft_strcmp(str, old) != 0))
-			add_history(str);
-		old = ft_free(old);
+		add_history(str);
 		lexer_parser(&parser_list, str, *env);
 		if (parser_list == NULL)
 			continue ;
@@ -78,7 +76,6 @@ void	minishell(t_env **env, int saved_stin, int saved_stout)
 		dup2(saved_stout, STDOUT_FILENO);
 		free_parser(&parser_list);
 	}
-	free(old);
 	free(str);
 }
 
