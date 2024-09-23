@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_build.c                                        :+:      :+:    :+:   */
+/*   env_edit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 15:13:38 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/23 19:55:33 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:17:37 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ int	env_edit(t_env **lst, t_env *newnode)
 	tmp = *lst;
 	while (tmp)
 	{
-		if (newnode && tmp->name && newnode->name && strcmp(tmp->name,
+		if (newnode && tmp->name && newnode->name && ft_strcmp(tmp->name,
 				newnode->name) == 0)
 		{
-			if (!tmp->value || (newnode->value && strcmp(tmp->value,
+			if (!tmp->value || (newnode->value && ft_strcmp(tmp->value,
 						newnode->value) != 0))
 			{
 				free(tmp->value);

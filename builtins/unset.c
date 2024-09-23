@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 17:26:10 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/05 19:39:03 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:20:15 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	remove_env_var(t_env **env, t_env **old, t_env **temp)
 	return (0);
 }
 
-int	my_unset(t_env **env, struct s_parser *parser)
+int	my_unset(t_env **env, struct s_parser *psr)
 {
 	t_env	*old;
 	t_env	*temp;
@@ -36,14 +36,14 @@ int	my_unset(t_env **env, struct s_parser *parser)
 	temp = *env;
 	old = NULL;
 	i = 1;
-	while (temp && parser->cmd[i])
+	while (temp && psr->cmd[i])
 	{
-		if (strcmp(parser->cmd[i], temp->name) == 0 && strcmp(parser->cmd[i],
+		if (ft_strcmp(psr->cmd[i], temp->name) == 0 && ft_strcmp(psr->cmd[i],
 				"?") != 0)
 		{
 			if (remove_env_var(env, &old, &temp))
 				continue ;
-			if (parser->cmd[i++ + 1] == NULL)
+			if (psr->cmd[i++ + 1] == NULL)
 			{
 				add_node_char("?", "0", false, env);
 				return (0);

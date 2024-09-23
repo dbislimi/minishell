@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:00:30 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/09/11 16:34:58 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:21:41 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef struct s_lexer
 	int				index;
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
-}					t_lexer;
+}			t_lexer;
 
 typedef struct s_flag
 {

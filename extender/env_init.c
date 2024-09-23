@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:18:35 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/22 16:39:29 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:17:45 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	check_delete(t_env **env, t_env **cpy)
 		tcpy = *cpy;
 		while (tcpy && !found)
 		{
-			if (strcmp(temp->name, tcpy->name) == 0)
+			if (ft_strcmp(temp->name, tcpy->name) == 0)
 				found = 1;
 			tcpy = tcpy->next;
 		}

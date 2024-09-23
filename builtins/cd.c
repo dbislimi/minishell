@@ -6,7 +6,7 @@
 /*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 17:25:33 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/08/05 19:38:46 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:16:29 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	get_target_dir(t_env **env, t_parser *parser, char **dir)
 {
-	if (parser->cmd[1] == NULL || strncmp(parser->cmd[1], "~", 1) == 0)
+	if (parser->cmd[1] == NULL || ft_strncmp(parser->cmd[1], "~", 1) == 0)
 	{
 		*dir = find_value("HOME", *env);
 		if (!*dir)
@@ -25,7 +25,7 @@ static void	get_target_dir(t_env **env, t_parser *parser, char **dir)
 		else if (parser->cmd[1] && parser->cmd[1][1])
 			*dir = ft_joinf("%s%s", *dir, parser->cmd[1] + 1);
 	}
-	else if (strcmp(parser->cmd[1], "-") == 0)
+	else if (ft_strcmp(parser->cmd[1], "-") == 0)
 	{
 		*dir = find_value("OLDPWD", *env);
 		if (!*dir)

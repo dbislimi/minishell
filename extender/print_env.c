@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dbislimi <dbislimi@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: dbislimi <dbislimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:24:13 by dbislimi          #+#    #+#             */
-/*   Updated: 2024/07/22 16:24:26 by dbislimi         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:17:56 by dbislimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ void	print_env(t_env *env, char *type)
 	while (env)
 	{
 		i = 0;
-		if (strcmp(env->name, "?") == 0)
+		if (ft_strcmp(env->name, "?") == 0)
 		{
 			env = env->next;
 			continue ;
 		}
-		else if (strcmp(type, "env") == 0)
+		else if (ft_strcmp(type, "env") == 0)
 			printf("%s=%s\n", env->name, env->value);
-		else if (strcmp(type, "export") == 0)
+		else if (ft_strcmp(type, "export") == 0)
 			print_export(env, i);
 		env = env->next;
 	}
